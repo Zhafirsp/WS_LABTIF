@@ -1,28 +1,23 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Asistens", {
-      asisten_id: {
+    await queryInterface.createTable("Matkuls", {
+      kode_mk: {
         allowNull: false,
         primaryKey: true,
-        unique: true,
         type: Sequelize.STRING(11),
       },
-      nim: {
-        allowNull: false,
-        type: Sequelize.STRING(11),
-      },
-      nama_asisten: {
-        allowNull: false,
+      nama_mk: {
         type: Sequelize.STRING,
-      },
-      golongan: {
         allowNull: false,
-        type: Sequelize.ENUM("A", "B", "C"),
       },
-      periode: {
+      kurikulum: {
+        type: Sequelize.STRING,
         allowNull: false,
-        type: Sequelize.STRING(11),
+      },
+      sks_mk: {
+        type: Sequelize.INTEGER(11),
+        allowNull: false,
       },
       created_at: {
         allowNull: false,
@@ -35,6 +30,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Asistens");
+    await queryInterface.dropTable("Matkuls");
   },
 };
