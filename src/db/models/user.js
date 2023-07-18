@@ -4,7 +4,16 @@ const { hashPassword } = require("../../helpers/bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {}
+    static associate(models) {
+      User.hasOne(models.Mahasiswa, {
+        sourceKey: "user_id",
+        foreignKey: "user_id",
+      });
+      User.hasOne(models.Laboran, {
+        sourceKey: "user_id",
+        foreignKey: "user_id",
+      });
+    }
   }
   User.init(
     {

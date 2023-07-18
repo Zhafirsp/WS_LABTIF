@@ -8,7 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Mahasiswa.belongsTo(models.User, {
+        foreignKey: "user_id",
+        targetKey: "user_id",
+      });
+      Mahasiswa.hasOne(models.Asisten, {
+        sourceKey: "nim",
+        foreignKey: "nim",
+      });
+      Mahasiswa.hasOne(models.Pendaftaran, {
+        sourceKey: "nim",
+        foreignKey: "nim",
+      });
     }
   }
   Mahasiswa.init(
