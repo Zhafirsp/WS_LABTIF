@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Laboran extends Model {
+  class Penilaian extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,39 +11,27 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Laboran.init(
+  Penilaian.init(
     {
-      nip: {
+      nilai_id: {
         allowNull: false,
         primaryKey: true,
-        unique: true,
-        type: DataTypes.STRING(11),
+        autoIncrement: true,
+        type: DataTypes.INTEGER(11),
       },
-      user_id: {
+      krs_id: {
         allowNull: false,
         type: DataTypes.INTEGER(11),
       },
-      nama_laboran: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notNull: {
-            args: true,
-            msg: "Nama tidak boleh kosong",
-          },
-          len: {
-            args: [2, 255],
-            msg: "Nama harus terdiri dari antara 2 dan 255 karakter.", // Error message I want to display
-          },
-        },
-      },
+      tugas_ke: DataTypes.INTEGER(11),
+      nilai: DataTypes.INTEGER(11),
     },
     {
       sequelize,
       createdAt: "created_at",
       updatedAt: "updated_at",
-      modelName: "Laboran",
+      modelName: "Penilaian",
     }
   );
-  return Laboran;
+  return Penilaian;
 };

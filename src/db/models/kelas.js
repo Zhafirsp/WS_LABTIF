@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       kelas_id: {
         allowNull: false,
         primaryKey: true,
-        unique: false,
+        unique: true,
         type: DataTypes.INTEGER(11),
       },
       nama_kelas: DataTypes.STRING,

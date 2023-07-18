@@ -5,6 +5,7 @@ module.exports = {
       nim: {
         allowNull: false,
         primaryKey: true,
+        unique: true,
         type: Sequelize.STRING(11),
       },
       nama_mahasiswa: {

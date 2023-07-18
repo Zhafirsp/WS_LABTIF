@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Laboran extends Model {
+  class Kehadiran extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,39 +11,44 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Laboran.init(
+  Kehadiran.init(
     {
-      nip: {
+      absen_id: {
         allowNull: false,
         primaryKey: true,
-        unique: true,
+        autoIncrement: true,
+        type: DataTypes.INTEGER(11),
+      },
+      asisten_id: {
+        allowNull: false,
         type: DataTypes.STRING(11),
       },
-      user_id: {
+      nama_asisten: DataTypes.STRING,
+      piket_id: {
         allowNull: false,
         type: DataTypes.INTEGER(11),
       },
-      nama_laboran: {
-        type: DataTypes.STRING,
+      status: {
         allowNull: false,
+        type: DataTypes.ENUM("Hadir", "Izin", "Alpha"),
         validate: {
-          notNull: {
-            args: true,
-            msg: "Nama tidak boleh kosong",
-          },
-          len: {
-            args: [2, 255],
-            msg: "Nama harus terdiri dari antara 2 dan 255 karakter.", // Error message I want to display
+          isIn: {
+            args: [["Hadir", "Izin", "Alpha"]],
+            msg: "Hanya dapat memilih 3 pilihan yaitu Hadir, Izin, dan Alpha",
           },
         },
+      },
+      pengganti_id: {
+        allowNull: false,
+        type: DataTypes.STRING(11),
       },
     },
     {
       sequelize,
       createdAt: "created_at",
       updatedAt: "updated_at",
-      modelName: "Laboran",
+      modelName: "Kehadiran",
     }
   );
-  return Laboran;
+  return Kehadiran;
 };

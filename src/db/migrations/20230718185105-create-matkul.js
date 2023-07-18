@@ -5,6 +5,7 @@ module.exports = {
       kode_mk: {
         allowNull: false,
         primaryKey: true,
+        unique: true,
         type: Sequelize.STRING(11),
       },
       nama_mk: {

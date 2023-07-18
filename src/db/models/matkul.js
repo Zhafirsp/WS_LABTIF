@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       kode_mk: {
         allowNull: false,
         primaryKey: true,
+        unique: true,
         type: DataTypes.STRING(11),
       },
       nama_mk: DataTypes.STRING,

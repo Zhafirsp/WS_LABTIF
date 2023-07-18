@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isIn: {
             args: [["A", "B", "C"]],
-            msg: "Hanya dapat memilih 3 pilihan yaitu Laboran, Asisten, dan Mahasiswa",
+            msg: "Hanya dapat memilih 3 pilihan yaitu A, B, dan C",
           },
         },
       },
