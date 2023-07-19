@@ -1,5 +1,5 @@
 const SevimaHelper = require("../helpers/getDataSevima");
-const { Dosen } = require("../db/models");
+const { Dosen, Matkul, Kelas } = require("../db/models");
 const { resSend } = require("../helpers/response");
 
 class SevimaController {
@@ -32,6 +32,8 @@ class SevimaController {
             "Data Dosen dari SEVIMA API berhasil ditambahkan ke database",
           data: dataBaruDosen,
         });
+
+        return responseArray;
       } else {
         // Data dosen sudah ada di database
         for (const dosen of dosenArray) {
@@ -82,22 +84,218 @@ class SevimaController {
     }
   }
 
+  // UPDATE Data Matkul
+  static async updateDataMatkul(req, res, next) {
+    try {
+      const matkulArray = await SevimaHelper.getMatkulPrak();
+
+      const isEmptyTableMatkul = (await Matkul.count()) === 0;
+      const responseArray = [];
+
+      // Data matkul di database kosong?
+      if (isEmptyTableMatkul) {
+        const dataBaruMatkul = matkulArray.map((item) => {
+          return {
+            kode_mk: item.kodemk,
+            nama_mk: item.namamk,
+            kurikulum: item.kurikulum,
+            sks_mk: item.sksmk,
+            created_at: new Date(),
+            updated_at: new Date(),
+          };
+        });
+
+        await Matkul.bulkCreate(dataBaruMatkul);
+
+        responseArray.push({
+          status: 201,
+          message:
+            "Data mata kuliah dari SEVIMA API berhasil ditambahkan ke database",
+          data: dataBaruMatkul,
+        });
+
+        return responseArray;
+      } else {
+        // Data matkul sudah ada di database
+        for (const matkul of matkulArray) {
+          // Cari data matkul berdasarkan kode_mk
+          const existingMatkul = await Matkul.findOne({
+            where: {
+              kode_mk: matkul.kodemk,
+            },
+          });
+
+          // Kode MK sudah ada? Lakukan pembaharuan data
+          if (existingMatkul) {
+            existingMatkul.nama_mk = matkul.namamk;
+            existingMatkul.kurikulum = matkul.kurikulum;
+            existingMatkul.sks_mk = matkul.sksmk;
+
+            await existingMatkul.save();
+
+            responseArray.push({
+              status: 200,
+              message: `Data mata kuliah dengan kode mk ${matkul.kodemk} berhasil diperbarui`,
+              data: existingMatkul,
+            });
+          } else {
+            // Kode mk belum ada? Tambahkan data baru
+            const dataBaruMatkul = {
+              kode_mk: matkul.kodemk,
+              nama_mk: matkul.namamk,
+              kurikulum: matkul.kurikulum,
+              sks_mk: matkul.sksmk,
+              created_at: new Date(),
+              updated_at: new Date(),
+            };
+
+            await Matkul.create(dataBaruMatkul);
+
+            responseArray.push({
+              status: 201,
+              message: `Data mata kuliah baru dengan kode mk ${matkul.kodemk} berhasil ditambahkan`,
+              data: dataBaruMatkul,
+            });
+          }
+        }
+
+        return responseArray;
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // UPDATE Data Kelas
+  static async updateDataKelas(req, res, next) {
+    try {
+      const kelasArray = await SevimaHelper.getKelasPrak();
+
+      const isEmptyTableKelas = (await Kelas.count()) === 0;
+      const responseArray = [];
+
+      // Mencari data mata kuliah dan diambil kode_mk saja
+      const matkulList = await Matkul.findAll({
+        attributes: ["kode_mk"],
+      });
+
+      // Membuat array baru dari matkulList (kode_mk di tabel matkul)
+      const kodeMKList = matkulList.map((matkul) => matkul.kode_mk);
+      /*
+       [
+         'IF21W0407', 'IF21W0408', 'IF21W0608', 'IF21W0609', 'IF21W0610', 'IF21W0308', 'IF21W0507', 'IF21W0506', 'IF21W0307', 'IF21W0607', 'IF21W0508'
+       ]
+     */
+
+      // Mengambil data yang kodemk nya cocok dengan data kodeMKList
+      const filteredData = kelasArray.filter((item) =>
+        kodeMKList.find((kodeMK) => kodeMK === item.kodemk)
+      );
+
+      // Data kelas di database kosong?
+      if (isEmptyTableKelas) {
+        const dataBaruKelas = filteredData.map((item) => {
+          return {
+            kelas_id: item.kelasid,
+            nama_kelas: item.namakelas,
+            nama_ruang: item.namaruang,
+            kapasitas: item.kapasitas,
+            kode_mk: item.kodemk,
+            created_at: new Date(),
+            updated_at: new Date(),
+          };
+        });
+
+        await Kelas.bulkCreate(dataBaruKelas);
+
+        responseArray.push({
+          status: 201,
+          message:
+            "Data kelas dari SEVIMA API berhasil ditambahkan ke database",
+          data: dataBaruKelas,
+        });
+
+        return responseArray;
+      } else {
+        // Data kelas sudah ada di database
+        for (const kelas of filteredData) {
+          // Cari data kelas berdasarkan kelasid
+          const existingKelas = await Kelas.findOne({
+            where: {
+              kelas_id: kelas.kelasid,
+            },
+          });
+          // Kelas id sudah ada? Lakukan pembaharuan data
+          if (existingKelas) {
+            existingKelas.nama_kelas = kelas.namakelas;
+            existingKelas.nama_ruang = kelas.namaruang;
+            existingKelas.kapasitas = kelas.kapasitas;
+            existingKelas.kode_mk = kelas.kodemk;
+
+            await existingKelas.save();
+
+            responseArray.push({
+              status: 200,
+              message: `Data kelas dengan Kelas ID ${kelas.kelasid} berhasil diperbarui`,
+              data: existingKelas,
+            });
+          } else {
+            // Kelas id belum ada? Tambahkan data baru
+            const dataBaruKelas = {
+              kelas_id: kelas.kelasid,
+              nama_kelas: kelas.namakelas,
+              nama_ruang: kelas.namaruang,
+              kapasitas: kelas.kapasitas,
+              kode_mk: kelas.kodemk,
+              created_at: new Date(),
+              updated_at: new Date(),
+            };
+
+            await Kelas.create(dataBaruKelas);
+            responseArray.push({
+              status: 201,
+              message: `Data kelas baru dengan Kelas ID ${kelas.kelasid} berhasil ditambahkan`,
+              data: dataBaruKelas,
+            });
+          }
+        }
+
+        return responseArray;
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // UPDATE All Data
   static async updateAllDataFromSevima(req, res, next) {
     try {
-      const responseArray = [];
+      const responseArrayDosen = [];
       const dataDosen = await SevimaController.updateDataDosen(req, res, next);
-      responseArray.push(...dataDosen);
+      responseArrayDosen.push(...dataDosen);
+
+      const responseArrayMatkul = [];
+      const dataMatkul = await SevimaController.updateDataMatkul(
+        req,
+        res,
+        next
+      );
+      responseArrayMatkul.push(...dataMatkul);
+
+      const responseArrayKelas = [];
+      const dataKelas = await SevimaController.updateDataKelas(req, res, next);
+      responseArrayKelas.push(...dataKelas);
+
       resSend(
         200,
         "Pembaruan data dari SEVIMA berhasil",
         {
-          dosen: responseArray,
-          // matkul: resultMatkul,
-          // kelas: resultKelas,
+          dosen: responseArrayDosen,
+          matkul: responseArrayMatkul,
+          kelas: responseArrayKelas,
         },
         res
       );
-      // res.status(200).json("Pembaruan data dari SEVIMA berhasil");
     } catch (error) {
       next(error);
     }
