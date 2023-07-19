@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "kelas_id",
         targetKey: "kelas_id",
       });
+      JadwalPraktik.hasMany(models.JadwalPiket, {
+        sourceKey: "praktik_id",
+        foreignKey: "praktik_id",
+      });
     }
   }
   JadwalPraktik.init(
