@@ -8,18 +8,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Krs.belongsTo(models.Mahasiswa, {
-      //   foreignKey: "nim",
-      //   targetKey: "nim",
-      // });
-      // Krs.belongsTo(models.Matkul, {
-      //   foreignKey: "kode_mk",
-      //   targetKey: "kode_mk",
-      // });
+      Krs.belongsTo(models.Mahasiswa, {
+        foreignKey: "nim",
+        targetKey: "nim",
+      });
+      Krs.belongsTo(models.Matkul, {
+        foreignKey: "kode_mk",
+        targetKey: "kode_mk",
+      });
       // Krs.belongsTo(models.Kelas, {
       //   foreignKey: "nama_kelas",
       //   targetKey: "nama_kelas",
       // });
+      Krs.hasMany(models.Penilaian, {
+        sourceKey: "krs_id",
+        foreignKey: "krs_id",
+      });
     }
   }
   Krs.init(

@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Penilaian.belongsTo(models.Krs, {
+        foreignKey: "krs_id",
+        targetKey: "krs_id",
+      });
     }
   }
   Penilaian.init(
