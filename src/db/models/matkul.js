@@ -8,7 +8,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Matkul.hasMany(models.Kelas, {
+        sourceKey: "kode_mk",
+        foreignKey: "kode_mk",
+      });
+      // Matkul.hasOne(models.Krs, {
+      //   sourceKey: "kode_mk",
+      //   foreignKey: "kode_mk",
+      // });
     }
   }
   Matkul.init(

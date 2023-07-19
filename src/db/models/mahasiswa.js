@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "nim",
         foreignKey: "nim",
       });
+      // Mahasiswa.hasMany(models.Krs, {
+      //   sourceKey: "nim",
+      //   foreignKey: "nim",
+      // });
     }
   }
   Mahasiswa.init(
