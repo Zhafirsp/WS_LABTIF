@@ -19,6 +19,9 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
       },
+      no_hp: {
+        type: Sequelize.STRING,
+      },
       image_url: {
         type: Sequelize.STRING,
       },

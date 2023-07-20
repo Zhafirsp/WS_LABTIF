@@ -79,7 +79,7 @@ class SevimaHelper {
         params: {
           programstudi: "S1 Teknik Informatika",
           kurikulum: "221",
-          limit: "2500",
+          limit: "5000",
         },
       });
 

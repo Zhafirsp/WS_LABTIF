@@ -8,13 +8,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      JadwalPraktik.belongsTo(models.Dosen, {
-        foreignKey: "dosen_nip",
-        targetKey: "dosen_nip",
+      JadwalPraktik.belongsTo(models.Matkul, {
+        foreignKey: "kode_mk",
+        targetKey: "kode_mk",
       });
       JadwalPraktik.belongsTo(models.Kelas, {
         foreignKey: "kelas_id",
         targetKey: "kelas_id",
+      });
+      JadwalPraktik.belongsTo(models.Dosen, {
+        foreignKey: "dosen_nip",
+        targetKey: "dosen_nip",
       });
       JadwalPraktik.hasMany(models.JadwalPiket, {
         sourceKey: "praktik_id",
@@ -34,12 +38,16 @@ module.exports = (sequelize, DataTypes) => {
       hari: DataTypes.STRING,
       jam_mulai: DataTypes.TIME,
       jam_selesai: DataTypes.TIME,
-      kelas_id: {
+      kode_mk: {
         allowNull: false,
+        type: DataTypes.STRING(11),
+      },
+      kelas_id: {
+        // allowNull: false,
         type: DataTypes.INTEGER(11),
       },
       dosen_nip: {
-        allowNull: false,
+        // allowNull: false,
         type: DataTypes.STRING(11),
       },
     },

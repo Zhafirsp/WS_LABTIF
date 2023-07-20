@@ -1,5 +1,5 @@
 const SevimaHelper = require("../helpers/getDataSevima");
-const { Dosen, Matkul, Kelas } = require("../db/models");
+const { Dosen, Matkul, Kelas, JadwalPraktik } = require("../db/models");
 const { resSend } = require("../helpers/response");
 
 class SevimaController {
@@ -270,10 +270,12 @@ class SevimaController {
   // UPDATE All Data
   static async updateAllDataFromSevima(req, res, next) {
     try {
+      // Dosen
       const responseArrayDosen = [];
       const dataDosen = await SevimaController.updateDataDosen(req, res, next);
       responseArrayDosen.push(...dataDosen);
 
+      // Mata Kuliah
       const responseArrayMatkul = [];
       const dataMatkul = await SevimaController.updateDataMatkul(
         req,
@@ -282,6 +284,7 @@ class SevimaController {
       );
       responseArrayMatkul.push(...dataMatkul);
 
+      // Kelas
       const responseArrayKelas = [];
       const dataKelas = await SevimaController.updateDataKelas(req, res, next);
       responseArrayKelas.push(...dataKelas);

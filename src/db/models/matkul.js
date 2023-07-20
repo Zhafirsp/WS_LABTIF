@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "kode_mk",
         foreignKey: "kode_mk",
       });
+      Matkul.hasMany(models.JadwalPraktik, {
+        sourceKey: "kode_mk",
+        foreignKey: "kode_mk",
+      });
       Matkul.hasMany(models.Krs, {
         sourceKey: "kode_mk",
         foreignKey: "kode_mk",

@@ -5,7 +5,6 @@ module.exports = {
       praktik_id: {
         allowNull: false,
         primaryKey: true,
-        unique: false,
         type: Sequelize.INTEGER(11),
       },
       periode: Sequelize.STRING(11),
@@ -13,12 +12,16 @@ module.exports = {
       hari: Sequelize.STRING,
       jam_mulai: Sequelize.TIME,
       jam_selesai: Sequelize.TIME,
-      kelas_id: {
+      kode_mk: {
         allowNull: false,
+        type: Sequelize.STRING(11),
+      },
+      kelas_id: {
+        // allowNull: false,
         type: Sequelize.INTEGER(11),
       },
       dosen_nip: {
-        allowNull: false,
+        // allowNull: false,
         type: Sequelize.STRING(11),
       },
       created_at: {
