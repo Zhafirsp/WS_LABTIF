@@ -16,6 +16,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      jenis_pegawai: Sequelize.STRING,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

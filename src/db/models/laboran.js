@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      jenis_pegawai: DataTypes.STRING,
     },
     {
       sequelize,

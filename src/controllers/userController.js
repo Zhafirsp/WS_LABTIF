@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { User } = require("../db/models");
+const { User, Laboran } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
 
 class UserController {
@@ -50,9 +50,9 @@ class UserController {
       });
       // Data Kosong?
       if (dataUsers.length == 0) {
-        resError(404, "Data User Kosong", res);
+        resError(404, "Data User kosong", res);
       } else {
-        resSend(200, "GET Data User Berhasil", dataUsers, res);
+        resSend(200, "Berhasil mendapatkan data User", dataUsers, res);
       }
     } catch (error) {
       next(error);
@@ -75,11 +75,11 @@ class UserController {
 
       // Data User ada?
       if (!dataUser) {
-        resError(404, `Data user id ${userID} tidak ditemukan`, res);
+        resError(404, `Data User dengan id ${userID} tidak ditemukan`, res);
       } else {
         resSend(
           200,
-          `Berhasil mendapatkan data user dengan id ${userID}`,
+          `Berhasil mendapatkan data User dengan id ${userID}`,
           dataUser,
           res
         );
@@ -102,7 +102,7 @@ class UserController {
     });
 
     if (!dataUser) {
-      resError(404, `Data user id ${userID} tidak ditemukan`, res);
+      resError(404, `Data User dengan id ${userID} tidak ditemukan`, res);
     } else {
       // Jika ada username atau email yang akan diupdate
       const filterQuery = {};
@@ -116,18 +116,15 @@ class UserController {
       const existingUser = await User.findOne({
         where: {
           [Op.or]: filterQuery,
-
-          // Mengecualikan pencarian pada user ID yang akan diupdate
-          [Op.not]: { user_id: Number(userID) },
         },
       });
 
-      // User sudah ada?
+      // User sudah terdaftar?
       if (existingUser) {
         if (existingUser.username === username) {
-          return resError(400, "Username sudah ada", res);
+          return resError(400, "Username sudah terdaftar", res);
         } else if (existingUser.email === email) {
-          return resError(400, "Email sudah ada", res);
+          return resError(400, "Email sudah terdaftar", res);
         }
       }
 
@@ -163,7 +160,34 @@ class UserController {
         },
       });
 
-      resSend(200, `Data user id ${userID} berhasil diubah`, req.body, res);
+      // Jika username berubah, dilakukan perubahan nip di tabel Laboran
+      if (username) {
+        const dataLaboran = await Laboran.findOne({
+          where: {
+            user_id: Number(userID),
+          },
+        });
+        // Data Laboran ada?
+        if (dataLaboran) {
+          await Laboran.update(
+            {
+              nip: username,
+            },
+            {
+              where: {
+                user_id: Number(userID),
+              },
+            }
+          );
+        }
+      }
+
+      resSend(
+        200,
+        `Data User dengan id ${userID} berhasil diubah`,
+        req.body,
+        res
+      );
     }
   }
 
@@ -184,9 +208,14 @@ class UserController {
             user_id: Number(userID),
           },
         });
-        resSend(200, `Data user id ${userID} berhasil dihapus`, dataUser, res);
+        resSend(
+          200,
+          `Data User dengan id ${userID} berhasil dihapus`,
+          dataUser,
+          res
+        );
       } else {
-        resError(404, `Data user id ${userID} tidak ditemukan`, res);
+        resError(404, `Data User dengan id ${userID} tidak ditemukan`, res);
       }
     } catch (error) {
       next(error);
