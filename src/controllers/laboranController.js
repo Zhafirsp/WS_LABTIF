@@ -216,7 +216,7 @@ class LaboranController {
         },
       });
 
-      // Data ada?
+      // Data Laboran ada?
       if (!dataLaboran) {
         resError(
           404,
