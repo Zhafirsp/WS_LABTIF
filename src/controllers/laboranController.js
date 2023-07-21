@@ -93,7 +93,7 @@ class LaboranController {
 
           resSend(
             200,
-            "Data laboran baru berhasil ditambahkan",
+            "Data Laboran baru berhasil ditambahkan",
             newLaboran,
             res
           );
@@ -114,7 +114,7 @@ class LaboranController {
       });
 
       // Data Kosong?
-      if (dataLaborans.length == 0) {
+      if (dataLaborans.length === 0) {
         resError(404, "Data Laboran kosong", res);
       } else {
         resSend(200, "Berhasil mendapatkan data Laboran", dataLaborans, res);

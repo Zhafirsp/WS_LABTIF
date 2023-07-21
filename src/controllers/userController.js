@@ -49,7 +49,7 @@ class UserController {
         },
       });
       // Data Kosong?
-      if (dataUsers.length == 0) {
+      if (dataUsers.length === 0) {
         resError(404, "Data User kosong", res);
       } else {
         resSend(200, "Berhasil mendapatkan data User", dataUsers, res);

@@ -12,7 +12,7 @@ class AsistenController {
       });
 
       // Data Kosong?
-      if (dataAsistens.length == 0) {
+      if (dataAsistens.length === 0) {
         resError(404, "Data Asisten kosong", res);
       } else {
         resSend(200, "Berhasil mendapatkan data Asisten", dataAsistens, res);
