@@ -23,6 +23,7 @@ class SevimaController {
           return {
             nim: item.nip,
             nama_mahasiswa: item.nama,
+            email: item.email,
             created_at: new Date(),
             updated_at: new Date(),
           };
@@ -51,6 +52,7 @@ class SevimaController {
           // NIM sudah ada? Lakukan pembaharuan data
           if (existingMahasiswa) {
             existingMahasiswa.nama_mahasiswa = mahasiswa.nama;
+            existingMahasiswa.email = mahasiswa.email;
 
             await existingMahasiswa.save();
 
@@ -64,6 +66,7 @@ class SevimaController {
             const dataBaruMahasiswa = {
               nim: mahasiswa.nip,
               nama_mahasiswa: mahasiswa.nama,
+              email: mahasiswa.email,
               created_at: new Date(),
               updated_at: new Date(),
             };

@@ -12,7 +12,7 @@ class UserController {
       const createdUsers = [];
 
       for (const mahasiswa of dataMahasiswas) {
-        const { nim } = mahasiswa;
+        const { nim, email } = mahasiswa;
 
         // Data Mahasiswa sudah memiliki akun?
         let user = await User.findOne({
@@ -26,6 +26,7 @@ class UserController {
           user = await User.create({
             username: nim,
             password: hashPassword("l4B-T!f2023"),
+            email: email,
           });
 
           // Menambahkan user_id baru ke data mahasiswa
