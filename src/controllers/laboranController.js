@@ -115,9 +115,9 @@ class LaboranController {
 
       // Data Kosong?
       if (dataLaborans.length == 0) {
-        resError(404, "Data laboran kosong", res);
+        resError(404, "Data Laboran kosong", res);
       } else {
-        resSend(200, "Berhasil mendapatkan data laboran", dataLaborans, res);
+        resSend(200, "Berhasil mendapatkan data Laboran", dataLaborans, res);
       }
     } catch (error) {
       next(error);
