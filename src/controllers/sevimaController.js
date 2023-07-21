@@ -1,8 +1,89 @@
 const SevimaHelper = require("../helpers/getDataSevima");
-const { Dosen, Matkul, Kelas, JadwalPraktik } = require("../db/models");
+const {
+  Mahasiswa,
+  Dosen,
+  Matkul,
+  Kelas,
+  JadwalPraktik,
+} = require("../db/models");
 const { resSend } = require("../helpers/response");
 
 class SevimaController {
+  // UPDATE Data Mahasiswa
+  static async updateDataMahasiswa(req, res, next) {
+    try {
+      const mahasiswaArray = await SevimaHelper.getDosenIF();
+
+      const isEmptyTableMahasiswa = (await Mahasiswa.count()) === 0;
+      const responseArray = [];
+
+      // Data Mahasiswa di database kosong?
+      if (isEmptyTableMahasiswa) {
+        const dataBaruMahasiswa = mahasiswaArray.map((item) => {
+          return {
+            nim: item.nip,
+            nama_mahasiswa: item.nama,
+            created_at: new Date(),
+            updated_at: new Date(),
+          };
+        });
+
+        await Mahasiswa.bulkCreate(dataBaruMahasiswa);
+
+        responseArray.push({
+          status: 201,
+          message:
+            "Data Mahasiswa dari SEVIMA API berhasil ditambahkan ke database",
+          data: dataBaruMahasiswa,
+        });
+
+        return responseArray;
+      } else {
+        // Data Mahasiswa sudah ada di database
+        for (const mahasiswa of mahasiswaArray) {
+          // Cari data Mahasiswa berdasarkan nim
+          const existingMahasiswa = await Mahasiswa.findOne({
+            where: {
+              nim: mahasiswa.nip,
+            },
+          });
+
+          // NIM sudah ada? Lakukan pembaharuan data
+          if (existingMahasiswa) {
+            existingMahasiswa.nama_mahasiswa = mahasiswa.nama;
+
+            await existingMahasiswa.save();
+
+            responseArray.push({
+              status: 200,
+              message: `Data Mahasiswa dengan NIM ${mahasiswa.nip} berhasil diperbarui`,
+              data: existingMahasiswa,
+            });
+          } else {
+            // NIM belum ada? Tambahkan data baru
+            const dataBaruMahasiswa = {
+              nim: mahasiswa.nip,
+              nama_mahasiswa: mahasiswa.nama,
+              created_at: new Date(),
+              updated_at: new Date(),
+            };
+
+            await Mahasiswa.create(dataBaruMahasiswa);
+
+            responseArray.push({
+              status: 201,
+              message: `Data Mahasiswa baru dengan NIM ${mahasiswa.nip} berhasil ditambahkan`,
+              data: dataBaruMahasiswa,
+            });
+          }
+        }
+        return responseArray;
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // UPDATE Data Dosen
   static async updateDataDosen(req, res, next) {
     try {
@@ -271,6 +352,15 @@ class SevimaController {
   static async updateAllDataFromSevima(req, res, next) {
     try {
       // Dosen
+      const responseArrayMahasiswa = [];
+      const dataMahasiswa = await SevimaController.updateDataMahasiswa(
+        req,
+        res,
+        next
+      );
+      responseArrayMahasiswa.push(...dataMahasiswa);
+
+      // Dosen
       const responseArrayDosen = [];
       const dataDosen = await SevimaController.updateDataDosen(req, res, next);
       responseArrayDosen.push(...dataDosen);
@@ -293,6 +383,7 @@ class SevimaController {
         200,
         "Pembaruan data dari SEVIMA berhasil",
         {
+          mahasiswa: responseArrayMahasiswa,
           dosen: responseArrayDosen,
           matkul: responseArrayMatkul,
           kelas: responseArrayKelas,

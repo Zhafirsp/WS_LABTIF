@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(11),
       },
       nama_mahasiswa: DataTypes.STRING,
+      email: DataTypes.STRING,
       user_id: DataTypes.INTEGER(11),
     },
     {

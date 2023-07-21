@@ -2,50 +2,6 @@ const { User, Laboran } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
 
 class LaboranController {
-  // GET Laboran By Username
-  static async getLaboranByUsername(req, res, next) {
-    const username = req.params.username;
-
-    const dataUser = await User.findOne({
-      where: {
-        username,
-      },
-      attributes: {
-        exclude: ["password", "created_at", "updated_at"],
-      },
-    });
-
-    // Data user ada?
-    if (!dataUser) {
-      resError(404, `Data username ${username} tidak ditemukan`, res);
-    } else if (dataUser.role !== "Laboran") {
-      // bukan Laboran?
-      resError(400, `Data username ${username} bukan Laboran`, res);
-    } else {
-      const laboranExists = await Laboran.findOne({
-        where: {
-          nip: username,
-        },
-      });
-
-      // Data laboran sudah ada?
-      if (laboranExists) {
-        resError(
-          400,
-          `Username ${username} sudah terdaftar sebagai Laboran`,
-          res
-        );
-      } else {
-        resSend(
-          200,
-          `Berhasil mendapatkan data User dengan username ${username}`,
-          dataUser,
-          res
-        );
-      }
-    }
-  }
-
   // ADD New Laboran
   static async addLaboranByUsername(req, res, next) {
     try {

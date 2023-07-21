@@ -1,9 +1,62 @@
 const { Op } = require("sequelize");
-const { User, Laboran } = require("../db/models");
+const { User, Laboran, Mahasiswa } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
+const { hashPassword } = require("../helpers/bcrypt");
 
 class UserController {
-  // ADD New User
+  // ADD New User Otomatis untuk Mahasiswa Baru
+  static async addMahasiswaAsUser(req, res, next) {
+    try {
+      const dataMahasiswas = await Mahasiswa.findAll();
+
+      const createdUsers = [];
+
+      for (const mahasiswa of dataMahasiswas) {
+        const { nim } = mahasiswa;
+
+        // Data Mahasiswa sudah memiliki akun?
+        let user = await User.findOne({
+          where: {
+            username: nim,
+          },
+        });
+
+        // Data Mahasiswa belum memiliki akun?
+        if (!user) {
+          user = await User.create({
+            username: nim,
+            password: hashPassword("l4B-T!f2023"),
+          });
+
+          // Menambahkan user_id baru ke data mahasiswa
+          if (!mahasiswa.user_id) {
+            // Jika mahasiswa tidak memiliki user_id, otomatis akan ditambahkan ke data Mahasiswa
+            mahasiswa.user_id = user.user_id;
+
+            await mahasiswa.save();
+          }
+
+          createdUsers.push(user);
+        }
+      }
+
+      // Ada penambahan data User baru?
+      if (createdUsers.length > 0) {
+        resSend(
+          201,
+          "Data Mahasiswa berhasil didaftarkan sebagai User",
+          createdUsers,
+          res
+        );
+      } else {
+        resSend(200, "Data User sudah up-to-date", createdUsers, res);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // ADD New User Manual
   static async addUser(req, res, next) {
     try {
       const { username, password, email, no_hp, image_url, role } = req.body;
@@ -33,7 +86,7 @@ class UserController {
           role,
         });
 
-        resSend(201, `Akun User baru berhasil ditambahkan`, newUser, res);
+        resSend(201, "Akun User baru berhasil ditambahkan", newUser, res);
       }
     } catch (error) {
       next(error);

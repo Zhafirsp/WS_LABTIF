@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Username tidak boleh kosong",
           },
           len: {
-            args: [9, 11],
-            msg: "Username harus dengan angka antara 9 dan 11 karakter.", // Error message I want to display
+            args: [3, 11],
+            msg: "Username harus dengan angka antara 3 dan 11 karakter.", // Error message I want to display
           },
         },
       },
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        // allowNull: false,
         validate: {
           isEmail: {
             args: true,

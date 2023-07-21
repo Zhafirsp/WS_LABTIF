@@ -9,13 +9,13 @@ module.exports = {
         type: Sequelize.STRING(11),
       },
       nama_mahasiswa: {
+        allowNull: false,
         type: Sequelize.STRING,
-        allowNull: false,
       },
-      user_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER(11),
+      email: {
+        type: Sequelize.STRING,
       },
+      user_id: Sequelize.INTEGER(11),
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
