@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(
     extended: true,
   })
 );
+
+app.use(cookieParser());
 
 app.use("/v1", routes);
 

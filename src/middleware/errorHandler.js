@@ -8,6 +8,7 @@ module.exports = (error, req, res, next) => {
     const errors = error.errors.map((error) => error.message);
     res.status(400).json({ errors });
   } else {
+    console.log(error);
     return res.status(500).json({
       error: error.message || "Internal Server Error",
     });

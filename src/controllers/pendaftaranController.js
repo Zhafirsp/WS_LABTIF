@@ -41,6 +41,34 @@ class PendaftaranController {
     }
   }
 
+  // GET Pengumuman
+  static async getPengumuman(req, res, next) {
+    try {
+      const dataPengumuman = await Pendaftaran.findAll({
+        where: {
+          status: "Diterima",
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+      });
+
+      // Data pengumuman ada?
+      if (dataPengumuman.length === 0) {
+        resError(404, "Data Pengumuman kosong", res);
+      } else {
+        resSend(
+          200,
+          "Berhasil mendapatkan data pengumuman",
+          dataPengumuman,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // GET Pendaftaran By NIM
   static async getPendaftaranByNim(req, res, next) {
     try {

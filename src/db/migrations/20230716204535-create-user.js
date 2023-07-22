@@ -16,19 +16,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      email: {
-        type: Sequelize.STRING,
-      },
-      no_hp: {
-        type: Sequelize.STRING,
-      },
-      image_url: {
-        type: Sequelize.STRING,
-      },
+      email: Sequelize.STRING,
+      no_hp: Sequelize.STRING,
+      image_url: Sequelize.STRING,
       role: {
         allowNull: false,
         type: Sequelize.ENUM("Laboran", "Asisten", "Mahasiswa"),
       },
+      access_token: Sequelize.STRING,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

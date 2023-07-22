@@ -25,7 +25,7 @@ class UserController {
         if (!user) {
           user = await User.create({
             username: nim,
-            password: hashPassword("l4B-T!f2023"),
+            password: "l4B-T!f2023",
             email: email,
           });
 
@@ -99,14 +99,14 @@ class UserController {
     try {
       const dataUsers = await User.findAll({
         attributes: {
-          exclude: ["password", "created_at", "updated_at"],
+          exclude: ["access_token", "password", "created_at", "updated_at"],
         },
       });
       // Data Kosong?
       if (dataUsers.length === 0) {
-        resError(404, "Data User kosong", res);
+        return resError(404, "Data User kosong", res);
       } else {
-        resSend(200, "Berhasil mendapatkan data User", dataUsers, res);
+        return resSend(200, "Berhasil mendapatkan data User", dataUsers, res);
       }
     } catch (error) {
       next(error);

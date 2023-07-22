@@ -74,6 +74,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      access_token: DataTypes.STRING,
     },
     {
       hooks: {
