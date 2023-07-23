@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, Model } = require("sequelize");
 const { User, Laboran, Mahasiswa } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
 const { hashPassword } = require("../helpers/bcrypt");

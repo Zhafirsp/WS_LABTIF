@@ -1,4 +1,4 @@
-const { User } = require("../db/models");
+const { User, Mahasiswa } = require("../db/models");
 const { comparePassword } = require("../helpers/bcrypt");
 const { resSend, resError } = require("../helpers/response");
 const {
@@ -48,7 +48,7 @@ class AuthController {
 
           // response sama dengan live_token SEVIMA
           return res.status(200).send({
-            message: "Login Berhasil",
+            message: "User Berhasil Login",
             access_token: token,
             expires_in: expiresIn.toString(),
           });
@@ -112,6 +112,87 @@ class AuthController {
       } else {
         return resError(500, "Internal server error", res);
       }
+    }
+  }
+
+  // GET Currest User
+  static async currentUser(req, res, next) {
+    try {
+      const username = req.userLogin.username;
+
+      const user = await User.findOne({
+        where: {
+          username,
+        },
+        include: {
+          model: Mahasiswa,
+        },
+      });
+
+      const response = {
+        user_id: user.user_id,
+        username: user.username,
+        nama_mahasiswa: user.Mahasiswa.nama_mahasiswa,
+        email: user.email,
+        role: user.role,
+      };
+
+      if (!user) {
+        return resError(404, "Data User tidak ditemukan", res);
+      } else {
+        return resSend(
+          200,
+          "Ini adalah data user yang sedang login",
+          response,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Logout
+  static async Logout(req, res, next) {
+    try {
+      /* 
+        Optional chaining (?.) 
+        untuk memastikan tidak terjadi error jika cookie refresh_token tidak ada
+      */
+      const cookiesToken = req.cookies?.refresh_token;
+
+      if (!cookiesToken) {
+        return resError(401, "Unauthorized", res);
+      }
+
+      const userID = req.userLogin.user_id;
+
+      const user = await User.findOne({
+        where: {
+          user_id: Number(userID),
+        },
+      });
+
+      // Data user tidak ada?
+      if (!user) {
+        // Menghapus refresh_token yang ada di cookie
+        res.clearCookie("refresh_token");
+
+        return resSend(200, "User Berhasil Logout ", null, res);
+      }
+
+      // Data user ada?
+      await user.update(
+        { access_token: null },
+        {
+          where: { userID },
+        }
+      );
+
+      res.clearCookie("refresh_token");
+      return resSend(200, "User Berhasil Logout ", null, res);
+    } catch (error) {
+      next(error);
     }
   }
 }

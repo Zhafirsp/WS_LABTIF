@@ -31,7 +31,7 @@ module.exports = async (req, res, next) => {
         return resError(401, "Unauthorized", res);
       }
 
-      req.user = decoded;
+      req.userLogin = decoded;
       next();
     }
   } catch (error) {
