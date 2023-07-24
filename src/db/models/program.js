@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER(11),
       },
+      periode: DataTypes.STRING(11),
       judul: DataTypes.STRING,
       deskripsi: DataTypes.STRING,
       batas_waktu: DataTypes.DATE,

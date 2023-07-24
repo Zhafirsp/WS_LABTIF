@@ -8,6 +8,10 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER(11),
       },
+      periode: {
+        allowNull: false,
+        type: Sequelize.STRING(11),
+      },
       judul: {
         allowNull: false,
         type: Sequelize.STRING,

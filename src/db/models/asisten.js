@@ -57,7 +57,6 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      periode: DataTypes.STRING(11),
     },
     {
       sequelize,

@@ -20,6 +20,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(11),
       },
+      nama_mahasiswa: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       file_syarat: Sequelize.STRING,
       status: {
         allowNull: false,

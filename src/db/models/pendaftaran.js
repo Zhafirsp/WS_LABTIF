@@ -35,9 +35,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING(11),
       },
+      nama_mahasiswa: DataTypes.STRING,
       file_syarat: DataTypes.STRING,
       status: {
-        allowNull: false,
         type: DataTypes.ENUM("Diterima", "Menunggu", "Ditolak"),
         validate: {
           isIn: {

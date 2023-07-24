@@ -5,10 +5,13 @@ class ProgramController {
   // ADD new Program
   static async addProgram(req, res, next) {
     try {
-      const { judul, deskripsi, batas_waktu } = req.body;
+      const { periode, judul, deskripsi, batas_waktu } = req.body;
 
-      // Data judul kosong?
-      if (!judul) {
+      // Data periode kosong?
+      if (!periode) {
+        resError(400, "Periode tidak boleh kosong", res);
+        // Data judul kosong?
+      } else if (!judul) {
         resError(400, "Judul tidak boleh kosong", res);
       } else if (!deskripsi) {
         // Data deskripsi kosong?
@@ -18,6 +21,7 @@ class ProgramController {
         resError(400, "Batas waktu tidak boleh kosong", res);
       } else {
         const newProgram = await Program.create({
+          periode,
           judul,
           deskripsi,
           batas_waktu,

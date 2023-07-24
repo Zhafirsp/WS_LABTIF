@@ -2,6 +2,8 @@ const { User, Asisten } = require("../db/models");
 const { resError } = require("../helpers/response");
 
 class AsistenController {
+  // CREATE New Asisten
+
   // GET All Asisten
   static async getAllAsisten(req, res, next) {
     try {
