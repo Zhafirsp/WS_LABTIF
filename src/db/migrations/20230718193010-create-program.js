@@ -10,6 +10,7 @@ module.exports = {
       },
       periode: {
         allowNull: false,
+        unique: true,
         type: Sequelize.STRING(11),
       },
       judul: {

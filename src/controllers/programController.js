@@ -20,13 +20,29 @@ class ProgramController {
         // Data batas waktu kosong?
         resError(400, "Batas waktu tidak boleh kosong", res);
       } else {
-        const newProgram = await Program.create({
-          periode,
-          judul,
-          deskripsi,
-          batas_waktu,
+        const periodeExists = await Program.findOne({
+          where: {
+            periode,
+          },
         });
-        resSend(200, "Data program baru berhasil ditambahkan", newProgram, res);
+
+        // Data periode sudah ada?
+        if (periodeExists) {
+          return resError(400, "Periode harus unik", res);
+        } else {
+          const newProgram = await Program.create({
+            periode,
+            judul,
+            deskripsi,
+            batas_waktu,
+          });
+          return resSend(
+            200,
+            "Data program baru berhasil ditambahkan",
+            newProgram,
+            res
+          );
+        }
       }
     } catch (error) {
       next(error);

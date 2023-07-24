@@ -36,6 +36,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(11),
       },
       nama_mahasiswa: DataTypes.STRING,
+      email: DataTypes.STRING,
+      no_hp: DataTypes.STRING,
       file_syarat: DataTypes.STRING,
       status: {
         type: DataTypes.ENUM("Diterima", "Menunggu", "Ditolak"),

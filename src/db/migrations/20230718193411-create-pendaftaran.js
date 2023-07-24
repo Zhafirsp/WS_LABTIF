@@ -24,6 +24,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      email: Sequelize.STRING,
+      no_hp: Sequelize.STRING,
       file_syarat: Sequelize.STRING,
       status: {
         allowNull: false,

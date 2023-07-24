@@ -92,6 +92,8 @@ class AuthController {
       const dataUser = {
         user_id: user.user_id,
         username: user.username,
+        email: user.email,
+        no_hp: user.no_hp,
         role: user.role,
       };
 
