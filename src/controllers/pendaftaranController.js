@@ -21,20 +21,37 @@ class PendaftaranController {
       } else {
         const userLogin = req.userLogin;
 
+        // Mencari data user login di data pendaftaran berdasarkan programID
         const userExists = await Pendaftaran.findOne({
           where: {
             program_id: dataProgram.program_id,
             nim: userLogin.username,
           },
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
         });
 
-        // User sudah terdaftar pada programID?
+        // User sudah terdaftar menjadi calon asisten  pada programID?
         if (userExists) {
-          return resError(
-            400,
-            `User sudah terdaftar menjadi calon Asisten di periode ${dataProgram.periode}`,
-            res
-          );
+          // File syarat kosong?
+          if (userExists.file_syarat === null) {
+            userExists.file_syarat = file_syarat;
+            await userExists.save();
+
+            return resSend(
+              200,
+              `Berhasil mengubah data file_syarat NIM ${userLogin.username} pada periode ${dataProgram.periode}`,
+              userExists,
+              res
+            );
+          } else {
+            return resError(
+              400,
+              "Perubahan file_syarat tidak diizinkan, hapus terlebih dahulu file sebelumnya",
+              res
+            );
+          }
         } else {
           // Memastikan data user sudah menjadi asisten di program lain
           const userAsAsisten = await Pendaftaran.findOne({
@@ -53,7 +70,7 @@ class PendaftaranController {
             );
           }
 
-          // User belum terdaftar pada programID?
+          // User belum terdaftar menjadi calon asisten pada programID?
           const user = await User.findOne({
             where: {
               user_id: userLogin.user_id,
@@ -294,8 +311,80 @@ class PendaftaranController {
   }
 
   // DELETE Pendaftaran By NIM
-  static async deletePendaftaranByNim(req, res, next) {
+  static async deletePendaftaranByProgramId(req, res, next) {
     try {
+      const programID = req.params.programID;
+
+      const dataProgram = await Program.findOne({
+        where: {
+          program_id: Number(programID),
+        },
+      });
+
+      // Data program tidak ada?
+      if (!dataProgram) {
+        return resError(404, "Data program tidak ditemukan", res);
+      } else {
+        const userLogin = req.userLogin;
+
+        // Mencari data user login di data pendaftaran berdasarkan programID
+        const dataPendaftaran = await Pendaftaran.findOne({
+          where: {
+            program_id: dataProgram.program_id,
+            nim: userLogin.username,
+          },
+          attributes: {
+            exclude: ["created_at", "updated_at"],
+          },
+        });
+
+        // User tidak ada pada data pendaftaran?
+        if (!dataPendaftaran) {
+          return resError(
+            404,
+            `Data pendaftaran user dengan username ${userLogin?.username} tidak ditemukan`,
+            res
+          );
+        } else {
+          // Memastikan data user sudah menjadi asisten di program lain
+          const userAsAsisten = await Pendaftaran.findOne({
+            where: {
+              nim: userLogin.username,
+              status: "Diterima",
+            },
+          });
+
+          // User adalah asisten?
+          if (userAsAsisten) {
+            return resError(
+              400,
+              `User sudah terdaftar menjadi calon Asisten di periode ${dataProgram.periode}`,
+              res
+            );
+          } else {
+            // User memiliki data file syarat yang telah diupload sebelumnya
+            if (dataPendaftaran.file_syarat) {
+              // Hapus file_syarat pada data pendaftaran
+              dataPendaftaran.file_syarat = null;
+              await dataPendaftaran.save();
+
+              return resSend(
+                200,
+                `Berhasil menghapus file syarat pada data pendaftaran username ${userLogin?.username} dengan program id ${programID}`,
+                dataPendaftaran,
+                res
+              );
+              // User tidak memiliki data file syarat yang telah diupload sebelumnya
+            } else {
+              return resError(
+                404,
+                `Data file syarat pada data pendaftaran username ${userLogin.username} dengan program id ${programID} tidak ditemukan`,
+                res
+              );
+            }
+          }
+        }
+      }
     } catch (error) {
       next(error);
     }
