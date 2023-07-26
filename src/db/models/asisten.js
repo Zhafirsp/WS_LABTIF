@@ -48,6 +48,8 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      email: DataTypes.STRING,
+      no_hp: DataTypes.STRING,
       golongan: {
         type: DataTypes.ENUM("A", "B", "C"),
         validate: {
@@ -57,8 +59,20 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      periode: {
+        allowNull: false,
+        type: DataTypes.STRING(11),
+      },
     },
     {
+      hooks: {
+        beforeCreate(model) {
+          if (!model.golongan) {
+            // default C --> baru bergabung
+            model.golongan = "C";
+          }
+        },
+      },
       sequelize,
       createdAt: "created_at",
       updatedAt: "updated_at",

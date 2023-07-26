@@ -32,7 +32,7 @@ class PendaftaranController {
           },
         });
 
-        // User sudah terdaftar menjadi calon asisten  pada programID?
+        // User sudah terdaftar menjadi calon asisten pada programID?
         if (userExists) {
           // File syarat kosong?
           if (userExists.file_syarat === null) {
