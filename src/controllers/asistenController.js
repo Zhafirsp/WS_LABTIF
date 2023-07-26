@@ -77,7 +77,7 @@ class AsistenController {
 
             await Asisten.create(newAsisten);
 
-            resSend(
+            return resSend(
               201,
               `Data asisten baru dengan nim ${dataPendaftaran.nim} berhasil ditambahkan`,
               newAsisten,
@@ -152,7 +152,7 @@ class AsistenController {
 
       // Data Asisten ada?
       if (!dataAsisten) {
-        resError(
+        return resError(
           404,
           `Data Asisten dengan id ${asistenID} tidak ditemukan`,
           res
@@ -174,7 +174,7 @@ class AsistenController {
           },
         });
 
-        resSend(
+        return resSend(
           200,
           `Data Asisten dengan id ${asistenID} berhasil dihapus`,
           dataAsisten,
