@@ -136,6 +136,43 @@ class AsistenController {
     }
   }
 
+  // UPDATE Asisten By ID
+  static async updateAslabByID(req, res, next) {
+    try {
+      const asistenID = req.params.id;
+      const { nim, email, no_hp, golongan, periode } = req.body;
+
+      const dataAsisten = await Asisten.findOne({
+        where: {
+          asisten_id: asistenID,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+      });
+
+      // Data Asisten ada?
+      if (!dataAsisten) {
+        return resError(
+          404,
+          `Data Asisten dengan id ${asistenID} tidak ditemukan`,
+          res
+        );
+      } else {
+        // Perubahan golongan
+        await Asisten.update(
+          { golongan: golongan },
+          {
+            where: {
+              asisten_id: asistenID,
+            },
+          }
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
   // DELETE Asisten By ID
   static async deleteAslabByID(req, res, next) {
     try {

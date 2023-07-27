@@ -2,35 +2,53 @@ const express = require("express");
 const router = express.Router();
 
 const Authenticated = require("../middleware/authentication");
+const Authorization = require("../middleware/authorization");
 const PendaftaranController = require("../controllers/pendaftaranController");
 
-// ADD new Pendaftaran
+router.use(Authenticated);
+
+// --- MAHASISWA ---
+// ADD new Pendaftaran By ProgramID
 router.post(
   "/:programID",
-  Authenticated,
+  Authorization.verifyMahasiswa,
   PendaftaranController.addPendaftaranByProgramId
 );
-
-// UPDATE status or Validasi
-router.post("/penerimaan/:id", PendaftaranController.updateStatusById);
-
-// GET All Pendaftaran
-router.get("/", PendaftaranController.getAllPendaftaran);
 
 // GET Pengumuman By Periode
 router.get(
   "/pengumuman/:periode",
+  Authorization.verifyMahasiswa,
   PendaftaranController.getPengumumanByPeriode
 );
 
-// GET Pendaftaran By NIM
-router.get("/:nim", PendaftaranController.getPendaftaranByNim);
-
-// DELETE Pendaftaran By NIM
+// DELETE Pendaftaran By ProgramID
 router.delete(
   "/:programID",
-  Authenticated,
+  Authorization.verifyMahasiswa,
   PendaftaranController.deletePendaftaranByProgramId
+);
+
+// --- LABORAN ---
+// UPDATE status or Validasi
+router.post(
+  "/penerimaan/:id",
+  Authorization.verifyLaboran,
+  PendaftaranController.updateStatusById
+);
+
+// GET All Pendaftaran
+router.get(
+  "/",
+  Authorization.verifyLaboran,
+  PendaftaranController.getAllPendaftaran
+);
+
+// GET Pendaftaran By NIM
+router.get(
+  "/:nim",
+  Authorization.verifyLaboran,
+  PendaftaranController.getPendaftaranByNim
 );
 
 module.exports = router;

@@ -198,15 +198,13 @@ class UserController {
         }
       }
 
-      // Jika ada role yang akan diupdate
-      // if (role) {
-      //   if (account?.role !== "Koordinator Lab") {
-      //     // return resError(400, "Access denied!", res);
-      //     return console.log("BUKAN ADMIN");
-      //   } else {
-      //     return console.log("INI ADMIN");
-      //   }
-      // }
+      // Jika ada role yang akan diupdate dan userLogin bukan Laboran
+      if (role) {
+        const userLogin = req.userLogin;
+        if (userLogin?.role !== "Laboran") {
+          return resError(400, "Akses Dilarang!", res);
+        }
+      }
 
       await User.update(req.body, {
         where: {
