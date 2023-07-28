@@ -192,7 +192,6 @@ class PendaftaranController {
         const dataPengumuman = await Pendaftaran.findAll({
           where: {
             program_id: program.program_id,
-            status: "Diterima",
           },
           attributes: {
             exclude: ["created_at", "updated_at"],
@@ -274,12 +273,12 @@ class PendaftaranController {
               { where: { username: dataPendaftaran.nim } }
             );
 
-            return resSend(
-              200,
-              `NIM ${dataPendaftaran.nim} diterima menjadi Asisten baru`,
-              dataPendaftaran,
-              res
-            );
+            // return resSend(
+            //   200,
+            //   `NIM ${dataPendaftaran.nim} diterima menjadi Asisten baru`,
+            //   dataPendaftaran,
+            //   res
+            // );
           } else if (status === "Ditolak") {
             // Mahasiswa ditolak menjadi Asisten?
             // Perubahan status
@@ -294,15 +293,29 @@ class PendaftaranController {
               }
             );
 
-            return resSend(
-              200,
-              `NIM ${dataPendaftaran.nim} ditolak menjadi Asisten`,
-              dataPendaftaran,
-              res
-            );
+            // return resSend(
+            //   200,
+            //   `NIM ${dataPendaftaran.nim} ditolak menjadi Asisten`,
+            //   dataPendaftaran,
+            //   res
+            // );
           } else if (status === "Menunggu") {
-            resSend(200, "Menunggu proses validasi pendaftaran", res);
+            resSend(200, "Menunggu proses validasi pendaftaran", null, res);
           }
+
+          const validasi = {
+            daftar_id: daftarID,
+            nim: dataPendaftaran.nim,
+            nama_mahasiswa: dataPendaftaran.nama_mahasiswa,
+            status,
+          };
+          // console.log({ UBAH: validasi });
+          return resSend(
+            200,
+            `Validasi data pendaftaran dengan NIM ${dataPendaftaran.nim} berhasil dilakukan`,
+            validasi,
+            res
+          );
         }
       }
     } catch (error) {
