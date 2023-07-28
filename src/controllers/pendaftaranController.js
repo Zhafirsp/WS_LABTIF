@@ -1,4 +1,10 @@
-const { Program, Pendaftaran, User, Mahasiswa } = require("../db/models");
+const {
+  Program,
+  Pendaftaran,
+  User,
+  Mahasiswa,
+  Asisten,
+} = require("../db/models");
 const { resError, resSend } = require("../helpers/response");
 
 class PendaftaranController {
@@ -192,7 +198,6 @@ class PendaftaranController {
         const dataPengumuman = await Pendaftaran.findAll({
           where: {
             program_id: program.program_id,
-            status: "Diterima",
           },
           attributes: {
             exclude: ["created_at", "updated_at"],
@@ -274,12 +279,64 @@ class PendaftaranController {
               { where: { username: dataPendaftaran.nim } }
             );
 
-            return resSend(
-              200,
-              `NIM ${dataPendaftaran.nim} diterima menjadi Asisten baru`,
-              dataPendaftaran,
-              res
-            );
+            // --- Data penambahan asisten ---
+            // Data pendaftaran ada pada tabel Asisten?
+            const dataAsisten = await Asisten.findOne({
+              where: {
+                nim: dataPendaftaran.nim,
+              },
+            });
+
+            // Mahasiswa sudah ada di data Asisten
+            if (dataAsisten) {
+              return resError(
+                400,
+                `Asisten dengan nim ${dataPendaftaran.nim} sudah terdaftar`,
+                res
+              );
+            } else {
+              // Memastikan data mahasiswa sudah menjadi asisten
+              const userAsAsisten = await User.findOne({
+                where: {
+                  username: dataPendaftaran.nim,
+                  role: "Asisten",
+                },
+              });
+
+              // Mahasiswa bukan asisten baru
+              if (!userAsAsisten) {
+                return resError(
+                  400,
+                  `Data pendaftaran dengan NIM ${dataPendaftaran.nim} bukan Asisten`,
+                  res
+                );
+              } else {
+                // Mahasiswa sudah menjadi asisten baru
+                // Ambil periode pada data program yang ada di data pendaftaran
+                const periodeProgram = dataPendaftaran.Program.periode;
+
+                // Buat costum asisten_id
+                const asisten_id = await generateAslabId(periodeProgram);
+                // Buat data asisten baru
+                const newAsisten = {
+                  asisten_id: asisten_id,
+                  nim: dataPendaftaran.nim,
+                  nama_asisten: dataPendaftaran.nama_mahasiswa,
+                  email: dataPendaftaran.email,
+                  no_hp: dataPendaftaran.no_hp,
+                  periode: periodeProgram,
+                };
+
+                await Asisten.create(newAsisten);
+
+                return resSend(
+                  201,
+                  `Data asisten baru dengan nim ${dataPendaftaran.nim} berhasil ditambahkan`,
+                  newAsisten,
+                  res
+                );
+              }
+            }
           } else if (status === "Ditolak") {
             // Mahasiswa ditolak menjadi Asisten?
             // Perubahan status
@@ -294,14 +351,25 @@ class PendaftaranController {
               }
             );
 
+            const validasi = {
+              daftar_id: daftarID,
+              nim: dataPendaftaran.nim,
+              nama_mahasiswa: dataPendaftaran.nama_mahasiswa,
+              status,
+            };
             return resSend(
               200,
-              `NIM ${dataPendaftaran.nim} ditolak menjadi Asisten`,
-              dataPendaftaran,
+              `Validasi data pendaftaran dengan NIM ${dataPendaftaran.nim} berhasil dilakukan`,
+              validasi,
               res
             );
           } else if (status === "Menunggu") {
-            resSend(200, "Menunggu proses validasi pendaftaran", res);
+            return resSend(
+              200,
+              "Menunggu proses validasi pendaftaran",
+              null,
+              res
+            );
           }
         }
       }

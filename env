@@ -1,0 +1,15 @@
+APP_NAME="WEB SERVICE - LAB TIF"
+APP_PORT=3000
+BASEURL=localhost
+APP_NODE=development
+
+BASEURL_SEVIMA="https://unpas.siakadcloud.com/live"
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD
+DB_NAME=labtif
+
+TOKEN_SECRET=51m4la_2023Unchp45
+TOKEN_SECRET_REFRESH=51m4la_2023Unchp45_R3fre5h
