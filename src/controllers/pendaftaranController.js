@@ -5,6 +5,7 @@ const {
   Mahasiswa,
   Asisten,
 } = require("../db/models");
+const generateAslabId = require("../helpers/generateAsistenId");
 const { resError, resSend } = require("../helpers/response");
 
 class PendaftaranController {
@@ -234,6 +235,9 @@ class PendaftaranController {
         },
         attributes: {
           exclude: ["created_at", "updated_at"],
+        },
+        include: {
+          model: Program,
         },
       });
 
