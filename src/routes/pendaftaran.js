@@ -18,7 +18,7 @@ router.post(
 // GET Pengumuman By Periode
 router.get(
   "/pengumuman/:periode",
-  Authorization.verifyMahasiswa,
+  Authorization.verifyLaboran,
   PendaftaranController.getPengumumanByPeriode
 );
 
