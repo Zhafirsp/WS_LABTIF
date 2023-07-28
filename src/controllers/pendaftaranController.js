@@ -259,7 +259,7 @@ class PendaftaranController {
 
         // User bukan Mahasiswa?
         if (!userAsMahasiswa) {
-          return resError(400, "User bukan Mahasiswa", res);
+          return resError(400, "Data user tidak memiliki role Mahasiswa", res);
         } else {
           // Mahasiswa diterima menjadi Asisten?
           if (status === "Diterima") {

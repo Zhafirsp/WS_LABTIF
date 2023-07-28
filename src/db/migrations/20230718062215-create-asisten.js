@@ -18,13 +18,12 @@ module.exports = {
       },
       email: Sequelize.STRING,
       no_hp: Sequelize.STRING,
-      golongan: {
-        type: Sequelize.ENUM("A", "B", "C"),
-      },
+      golongan: Sequelize.ENUM("A", "B", "C"),
       periode: {
         allowNull: false,
         type: Sequelize.STRING(11),
       },
+      is_active: Sequelize.BOOLEAN,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
