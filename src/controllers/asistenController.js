@@ -109,6 +109,7 @@ class AsistenController {
       next(error);
     }
   }
+
   // DELETE Asisten By ID
   static async deleteAslabByID(req, res, next) {
     try {
@@ -141,7 +142,14 @@ class AsistenController {
         dataUser.role = "Mahasiswa";
         await dataUser.save();
 
-        await Asisten.destroy({
+        const deletedAsisten = {
+          asisten_id: dataAsisten.asisten_id,
+          nama_asisten: dataAsisten.nama_asisten,
+          golongan: dataAsisten.golongan,
+          periode: dataAsisten.periode,
+          is_active: false,
+        };
+        await Asisten.update(deletedAsisten, {
           where: {
             asisten_id: asistenID,
           },
@@ -150,7 +158,7 @@ class AsistenController {
         return resSend(
           200,
           `Data Asisten dengan id ${asistenID} berhasil dihapus`,
-          dataAsisten,
+          deletedAsisten,
           res
         );
       }
