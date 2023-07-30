@@ -12,18 +12,22 @@ class SevimaController {
   // UPDATE Data Mahasiswa
   static async updateDataMahasiswa(req, res, next) {
     try {
-      const mahasiswaArray = await SevimaHelper.getDosenIF();
+      const { periode, limit } = req.body;
 
+      const mahasiswaArray = await SevimaHelper.getMahasiswaIF(periode, limit);
       const isEmptyTableMahasiswa = (await Mahasiswa.count()) === 0;
+
       const responseArray = [];
 
       // Data Mahasiswa di database kosong?
       if (isEmptyTableMahasiswa) {
         const dataBaruMahasiswa = mahasiswaArray.map((item) => {
           return {
-            nim: item.nip,
+            nim: item.nim,
             nama_mahasiswa: item.nama,
             email: item.email,
+            no_hp: item.nohp,
+            periode_masuk: item.periodemasuk,
             created_at: new Date(),
             updated_at: new Date(),
           };
@@ -32,20 +36,17 @@ class SevimaController {
         await Mahasiswa.bulkCreate(dataBaruMahasiswa);
 
         responseArray.push({
-          status: 201,
+          status: 200,
           message:
             "Data Mahasiswa dari SEVIMA API berhasil ditambahkan ke database",
           data: dataBaruMahasiswa,
         });
-
-        return responseArray;
       } else {
-        // Data Mahasiswa sudah ada di database
         for (const mahasiswa of mahasiswaArray) {
           // Cari data Mahasiswa berdasarkan nim
           const existingMahasiswa = await Mahasiswa.findOne({
             where: {
-              nim: mahasiswa.nip,
+              nim: mahasiswa.nim,
             },
           });
 
@@ -53,20 +54,24 @@ class SevimaController {
           if (existingMahasiswa) {
             existingMahasiswa.nama_mahasiswa = mahasiswa.nama;
             existingMahasiswa.email = mahasiswa.email;
+            existingMahasiswa.no_hp = mahasiswa.nohp;
+            existingMahasiswa.periode_masuk = mahasiswa.periodemasuk;
 
             await existingMahasiswa.save();
 
             responseArray.push({
               status: 200,
-              message: `Data Mahasiswa dengan NIM ${mahasiswa.nip} berhasil diperbarui`,
+              message: `Data Mahasiswa dengan NIM ${mahasiswa.nim} berhasil diperbarui`,
               data: existingMahasiswa,
             });
           } else {
             // NIM belum ada? Tambahkan data baru
             const dataBaruMahasiswa = {
-              nim: mahasiswa.nip,
+              nim: mahasiswa.nim,
               nama_mahasiswa: mahasiswa.nama,
               email: mahasiswa.email,
+              no_hp: mahasiswa.nohp,
+              periode_masuk: mahasiswa.periodemasuk,
               created_at: new Date(),
               updated_at: new Date(),
             };
@@ -75,13 +80,19 @@ class SevimaController {
 
             responseArray.push({
               status: 201,
-              message: `Data Mahasiswa baru dengan NIM ${mahasiswa.nip} berhasil ditambahkan`,
+              message: `Data Mahasiswa baru dengan NIM ${mahasiswa.nim} berhasil ditambahkan`,
               data: dataBaruMahasiswa,
             });
           }
         }
-        return responseArray;
       }
+
+      return resSend(
+        200,
+        "Pembaruan data Mahasiswa dari SEVIMA berhasil",
+        responseArray,
+        res
+      );
     } catch (error) {
       next(error);
     }
@@ -90,7 +101,8 @@ class SevimaController {
   // UPDATE Data Dosen
   static async updateDataDosen(req, res, next) {
     try {
-      const dosenArray = await SevimaHelper.getDosenIF();
+      const { limit } = req.body;
+      const dosenArray = await SevimaHelper.getDosenIF(limit);
 
       const isEmptyTableDosen = (await Dosen.count()) === 0;
       const responseArray = [];
@@ -116,8 +128,6 @@ class SevimaController {
             "Data Dosen dari SEVIMA API berhasil ditambahkan ke database",
           data: dataBaruDosen,
         });
-
-        return responseArray;
       } else {
         // Data dosen sudah ada di database
         for (const dosen of dosenArray) {
@@ -161,8 +171,13 @@ class SevimaController {
             });
           }
         }
-        return responseArray;
       }
+      return resSend(
+        200,
+        "Pembaruan data dosen dari SEVIMA berhasil",
+        responseArray,
+        res
+      );
     } catch (error) {
       next(error);
     }
@@ -171,7 +186,8 @@ class SevimaController {
   // UPDATE Data Matkul
   static async updateDataMatkul(req, res, next) {
     try {
-      const matkulArray = await SevimaHelper.getMatkulPrak();
+      const { kurikulum, limit } = req.body;
+      const matkulArray = await SevimaHelper.getMatkulPrak(kurikulum, limit);
 
       const isEmptyTableMatkul = (await Matkul.count()) === 0;
       const responseArray = [];
@@ -197,8 +213,6 @@ class SevimaController {
             "Data mata kuliah dari SEVIMA API berhasil ditambahkan ke database",
           data: dataBaruMatkul,
         });
-
-        return responseArray;
       } else {
         // Data matkul sudah ada di database
         for (const matkul of matkulArray) {
@@ -242,9 +256,13 @@ class SevimaController {
             });
           }
         }
-
-        return responseArray;
       }
+      return resSend(
+        200,
+        "Pembaruan data mata kuliah dari SEVIMA berhasil",
+        responseArray,
+        res
+      );
     } catch (error) {
       next(error);
     }
@@ -253,7 +271,12 @@ class SevimaController {
   // UPDATE Data Kelas
   static async updateDataKelas(req, res, next) {
     try {
-      const kelasArray = await SevimaHelper.getKelasPrak();
+      const { periode, kurikulum, limit } = req.body;
+      const kelasArray = await SevimaHelper.getKelasPrak(
+        periode,
+        kurikulum,
+        limit
+      );
 
       const isEmptyTableKelas = (await Kelas.count()) === 0;
       const responseArray = [];
@@ -285,6 +308,7 @@ class SevimaController {
             nama_ruang: item.namaruang,
             kapasitas: item.kapasitas,
             kode_mk: item.kodemk,
+            periode: item.periodeakademik,
             created_at: new Date(),
             updated_at: new Date(),
           };
@@ -298,8 +322,6 @@ class SevimaController {
             "Data kelas dari SEVIMA API berhasil ditambahkan ke database",
           data: dataBaruKelas,
         });
-
-        return responseArray;
       } else {
         // Data kelas sudah ada di database
         for (const kelas of filteredData) {
@@ -315,6 +337,7 @@ class SevimaController {
             existingKelas.nama_ruang = kelas.namaruang;
             existingKelas.kapasitas = kelas.kapasitas;
             existingKelas.kode_mk = kelas.kodemk;
+            existingKelas.periode = kelas.periodeakademik;
 
             await existingKelas.save();
 
@@ -331,6 +354,7 @@ class SevimaController {
               nama_ruang: kelas.namaruang,
               kapasitas: kelas.kapasitas,
               kode_mk: kelas.kodemk,
+              periode: kelas.periodeakademik,
               created_at: new Date(),
               updated_at: new Date(),
             };
@@ -343,54 +367,11 @@ class SevimaController {
             });
           }
         }
-
-        return responseArray;
       }
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  // UPDATE All Data
-  static async updateAllDataFromSevima(req, res, next) {
-    try {
-      // Dosen
-      const responseArrayMahasiswa = [];
-      const dataMahasiswa = await SevimaController.updateDataMahasiswa(
-        req,
-        res,
-        next
-      );
-      responseArrayMahasiswa.push(...dataMahasiswa);
-
-      // Dosen
-      const responseArrayDosen = [];
-      const dataDosen = await SevimaController.updateDataDosen(req, res, next);
-      responseArrayDosen.push(...dataDosen);
-
-      // Mata Kuliah
-      const responseArrayMatkul = [];
-      const dataMatkul = await SevimaController.updateDataMatkul(
-        req,
-        res,
-        next
-      );
-      responseArrayMatkul.push(...dataMatkul);
-
-      // Kelas
-      const responseArrayKelas = [];
-      const dataKelas = await SevimaController.updateDataKelas(req, res, next);
-      responseArrayKelas.push(...dataKelas);
-
-      resSend(
+      return resSend(
         200,
-        "Pembaruan data dari SEVIMA berhasil",
-        {
-          mahasiswa: responseArrayMahasiswa,
-          dosen: responseArrayDosen,
-          matkul: responseArrayMatkul,
-          kelas: responseArrayKelas,
-        },
+        "Pembaruan data kelas dari SEVIMA berhasil",
+        responseArray,
         res
       );
     } catch (error) {
