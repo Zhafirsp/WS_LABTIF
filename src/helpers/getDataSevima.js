@@ -7,16 +7,17 @@ dotenv.config();
 const sevimaURL = process.env.BASEURL_SEVIMA;
 
 class SevimaHelper {
-  static async getDosenIF() {
+  static async getMahasiswaIF(periode, limit) {
     try {
       const token = await getToken();
-      const response = await axios.get(sevimaURL + "/dosen", {
+      const response = await axios.get(sevimaURL + "/biodatamhs", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          homebase: "Teknik Informatika",
-          limit: "100",
+          programstudi: "Teknik Informatika",
+          periodemasuk: periode,
+          limit: limit.toString(),
         },
       });
 
@@ -27,7 +28,27 @@ class SevimaHelper {
     }
   }
 
-  static async getMatkulPrak() {
+  static async getDosenIF(limit) {
+    try {
+      const token = await getToken();
+      const response = await axios.get(sevimaURL + "/dosen", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          homebase: "Teknik Informatika",
+          limit: limit.toString(),
+        },
+      });
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      throw new Error("Gagal mendapatkan data dari Sevima API");
+    }
+  }
+
+  static async getMatkulPrak(kurikulum, limit) {
     try {
       const token = await getToken();
       const response = await axios.get(sevimaURL + "/matakuliah", {
@@ -35,9 +56,9 @@ class SevimaHelper {
           Authorization: `Bearer ${token}`,
         },
         params: {
-          kurikulum: "221",
           prodipengampu: "Teknik Informatika",
-          limit: "100",
+          kurikulum: kurikulum.toString(),
+          limit: limit.toString(),
           jenismk: "Praktikum",
         },
       });
@@ -48,7 +69,7 @@ class SevimaHelper {
     }
   }
 
-  static async getKelasPrak() {
+  static async getKelasPrak(periode, kurikulum, limit) {
     try {
       const token = await getToken();
       const response = await axios.get(sevimaURL + "/kelaskuliah", {
@@ -56,9 +77,10 @@ class SevimaHelper {
           Authorization: `Bearer ${token}`,
         },
         params: {
+          periodeakademik: periode.toString(),
           programstudi: "Teknik Informatika",
-          kurikulum: "221",
-          limit: "2500",
+          kurikulum: kurikulum.toString(),
+          limit: limit.toString(),
         },
       });
 
@@ -69,7 +91,7 @@ class SevimaHelper {
     }
   }
 
-  static async getJadwalPrak() {
+  static async getJadwalPrak(periode, kurikulum, limit) {
     try {
       const token = await getToken();
       const response = await axios.get(sevimaURL + "/jadwalperkuliahan", {
@@ -77,9 +99,10 @@ class SevimaHelper {
           Authorization: `Bearer ${token}`,
         },
         params: {
+          periode: periode.toString(),
           programstudi: "S1 Teknik Informatika",
-          kurikulum: "221",
-          limit: "5000",
+          kurikulum: kurikulum.toString(),
+          limit: limit.toString(),
         },
       });
 

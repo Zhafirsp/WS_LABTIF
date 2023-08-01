@@ -63,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING(11),
       },
+      is_active: DataTypes.BOOLEAN,
     },
     {
       hooks: {
@@ -70,6 +71,10 @@ module.exports = (sequelize, DataTypes) => {
           if (!model.golongan) {
             // default C --> baru bergabung
             model.golongan = "C";
+          }
+          if (!model.is_active) {
+            // default true --> baru bergabung
+            model.is_active = true;
           }
         },
       },

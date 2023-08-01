@@ -5,6 +5,7 @@ const {
   Mahasiswa,
   Asisten,
 } = require("../db/models");
+const generateAslabId = require("../helpers/generateAsistenId");
 const { resError, resSend } = require("../helpers/response");
 
 class PendaftaranController {
@@ -235,6 +236,9 @@ class PendaftaranController {
         attributes: {
           exclude: ["created_at", "updated_at"],
         },
+        include: {
+          model: Program,
+        },
       });
 
       // Data pendaftaran ada?
@@ -255,7 +259,7 @@ class PendaftaranController {
 
         // User bukan Mahasiswa?
         if (!userAsMahasiswa) {
-          return resError(400, "User bukan Mahasiswa", res);
+          return resError(400, "Data user tidak memiliki role Mahasiswa", res);
         } else {
           // Mahasiswa diterima menjadi Asisten?
           if (status === "Diterima") {

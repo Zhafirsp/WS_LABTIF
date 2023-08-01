@@ -1,96 +1,7 @@
-const { Program, Pendaftaran, User, Asisten } = require("../db/models");
-const generateAslabId = require("../helpers/generateAsistenId");
+const { User, Asisten } = require("../db/models");
 const { resError, resSend } = require("../helpers/response");
 
 class AsistenController {
-  // CREATE New Asisten
-  static async addAslabByDaftarID(req, res, next) {
-    try {
-      const daftarID = req.params.daftarID;
-
-      const dataPendaftaran = await Pendaftaran.findOne({
-        where: {
-          daftar_id: Number(daftarID),
-        },
-        attributes: {
-          exclude: ["created_at", "updated_at"],
-        },
-        include: {
-          model: Program,
-        },
-      });
-
-      // Data pendaftaran tidak ada?
-      if (!dataPendaftaran) {
-        return resError(
-          404,
-          `Data pendaftaran dengan id ${daftarID} tidak ditemukan`,
-          res
-        );
-      } else {
-        // Data pendaftaran ada?
-        const dataAsisten = await Asisten.findOne({
-          where: {
-            nim: dataPendaftaran.nim,
-          },
-        });
-
-        // Mahasiswa sudah ada di data Asisten
-        if (dataAsisten) {
-          return resError(
-            400,
-            `Asisten dengan nim ${dataPendaftaran.nim} sudah terdaftar`,
-            res
-          );
-        } else {
-          // Memastikan data mahasiswa sudah menjadi asisten
-          const userAsAsisten = await User.findOne({
-            where: {
-              username: dataPendaftaran.nim,
-              role: "Asisten",
-            },
-          });
-
-          // Mahasiswa bukan asisten baru
-          if (!userAsAsisten) {
-            return resError(
-              400,
-              `Data pendaftaran dengan NIM ${dataPendaftaran.nim} bukan Asisten`,
-              res
-            );
-          } else {
-            // Mahasiswa sudah menjadi asisten baru
-            // Ambil periode pada data program yang ada di data pendaftaran
-            const periodeProgram = dataPendaftaran.Program.periode;
-
-            // Buat costum asisten_id
-            const asisten_id = await generateAslabId(periodeProgram);
-            // Buat data asisten baru
-            const newAsisten = {
-              asisten_id: asisten_id,
-              nim: dataPendaftaran.nim,
-              nama_asisten: dataPendaftaran.nama_mahasiswa,
-              email: dataPendaftaran.email,
-              no_hp: dataPendaftaran.no_hp,
-              periode: periodeProgram,
-            };
-
-            await Asisten.create(newAsisten);
-
-            return resSend(
-              201,
-              `Data asisten baru dengan nim ${dataPendaftaran.nim} berhasil ditambahkan`,
-              newAsisten,
-              res
-            );
-          }
-        }
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
   // GET All Asisten
   static async getAllAslab(req, res, next) {
     try {
@@ -136,11 +47,36 @@ class AsistenController {
     }
   }
 
+  // GET Asisten By ID
+  static async getAslabActive(req, res, next) {
+    // Cari data asisten pada periode berjalan yang memiliki status aktif
+    const dataAsisten = await Asisten.findAll({
+      where: {
+        is_active: true,
+      },
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
+    });
+
+    // Data dengan status aktif kosong
+    if (dataAsisten.length === 0) {
+      resError(404, "Data Asisten dengan status aktif tidak ditemukan", res);
+    } else {
+      resSend(
+        200,
+        "Berhasil mendapatkan data Asisten dengan status aktif",
+        dataAsisten,
+        res
+      );
+    }
+  }
+
   // UPDATE Asisten By ID
   static async updateAslabByID(req, res, next) {
     try {
       const asistenID = req.params.id;
-      const { nim, email, no_hp, golongan, periode } = req.body;
+      const { golongan, isActive } = req.body;
 
       const dataAsisten = await Asisten.findOne({
         where: {
@@ -161,7 +97,7 @@ class AsistenController {
       } else {
         // Perubahan golongan
         await Asisten.update(
-          { golongan: golongan },
+          { golongan, isActive },
           {
             where: {
               asisten_id: asistenID,
@@ -173,6 +109,7 @@ class AsistenController {
       next(error);
     }
   }
+
   // DELETE Asisten By ID
   static async deleteAslabByID(req, res, next) {
     try {
@@ -205,7 +142,14 @@ class AsistenController {
         dataUser.role = "Mahasiswa";
         await dataUser.save();
 
-        await Asisten.destroy({
+        const deletedAsisten = {
+          asisten_id: dataAsisten.asisten_id,
+          nama_asisten: dataAsisten.nama_asisten,
+          golongan: dataAsisten.golongan,
+          periode: dataAsisten.periode,
+          is_active: false,
+        };
+        await Asisten.update(deletedAsisten, {
           where: {
             asisten_id: asistenID,
           },
@@ -214,7 +158,7 @@ class AsistenController {
         return resSend(
           200,
           `Data Asisten dengan id ${asistenID} berhasil dihapus`,
-          dataAsisten,
+          deletedAsisten,
           res
         );
       }

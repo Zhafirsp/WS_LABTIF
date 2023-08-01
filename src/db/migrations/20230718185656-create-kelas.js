@@ -15,6 +15,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(11),
       },
+      periode: Sequelize.STRING,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

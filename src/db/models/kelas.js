@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "kode_mk",
         targetKey: "kode_mk",
       });
-      Kelas.hasMany(models.JadwalPraktik, {
-        sourceKey: "kelas_id",
-        foreignKey: "kelas_id",
-      });
+      // Kelas.hasMany(models.JadwalPraktik, {
+      //   sourceKey: "kelas_id",
+      //   foreignKey: "kelas_id",
+      // });
       // Kelas.hasOne(models.Krs, {
       //   sourceKey: "nama_kelas",
       //   foreignKey: "nama_kelas",
@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING(11),
       },
+      periode: DataTypes.STRING,
     },
     {
       sequelize,

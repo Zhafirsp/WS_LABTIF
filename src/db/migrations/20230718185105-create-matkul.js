@@ -20,6 +20,7 @@ module.exports = {
         type: Sequelize.INTEGER(11),
         allowNull: false,
       },
+      dosen_nip: Sequelize.STRING(11),
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
