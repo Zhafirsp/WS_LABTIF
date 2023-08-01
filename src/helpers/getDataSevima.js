@@ -91,7 +91,7 @@ class SevimaHelper {
     }
   }
 
-  static async getJadwalPrak() {
+  static async getJadwalPrak(periode, kurikulum, limit) {
     try {
       const token = await getToken();
       const response = await axios.get(sevimaURL + "/jadwalperkuliahan", {
@@ -99,9 +99,10 @@ class SevimaHelper {
           Authorization: `Bearer ${token}`,
         },
         params: {
+          periode: periode.toString(),
           programstudi: "S1 Teknik Informatika",
-          kurikulum: "221",
-          limit: "5000",
+          kurikulum: kurikulum.toString(),
+          limit: limit.toString(),
         },
       });
 

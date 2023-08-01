@@ -12,14 +12,13 @@ const port = process.env.APP_PORT;
 const app = express();
 
 // Middleware
-app.use(express.json());
+app.use(cors());
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
-
-app.use(cors());
+app.use(express.json());
 
 app.use(cookieParser());
 

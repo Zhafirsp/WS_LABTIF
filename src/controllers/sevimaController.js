@@ -6,7 +6,7 @@ const {
   Kelas,
   JadwalPraktik,
 } = require("../db/models");
-const { resSend } = require("../helpers/response");
+const { resSend, resError } = require("../helpers/response");
 
 class SevimaController {
   // UPDATE Data Mahasiswa
@@ -192,14 +192,26 @@ class SevimaController {
       const isEmptyTableMatkul = (await Matkul.count()) === 0;
       const responseArray = [];
 
+      let dosenPengampu;
+
       // Data matkul di database kosong?
       if (isEmptyTableMatkul) {
         const dataBaruMatkul = matkulArray.map((item) => {
+          // Mengubah format dosen pengampu di SEVIMA API
+          if (item.dosenpengampu === " -   ") {
+            dosenPengampu = null;
+          } else {
+            dosenPengampu = item.dosenpengampu.split(" -")[0];
+            // "0425098502 -  R. SANDHIKA GALIH AMALGA, ST., MT. "
+            // hasil split "0425098502" hanya indeks ke-0 yang diambil
+          }
+
           return {
             kode_mk: item.kodemk,
             nama_mk: item.namamk,
             kurikulum: item.kurikulum,
             sks_mk: item.sksmk,
+            dosen_nip: dosenPengampu,
             created_at: new Date(),
             updated_at: new Date(),
           };
@@ -216,6 +228,15 @@ class SevimaController {
       } else {
         // Data matkul sudah ada di database
         for (const matkul of matkulArray) {
+          // Mengubah format dosen pengampu di SEVIMA API
+          if (matkul.dosenpengampu === " -   ") {
+            dosenPengampu = null;
+          } else {
+            dosenPengampu = matkul.dosenpengampu.split(" -")[0];
+            // "0425098502 -  R. SANDHIKA GALIH AMALGA, ST., MT. "
+            // hasil split "0425098502" hanya indeks ke-0 yang diambil
+          }
+
           // Cari data matkul berdasarkan kode_mk
           const existingMatkul = await Matkul.findOne({
             where: {
@@ -228,9 +249,11 @@ class SevimaController {
             existingMatkul.nama_mk = matkul.namamk;
             existingMatkul.kurikulum = matkul.kurikulum;
             existingMatkul.sks_mk = matkul.sksmk;
+            existingMatkul.dosen_nip = matkul.dosenPengampu;
 
             await existingMatkul.save();
 
+            console.log(existingMatkul);
             responseArray.push({
               status: 200,
               message: `Data mata kuliah dengan kode mk ${matkul.kodemk} berhasil diperbarui`,
@@ -243,6 +266,7 @@ class SevimaController {
               nama_mk: matkul.namamk,
               kurikulum: matkul.kurikulum,
               sks_mk: matkul.sksmk,
+              dosen_nip: matkul.dosenPengampu,
               created_at: new Date(),
               updated_at: new Date(),
             };
@@ -371,6 +395,121 @@ class SevimaController {
       return resSend(
         200,
         "Pembaruan data kelas dari SEVIMA berhasil",
+        responseArray,
+        res
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // UPDATE Data Jadwal
+  static async updateDataJadwal(req, res, next) {
+    try {
+      const { periode, kurikulum, limit } = req.body;
+      const jadwalArray = await SevimaHelper.getJadwalPrak(
+        periode,
+        kurikulum,
+        limit
+      );
+
+      const isEmptyTableJadwal = (await JadwalPraktik.count()) === 0;
+      const responseArray = [];
+
+      // Mencari data mata kuliah dan diambil kode_mk saja
+      const matkulList = await Matkul.findAll({
+        attributes: ["kode_mk"],
+      });
+
+      // Membuat array baru dari matkulList (kode_mk di tabel matkul)
+      const kodeMKList = matkulList.map((matkul) => matkul.kode_mk);
+
+      console.log(kodeMKList);
+      // Mengambil data yang sesuai dengan kode_mk, kelas_id, dan dosen_nip yang ada di database
+      const filteredData = jadwalArray.filter((item) =>
+        kodeMKList.find((kodeMK) => kodeMK === item.kodemk)
+      );
+
+      // Data jadwal di database kosong?
+      if (isEmptyTableJadwal) {
+        const dataBaruJadwal = filteredData.map((item) => ({
+          praktik_id: item.jadwalid,
+          periode: item.periode,
+          pertemuan: item.pertemuan,
+          hari: item.hari,
+          jam_mulai: item.waktumulai,
+          jam_selesai: item.waktuselesai,
+          kode_mk: item.kodemk,
+          created_at: new Date(),
+          updated_at: new Date(),
+        }));
+
+        console.log("MASUK SINI");
+
+        await JadwalPraktik.bulkCreate(dataBaruJadwal);
+
+        responseArray.push({
+          status: 201,
+          message:
+            "Data jadwal dari SEVIMA API berhasil ditambahkan ke database",
+          data: dataBaruJadwal,
+        });
+      } else {
+        // Data jadwal sudah ada di database
+        for (const jadwal of filteredData) {
+          // Cari data jadwal berdasarkan praktik_id
+          const existingJadwal = await JadwalPraktik.findOne({
+            where: {
+              praktik_id: jadwal.jadwalid,
+            },
+          });
+          // Jadwal sudah ada? Lakukan pembaharuan data
+          if (existingJadwal) {
+            existingJadwal.periode = jadwal.periode;
+            existingJadwal.pertemuan = jadwal.pertemuan;
+            existingJadwal.hari = jadwal.hari;
+            existingJadwal.jam_mulai = jadwal.waktumulai;
+            existingJadwal.jam_selesai = jadwal.waktuselesai;
+            existingJadwal.kode_mk = jadwal.kodemk;
+            existingJadwal.kelas_id = jadwal.kelasid;
+            existingJadwal.dosen_nip = jadwal.nip;
+            existingJadwal.updated_at = new Date();
+
+            await existingJadwal.save();
+
+            responseArray.push({
+              status: 200,
+              message: `Data jadwal dengan Praktik ID ${jadwal.jadwalid} berhasil diperbarui`,
+              data: existingJadwal,
+            });
+          } else {
+            // Jadwal belum ada? Tambahkan data baru
+            const dataBaruJadwal = {
+              praktik_id: jadwal.jadwalid,
+              periode: jadwal.periode,
+              pertemuan: jadwal.pertemuan,
+              hari: jadwal.hari,
+              jam_mulai: jadwal.waktumulai,
+              jam_selesai: jadwal.waktuselesai,
+              kode_mk: jadwal.kodemk,
+              kelas_id: jadwal.kelasid,
+              dosen_nip: jadwal.nip,
+              created_at: new Date(),
+              updated_at: new Date(),
+            };
+
+            await JadwalPraktik.create(dataBaruJadwal);
+            responseArray.push({
+              status: 201,
+              message: `Data jadwal baru dengan Praktik ID ${jadwal.jadwalid} berhasil ditambahkan`,
+              data: dataBaruJadwal,
+            });
+          }
+        }
+      }
+      return resSend(
+        200,
+        "Pembaruan data jadwal dari SEVIMA berhasil",
         responseArray,
         res
       );

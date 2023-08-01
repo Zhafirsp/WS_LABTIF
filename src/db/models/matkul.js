@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      Matkul.belongsTo(models.Dosen, {
+        foreignKey: "dosen_nip",
+        targetKey: "dosen_nip",
+      });
       Matkul.hasMany(models.Kelas, {
         sourceKey: "kode_mk",
         foreignKey: "kode_mk",
@@ -33,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       nama_mk: DataTypes.STRING,
       kurikulum: DataTypes.STRING,
       sks_mk: DataTypes.INTEGER(11),
+      dosen_nip: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
     },
     {
       sequelize,
