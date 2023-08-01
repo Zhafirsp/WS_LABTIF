@@ -424,7 +424,6 @@ class SevimaController {
       // Membuat array baru dari matkulList (kode_mk di tabel matkul)
       const kodeMKList = matkulList.map((matkul) => matkul.kode_mk);
 
-      console.log(kodeMKList);
       // Mengambil data yang sesuai dengan kode_mk, kelas_id, dan dosen_nip yang ada di database
       const filteredData = jadwalArray.filter((item) =>
         kodeMKList.find((kodeMK) => kodeMK === item.kodemk)
@@ -432,28 +431,46 @@ class SevimaController {
 
       // Data jadwal di database kosong?
       if (isEmptyTableJadwal) {
-        const dataBaruJadwal = filteredData.map((item) => ({
-          praktik_id: item.jadwalid,
-          periode: item.periode,
-          pertemuan: item.pertemuan,
-          hari: item.hari,
-          jam_mulai: item.waktumulai,
-          jam_selesai: item.waktuselesai,
-          kode_mk: item.kodemk,
-          created_at: new Date(),
-          updated_at: new Date(),
-        }));
+        for (const jadwal of filteredData) {
+          // Cari data kelas berdasarkan kelas_id
+          const kelasData = await Kelas.findOne({
+            where: {
+              kelas_id: jadwal.kelasid,
+            },
+          });
 
-        console.log("MASUK SINI");
+          // Cari data dosen berdasarkan nip
+          const dosenData = await Dosen.findOne({
+            where: {
+              nip: jadwal.nip,
+            },
+          });
 
-        await JadwalPraktik.bulkCreate(dataBaruJadwal);
+          if (kelasData && dosenData) {
+            const dataBaruJadwal = {
+              praktik_id: item.jadwalid,
+              periode: item.periode,
+              pertemuan: item.pertemuan,
+              hari: item.hari,
+              jam_mulai: item.waktumulai,
+              jam_selesai: item.waktuselesai,
+              kode_mk: item.kodemk,
+              kelas_id: item.kelasid,
+              dosen_nip: item.nip,
+              created_at: new Date(),
+              updated_at: new Date(),
+            };
 
-        responseArray.push({
-          status: 201,
-          message:
-            "Data jadwal dari SEVIMA API berhasil ditambahkan ke database",
-          data: dataBaruJadwal,
-        });
+            await JadwalPraktik.bulkCreate(dataBaruJadwal);
+
+            responseArray.push({
+              status: 201,
+              message:
+                "Data jadwal dari SEVIMA API berhasil ditambahkan ke database",
+              data: dataBaruJadwal,
+            });
+          }
+        }
       } else {
         // Data jadwal sudah ada di database
         for (const jadwal of filteredData) {
@@ -484,26 +501,43 @@ class SevimaController {
             });
           } else {
             // Jadwal belum ada? Tambahkan data baru
-            const dataBaruJadwal = {
-              praktik_id: jadwal.jadwalid,
-              periode: jadwal.periode,
-              pertemuan: jadwal.pertemuan,
-              hari: jadwal.hari,
-              jam_mulai: jadwal.waktumulai,
-              jam_selesai: jadwal.waktuselesai,
-              kode_mk: jadwal.kodemk,
-              kelas_id: jadwal.kelasid,
-              dosen_nip: jadwal.nip,
-              created_at: new Date(),
-              updated_at: new Date(),
-            };
-
-            await JadwalPraktik.create(dataBaruJadwal);
-            responseArray.push({
-              status: 201,
-              message: `Data jadwal baru dengan Praktik ID ${jadwal.jadwalid} berhasil ditambahkan`,
-              data: dataBaruJadwal,
+            // Cari data kelas berdasarkan kelas_id
+            const kelasData = await Kelas.findOne({
+              where: {
+                kelas_id: jadwal.kelasid,
+              },
             });
+
+            // Cari data dosen berdasarkan nip
+            const dosenData = await Dosen.findOne({
+              where: {
+                nip: jadwal.nip,
+              },
+            });
+
+            if (kelasData && dosenData) {
+              const dataBaruJadwal = {
+                praktik_id: jadwal.jadwalid,
+                periode: jadwal.periode,
+                pertemuan: jadwal.pertemuan,
+                hari: jadwal.hari,
+                jam_mulai: jadwal.waktumulai,
+                jam_selesai: jadwal.waktuselesai,
+                kode_mk: jadwal.kodemk,
+                kelas_id: jadwal.kelasid,
+                dosen_nip: jadwal.nip,
+                created_at: new Date(),
+                updated_at: new Date(),
+              };
+
+              await JadwalPraktik.create(dataBaruJadwal);
+
+              responseArray.push({
+                status: 201,
+                message: `Data jadwal baru dengan Praktik ID ${jadwal.jadwalid} berhasil ditambahkan`,
+                data: dataBaruJadwal,
+              });
+            }
           }
         }
       }

@@ -12,14 +12,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "kode_mk",
         targetKey: "kode_mk",
       });
-      // JadwalPraktik.belongsTo(models.Kelas, {
-      //   foreignKey: "kelas_id",
-      //   targetKey: "kelas_id",
-      // });
-      // JadwalPraktik.belongsTo(models.Dosen, {
-      //   foreignKey: "dosen_nip",
-      //   targetKey: "dosen_nip",
-      // });
+      JadwalPraktik.belongsTo(models.Kelas, {
+        foreignKey: "kelas_id",
+        targetKey: "kelas_id",
+      });
+      JadwalPraktik.belongsTo(models.Dosen, {
+        foreignKey: "dosen_nip",
+        targetKey: "dosen_nip",
+      });
       JadwalPraktik.hasMany(models.JadwalPiket, {
         sourceKey: "praktik_id",
         foreignKey: "praktik_id",
