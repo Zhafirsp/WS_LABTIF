@@ -47,7 +47,7 @@ class AsistenController {
     }
   }
 
-  // GET Asisten By ID
+  // GET Asisten By Status Active
   static async getAslabActive(req, res, next) {
     // Cari data asisten pada periode berjalan yang memiliki status aktif
     const dataAsisten = await Asisten.findAll({

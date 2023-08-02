@@ -418,7 +418,7 @@ class PendaftaranController {
             res
           );
         } else {
-          // Memastikan data user sudah menjadi asisten di program lain
+          // Memastikan agar data pendaftaran milik asisten tidak boleh dihapus
           const userAsAsisten = await Pendaftaran.findOne({
             where: {
               nim: userLogin.username,
@@ -430,7 +430,7 @@ class PendaftaranController {
           if (userAsAsisten) {
             return resError(
               400,
-              `User sudah terdaftar menjadi calon Asisten di periode ${dataProgram.periode}`,
+              "Dilarang menghapus data pendaftaran milik Asisten",
               res
             );
           } else {

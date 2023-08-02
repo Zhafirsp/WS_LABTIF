@@ -145,14 +145,18 @@ class ProgramController {
 
     // Data program ada?
     if (!dataProgram) {
-      resError(404, `Data program dengan id ${programID} tidak ditemukan`, res);
+      return resError(
+        404,
+        `Data program dengan id ${programID} tidak ditemukan`,
+        res
+      );
     } else {
       await Program.destroy({
         where: {
           program_id: Number(programID),
         },
       });
-      resSend(
+      return resSend(
         200,
         `Data program dengan id ${programID} berhasil dihapus`,
         dataProgram,
