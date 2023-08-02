@@ -262,6 +262,45 @@ class JadwalController {
       next(error);
     }
   }
+
+  // DELETE Jadwal Piket By Piket ID --> Menghapus hanya jadwal piket yang ada pada jadwal praktikum id
+  static async deletePiketByPiketId(req, res, next) {
+    try {
+      const piketID = req.params.piketID;
+
+      const dataPiket = await JadwalPiket.findOne({
+        where: {
+          piket_id: Number(piketID),
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+      });
+
+      // Data jadwal praktik tidak ada?
+      if (!dataPiket) {
+        return resError(
+          404,
+          `Data jadwal piket dengan id ${piketID} tidak ditemukan`,
+          res
+        );
+      } else {
+        await JadwalPiket.destroy({
+          where: {
+            piket_id: Number(piketID),
+          },
+        });
+        return resSend(
+          200,
+          `Data jadwal piket dengan id ${piketID} berhasil dihapus`,
+          dataPiket,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = JadwalController;
