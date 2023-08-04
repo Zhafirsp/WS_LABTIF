@@ -9,6 +9,7 @@ const laboranRoutes = require("./laboran");
 const asistenRoutes = require("./asisten");
 const programRoutes = require("./program");
 const pendaftaranRoutes = require("./pendaftaran");
+const penjadwalanRoutes = require("./penjadwalan");
 
 // Check pink
 router.get("/ping", (req, res) => {
@@ -27,5 +28,6 @@ router.use("/laborans", laboranRoutes);
 router.use("/asistens", asistenRoutes);
 router.use("/programs", programRoutes);
 router.use("/pendaftarans", pendaftaranRoutes);
+router.use("/penjadwalans", penjadwalanRoutes);
 
 module.exports = router;

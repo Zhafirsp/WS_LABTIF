@@ -435,7 +435,7 @@ class SevimaController {
           // Cari data kelas yang ada di database
           const dataKelas = await Kelas.findOne({
             where: {
-              kelas_id: jadwal?.kelasid,
+              kelas_id: jadwal.kelasid,
             },
           });
 
@@ -484,7 +484,7 @@ class SevimaController {
             // Cari data kelas yang ada di database
             const dataKelas = await Kelas.findOne({
               where: {
-                kelas_id: jadwal?.kelasid,
+                kelas_id: jadwal.kelasid,
               },
             });
 
@@ -521,13 +521,13 @@ class SevimaController {
             // Cari data kelas yang ada di database
             const dataKelas = await Kelas.findOne({
               where: {
-                kelas_id: jadwal?.kelasid,
+                kelas_id: jadwal.kelasid,
               },
             });
 
             // Cari data dosen yang ada di database
             const dataDosen = await Dosen.findOne({
-              where: { dosen_nip: jadwal?.nip },
+              where: { dosen_nip: jadwal.nip },
             });
 
             // Jika data kelas dan dosen ada pada jadwal tersebut, hubungkan dengan data kelas dan dosen yang ada di database
