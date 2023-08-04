@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use("/v1", routes);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello Welcome to LABTIF API!");
 });
 
 app.use(errorHandler);
