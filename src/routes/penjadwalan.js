@@ -4,6 +4,7 @@ const router = express.Router();
 const JadwalController = require("../controllers/jadwalController");
 
 router.get("/", JadwalController.getAllPiket);
-router.post("/:praktikID", JadwalController.addPiketByPraktikId);
+router.post("/praktik/:praktikID", JadwalController.addPiketByPraktikId);
+router.delete("/piket/:piketID", JadwalController.deletePiketByPiketId);
 
 module.exports = router;

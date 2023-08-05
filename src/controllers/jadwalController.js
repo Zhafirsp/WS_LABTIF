@@ -29,7 +29,7 @@ class JadwalController {
             praktik_id: Number(praktikID),
           },
           distinct: true, // data unik saja yang akan dihitung
-          col: asisten_id, // kolom yang akan dihitung
+          col: "asisten_id", // kolom yang akan dihitung
         });
 
         // Data asisten sudah melebihi 3?
@@ -42,7 +42,8 @@ class JadwalController {
         }
 
         // Data asisten belum melebihi 3?
-        const dataAsisten = await Asisten.findOne({
+        // Mencari data asisten pada jadwal piket
+        const dataAsisten = await JadwalPiket.findOne({
           where: {
             asisten_id,
           },
