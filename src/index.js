@@ -25,7 +25,9 @@ app.use(cookieParser());
 // Welcome Page
 app.get("/", (req, res) => {
   res.send(`<h1>Hello Welcome to LABTIF API!</h1>
-  <p>You can access endpoints starting with /v1</p>`);
+  <p>You can access endpoints starting with /v1</p>
+  <p>API documentation is available at <a>https://documenter.getpostman.com/view/18343779/2s93z3gRGU</a></p>
+  `);
 });
 
 app.use("/v1", routes);
