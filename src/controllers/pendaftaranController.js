@@ -193,7 +193,8 @@ class PendaftaranController {
       if (!program) {
         return resError(
           404,
-          `Data program dengan periode ${periode} tidak ditemukan`
+          `Data program dengan periode ${periode} tidak ditemukan`,
+          res
         );
       } else {
         const dataPengumuman = await Pendaftaran.findAll({
