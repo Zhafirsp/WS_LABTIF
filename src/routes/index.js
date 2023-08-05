@@ -16,11 +16,6 @@ router.get("/ping", (req, res) => {
   resSend(200, "Success! Server is Ready", null, res);
 });
 
-// Welcome Page
-router.get("/", (req, res) => {
-  res.send(`<h1>Hello Welcome to LABTIF API!</h1>`);
-});
-
 router.use("/auth", authRoutes);
 router.use("/sevima", sevimaRoutes);
 router.use("/users", userRoutes);

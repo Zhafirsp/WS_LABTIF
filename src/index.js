@@ -22,11 +22,13 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.use("/v1", routes);
-
+// Welcome Page
 app.get("/", (req, res) => {
-  res.send("Hello Welcome to LABTIF API!");
+  res.send(`<h1>Hello Welcome to LABTIF API!</h1>
+  <p>You can access endpoints starting with /v1</p>`);
 });
+
+app.use("/v1", routes);
 
 app.use(errorHandler);
 
