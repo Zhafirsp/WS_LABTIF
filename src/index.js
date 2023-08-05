@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send(`<h1>Hello Welcome to LABTIF API!</h1>
   <p>You can access endpoints starting with /v1</p>
-  <p>API documentation is available at <a>https://documenter.getpostman.com/view/18343779/2s93z3gRGU</a></p>
+  <p>API documentation is available at <a href="https://documenter.getpostman.com/view/18343779/2s93z3gRGU">Visit Postman Documentation</a></p>
   `);
 });
 
