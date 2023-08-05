@@ -93,13 +93,9 @@ class JadwalController {
         },
       });
 
-      // Data Praktik tidak ada?
-      if (!dataPraktiks) {
-        return resError(
-          404,
-          `Data jadwal praktikum by periode ${periode} tidak ditemukan`,
-          res
-        );
+      // Data Praktik kosong?
+      if (dataPraktiks.length === 0) {
+        return resError(404, "Data jadwal praktik kosong", res);
       } else {
         return resSend(
           200,
