@@ -76,8 +76,8 @@ class JadwalController {
     }
   }
 
-  // GET All Jadwal Praktik
-  static async getAllPraktik(req, res, next) {
+  // GET All Jadwal Praktik By Periode
+  static async getAllPraktikByPeriode(req, res, next) {
     try {
       const periode = req.params.periode;
 

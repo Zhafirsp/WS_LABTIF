@@ -3,7 +3,11 @@ const router = express.Router();
 
 const JadwalController = require("../controllers/jadwalController");
 
-router.get("/", JadwalController.getAllPiket);
+// GET Data Jadwal Praktikum By Periode
+router.get(
+  "/jadwalpraktik/periode/:periode",
+  JadwalController.getAllPraktikByPeriode
+);
 router.post("/praktik/:praktikID", JadwalController.addPiketByPraktikId);
 router.delete("/piket/:piketID", JadwalController.deletePiketByPiketId);
 
