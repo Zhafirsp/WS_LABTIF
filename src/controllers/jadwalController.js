@@ -96,10 +96,16 @@ class JadwalController {
       // Data Piket kosong?
       if (dataPraktiks.length === 0) {
         return resError(404, "Data jadwal praktik kosong", res);
+      } else if (!dataPraktiks) {
+        return resError(
+          404,
+          `Data jadwal praktikum by periode ${periode} tidak ditemukan`,
+          res
+        );
       } else {
         return resSend(
           200,
-          "Berhasil mendapatkan jadwal praktik ",
+          `Berhasil mendapatkan jadwal praktikum by periode ${periode}`,
           dataPraktiks,
           res
         );
