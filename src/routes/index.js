@@ -23,6 +23,6 @@ router.use("/laborans", laboranRoutes);
 router.use("/asistens", asistenRoutes);
 router.use("/programs", programRoutes);
 router.use("/pendaftarans", pendaftaranRoutes);
-router.use("/penjadwalans", penjadwalanRoutes);
+router.use("/jadwal", penjadwalanRoutes);
 
 module.exports = router;

@@ -62,7 +62,12 @@ class ProgramController {
       if (dataPrograms.length === 0) {
         resError(404, "Data program kosong", res);
       } else {
-        resSend(200, "Berhasil mendapatkan data program", dataPrograms, res);
+        resSend(
+          200,
+          "Berhasil mendapatkan seluruh data program",
+          dataPrograms,
+          res
+        );
       }
     } catch (error) {
       next(error);
