@@ -26,6 +26,7 @@ class SevimaController {
             nim: item.nim,
             nama_mahasiswa: item.nama,
             email: item.email,
+            email_kampus: item.emailkampus,
             no_hp: item.nohp,
             periode_masuk: item.periodemasuk,
             created_at: new Date(),
@@ -54,6 +55,7 @@ class SevimaController {
           if (existingMahasiswa) {
             existingMahasiswa.nama_mahasiswa = mahasiswa.nama;
             existingMahasiswa.email = mahasiswa.email;
+            existingMahasiswa.email_kampus = mahasiswa.emailkampus;
             existingMahasiswa.no_hp = mahasiswa.nohp;
             existingMahasiswa.periode_masuk = mahasiswa.periodemasuk;
 
@@ -70,6 +72,7 @@ class SevimaController {
               nim: mahasiswa.nim,
               nama_mahasiswa: mahasiswa.nama,
               email: mahasiswa.email,
+              email_kampus: mahasiswa.emailkampus,
               no_hp: mahasiswa.nohp,
               periode_masuk: mahasiswa.periodemasuk,
               created_at: new Date(),

@@ -13,6 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       email: Sequelize.STRING,
+      email_kampus: Sequelize.STRING,
       no_hp: Sequelize.STRING,
       periode_masuk: Sequelize.STRING,
       user_id: Sequelize.INTEGER(11),

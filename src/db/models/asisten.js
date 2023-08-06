@@ -49,7 +49,9 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       email: DataTypes.STRING,
+      email_kampus: DataTypes.STRING,
       no_hp: DataTypes.STRING,
+      bidang_praktikum: DataTypes.STRING,
       golongan: {
         type: DataTypes.ENUM("A", "B", "C"),
         validate: {

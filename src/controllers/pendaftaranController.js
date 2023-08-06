@@ -14,7 +14,7 @@ class PendaftaranController {
     try {
       const programID = req.params.programID;
 
-      const { file_syarat } = req.body;
+      const { file_syarat, bidang_praktikum } = req.body;
 
       const dataProgram = await Program.findOne({
         where: {
@@ -101,8 +101,10 @@ class PendaftaranController {
             nim: user.Mahasiswa.nim,
             nama_mahasiswa: user.Mahasiswa.nama_mahasiswa,
             email: user.email,
+            email_kampus: user.Mahasiswa.email_kampus,
             no_hp: user.no_hp,
             file_syarat,
+            bidang_praktikum,
           };
 
           await Pendaftaran.create(newPendaftaran);
@@ -328,7 +330,9 @@ class PendaftaranController {
                   nim: dataPendaftaran.nim,
                   nama_asisten: dataPendaftaran.nama_mahasiswa,
                   email: dataPendaftaran.email,
+                  email_kampus: dataPendaftaran.email_kampus,
                   no_hp: dataPendaftaran.no_hp,
+                  bidang_praktikum: dataPendaftaran.bidang_praktikum,
                   periode: periodeProgram,
                 };
 
