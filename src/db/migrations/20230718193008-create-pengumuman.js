@@ -16,12 +16,9 @@ module.exports = {
       link: Sequelize.STRING,
       tanggal_publish: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
-      is_publish: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-      },
+      is_publish: Sequelize.BOOLEAN,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

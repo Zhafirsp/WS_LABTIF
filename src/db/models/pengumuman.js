@@ -27,12 +27,9 @@ module.exports = (sequelize, DataTypes) => {
       link: DataTypes.STRING,
       tanggal_publish: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
-      is_publish: {
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-      },
+      is_publish: DataTypes.BOOLEAN,
     },
     {
       hooks: {

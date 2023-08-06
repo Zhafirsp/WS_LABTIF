@@ -38,7 +38,7 @@ class ProgramController {
           });
           return resSend(
             200,
-            "Data program baru berhasil ditambahkan",
+            "Berhasil menambahkan data program baru",
             newProgram,
             res
           );

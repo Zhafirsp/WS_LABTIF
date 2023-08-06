@@ -33,7 +33,7 @@ class PengumumanController {
 
         return resSend(
           200,
-          "Data pengumuman baru berhasil ditambahkan",
+          "Berhasil menambahkan data pengumuman baru",
           newPengumuman,
           res
         );
@@ -68,6 +68,38 @@ class PengumumanController {
     }
   }
 
+  // GET All Pengumuman By Publish True
+  static async getPengumumanActive(req, res, next) {
+    try {
+      const dataPengumuman = await Pengumuman.findAll({
+        where: {
+          is_publish: true,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+      });
+
+      // Data pengumuman active kosong?
+      if (dataPengumuman.length === 0) {
+        return resError(
+          404,
+          "Data pengumuman dengan status publish aktif tidak ditemukan",
+          res
+        );
+      } else {
+        return resSend(
+          200,
+          "Berhasil mendapatkan data pengumuman dengan status publish aktif",
+          dataPengumuman,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // GET Pengumuman By Id
   static async getPengumumanById(req, res, next) {
     try {
@@ -86,13 +118,13 @@ class PengumumanController {
       if (!dataPengumuman) {
         return resError(
           404,
-          `Data pengumuman dengan ${infoID} tidak ditemukan`,
+          `Data pengumuman dengan id ${infoID} tidak ditemukan`,
           res
         );
       } else {
         return resSend(
           200,
-          `Berhasil mendapatkan data pengumuman dengan ${infoID}`,
+          `Berhasil mendapatkan data pengumuman dengan id ${infoID}`,
           dataPengumuman,
           res
         );
@@ -126,19 +158,20 @@ class PengumumanController {
           res
         );
       } else {
-        // Mencegah duplikasi judul
-        const judulExists = await Pengumuman.findOne({
-          where: {
-            judul,
-          },
-        });
-
-        // Judul sudah ada?
-        if (judulExists) {
-          return resError(404, "Judul sudah ada", res);
+        // Ada data judul yang akan di update?
+        if (judul) {
+          // Mencegah duplikasi judul
+          const judulExists = await Pengumuman.findOne({
+            where: {
+              judul,
+            },
+          });
+          // Judul sudah ada?
+          if (judulExists) {
+            return resError(404, "Judul sudah ada", res);
+          }
         }
 
-        // Judul belum ada?
         const updatedPengumuman = {
           judul,
           dokumen,
@@ -146,15 +179,15 @@ class PengumumanController {
           is_publish,
         };
 
-        await Pengumuman.updated(updatedPengumuman, {
+        await Pengumuman.update(updatedPengumuman, {
           where: {
             info_id: Number(infoID),
           },
         });
         return resSend(
           200,
-          `Data program dengan id ${programID} berhasil diubah`,
-          dataPengumuman,
+          `Berhasil mengubah data program dengan id ${infoID}`,
+          updatedPengumuman,
           res
         );
       }
@@ -187,11 +220,11 @@ class PengumumanController {
       } else {
         // Non-active menampilkan pengumuman
         dataPengumuman.is_publish = false;
-        await Pengumuman.save();
+        await dataPengumuman.save();
 
         return resSend(
           200,
-          `Data pengumuman dengan id ${infoID} berhasil dihapus`,
+          `Berhasil menghapus data pengumuman dengan id ${infoID}`,
           dataPengumuman,
           res
         );
