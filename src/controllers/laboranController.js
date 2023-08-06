@@ -20,10 +20,10 @@ class LaboranController {
 
       // Data user ada?
       if (!dataUser) {
-        resError(404, `Data username ${username} tidak ditemukan`, res);
-      } else if (dataUser.role !== "Laboran") {
+        return resError(404, `Data username ${username} tidak ditemukan`, res);
+      } else if (dataUser?.role !== "Laboran") {
         // bukan Laboran?
-        resError(400, `Data username ${username} bukan Laboran`, res);
+        return resError(400, `Data username ${username} bukan Laboran`, res);
       } else {
         const laboranExists = await Laboran.findOne({
           where: {
@@ -33,7 +33,7 @@ class LaboranController {
 
         // Data laboran sudah ada?
         if (laboranExists) {
-          resError(
+          return resError(
             400,
             `Username ${username} sudah terdaftar sebagai Laboran`,
             res
@@ -47,9 +47,9 @@ class LaboranController {
             user_id: dataUser.user_id,
           });
 
-          resSend(
+          return resSend(
             200,
-            "Data Laboran baru berhasil ditambahkan",
+            "Berhasil menambahkan data Laboran baru",
             newLaboran,
             res
           );
@@ -71,9 +71,14 @@ class LaboranController {
 
       // Data Kosong?
       if (dataLaborans.length === 0) {
-        resError(404, "Data Laboran kosong", res);
+        return resError(404, "Data Laboran kosong", res);
       } else {
-        resSend(200, "Berhasil mendapatkan data Laboran", dataLaborans, res);
+        return resSend(
+          200,
+          "Berhasil mendapatkan seluruh data Laboran",
+          dataLaborans,
+          res
+        );
       }
     } catch (error) {
       next(error);
@@ -94,13 +99,13 @@ class LaboranController {
     });
 
     if (!dataLaboran) {
-      resError(
+      return resError(
         404,
         `Data Laboran dengan NIP ${laboranNIP} tidak ditemukan`,
         res
       );
     } else {
-      resSend(
+      return resSend(
         200,
         `Berhasil mendapatkan data Laboran dengan NIP ${laboranNIP}`,
         dataLaboran,
@@ -124,7 +129,7 @@ class LaboranController {
 
       // Data Laboran ada?
       if (!dataLaboran) {
-        resError(
+        return resError(
           404,
           `Data Laboran dengan NIP ${laboranNIP} tidak ditemukan`,
           res
@@ -138,16 +143,16 @@ class LaboranController {
         });
 
         if (namaExists) {
-          resError(400, "Nama Laboran sudah terdaftar", res);
+          return resError(400, "Nama Laboran sudah terdaftar", res);
         } else {
           await Laboran.update(req.body, {
             where: {
               nip: laboranNIP,
             },
           });
-          resSend(
+          return resSend(
             200,
-            `Data Laboran dengan NIP ${laboranNIP} berhasil diubah`,
+            `Berhasil mengubah data Laboran dengan NIP ${laboranNIP}`,
             req.body,
             res
           );
@@ -174,7 +179,7 @@ class LaboranController {
 
       // Data Laboran ada?
       if (!dataLaboran) {
-        resError(
+        return resError(
           404,
           `Data Laboran dengan NIP ${laboranNIP} tidak ditemukan`,
           res
@@ -185,9 +190,9 @@ class LaboranController {
             nip: laboranNIP,
           },
         });
-        resSend(
+        return resSend(
           200,
-          `Data Laboran dengan NIP ${laboranNIP} berhasil dihapus`,
+          `Berhasil menghapus data Laboran dengan NIP ${laboranNIP}`,
           dataLaboran,
           res
         );

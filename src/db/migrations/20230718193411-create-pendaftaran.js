@@ -25,8 +25,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       email: Sequelize.STRING,
+      email_kampus: Sequelize.STRING,
       no_hp: Sequelize.STRING,
       file_syarat: Sequelize.STRING,
+      bidang_praktikum: Sequelize.STRING,
       status: {
         allowNull: false,
         type: Sequelize.ENUM("Diterima", "Menunggu", "Ditolak"),

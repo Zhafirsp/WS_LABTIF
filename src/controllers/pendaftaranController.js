@@ -14,7 +14,7 @@ class PendaftaranController {
     try {
       const programID = req.params.programID;
 
-      const { file_syarat } = req.body;
+      const { file_syarat, bidang_praktikum } = req.body;
 
       const dataProgram = await Program.findOne({
         where: {
@@ -101,8 +101,10 @@ class PendaftaranController {
             nim: user.Mahasiswa.nim,
             nama_mahasiswa: user.Mahasiswa.nama_mahasiswa,
             email: user.email,
+            email_kampus: user.Mahasiswa.email_kampus,
             no_hp: user.no_hp,
             file_syarat,
+            bidang_praktikum,
           };
 
           await Pendaftaran.create(newPendaftaran);
@@ -131,11 +133,11 @@ class PendaftaranController {
 
       // Data pendaftaran kosong?
       if (dataPendaftarans.length === 0) {
-        resError(404, "Data pendaftaran kosong", res);
+        return resError(404, "Data pendaftaran kosong", res);
       } else {
-        resSend(
+        return resSend(
           200,
-          "Berhasil mendapatkan data pendaftaran",
+          "Berhasil mendapatkan seluruh data pendaftaran",
           dataPendaftarans,
           res
         );
@@ -161,13 +163,13 @@ class PendaftaranController {
 
       // Data pendaftaran ada?
       if (!dataPendaftaran) {
-        resError(
+        return resError(
           404,
           `Data pendaftaran dengan NIM ${mahasiswaNIM} tidak ditemukan`,
           res
         );
       } else {
-        resSend(
+        return resSend(
           200,
           `Berhasil mendapatkan data pendaftaran dengan NIM ${mahasiswaNIM}`,
           dataPendaftaran,
@@ -193,7 +195,8 @@ class PendaftaranController {
       if (!program) {
         return resError(
           404,
-          `Data program dengan periode ${periode} tidak ditemukan`
+          `Data program dengan periode ${periode} tidak ditemukan`,
+          res
         );
       } else {
         const dataPengumuman = await Pendaftaran.findAll({
@@ -211,7 +214,7 @@ class PendaftaranController {
         } else {
           return resSend(
             200,
-            `Berhasil mendapatkan data pengumuman periode ${periode}`,
+            `Berhasil mendapatkan seluruh data pengumuman dengan periode ${periode}`,
             dataPengumuman,
             res
           );
@@ -327,7 +330,9 @@ class PendaftaranController {
                   nim: dataPendaftaran.nim,
                   nama_asisten: dataPendaftaran.nama_mahasiswa,
                   email: dataPendaftaran.email,
+                  email_kampus: dataPendaftaran.email_kampus,
                   no_hp: dataPendaftaran.no_hp,
+                  bidang_praktikum: dataPendaftaran.bidang_praktikum,
                   periode: periodeProgram,
                 };
 
@@ -335,7 +340,7 @@ class PendaftaranController {
 
                 return resSend(
                   201,
-                  `Data asisten baru dengan nim ${dataPendaftaran.nim} berhasil ditambahkan`,
+                  `Berhasil menambahkan data asisten baru dengan nim ${dataPendaftaran.nim}`,
                   newAsisten,
                   res
                 );
@@ -363,7 +368,7 @@ class PendaftaranController {
             };
             return resSend(
               200,
-              `Validasi data pendaftaran dengan NIM ${dataPendaftaran.nim} berhasil dilakukan`,
+              `Berhasil melakukan validasi data pendaftaran dengan NIM ${dataPendaftaran.nim}`,
               validasi,
               res
             );
@@ -418,7 +423,7 @@ class PendaftaranController {
             res
           );
         } else {
-          // Memastikan data user sudah menjadi asisten di program lain
+          // Memastikan agar data pendaftaran milik asisten tidak boleh dihapus
           const userAsAsisten = await Pendaftaran.findOne({
             where: {
               nim: userLogin.username,
@@ -430,7 +435,7 @@ class PendaftaranController {
           if (userAsAsisten) {
             return resError(
               400,
-              `User sudah terdaftar menjadi calon Asisten di periode ${dataProgram.periode}`,
+              "Dilarang menghapus data pendaftaran milik Asisten",
               res
             );
           } else {

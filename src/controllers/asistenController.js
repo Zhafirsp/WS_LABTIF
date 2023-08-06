@@ -15,10 +15,40 @@ class AsistenController {
       if (dataAsistens.length === 0) {
         resError(404, "Data Asisten kosong", res);
       } else {
-        resSend(200, "Berhasil mendapatkan data Asisten", dataAsistens, res);
+        resSend(
+          200,
+          "Berhasil mendapatkan seluruh data Asisten",
+          dataAsistens,
+          res
+        );
       }
     } catch (error) {
       next(error);
+    }
+  }
+
+  // GET All Asisten By Status Active
+  static async getAslabActive(req, res, next) {
+    // Cari data asisten pada periode berjalan yang memiliki status aktif
+    const dataAsisten = await Asisten.findAll({
+      where: {
+        is_active: true,
+      },
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
+    });
+
+    // Data dengan status aktif kosong
+    if (dataAsisten.length === 0) {
+      resError(404, "Data Asisten dengan status aktif tidak ditemukan", res);
+    } else {
+      resSend(
+        200,
+        "Berhasil mendapatkan seluruh data Asisten dengan status aktif",
+        dataAsisten,
+        res
+      );
     }
   }
 
@@ -47,36 +77,11 @@ class AsistenController {
     }
   }
 
-  // GET Asisten By ID
-  static async getAslabActive(req, res, next) {
-    // Cari data asisten pada periode berjalan yang memiliki status aktif
-    const dataAsisten = await Asisten.findAll({
-      where: {
-        is_active: true,
-      },
-      attributes: {
-        exclude: ["created_at", "updated_at"],
-      },
-    });
-
-    // Data dengan status aktif kosong
-    if (dataAsisten.length === 0) {
-      resError(404, "Data Asisten dengan status aktif tidak ditemukan", res);
-    } else {
-      resSend(
-        200,
-        "Berhasil mendapatkan data Asisten dengan status aktif",
-        dataAsisten,
-        res
-      );
-    }
-  }
-
   // UPDATE Asisten By ID
   static async updateAslabByID(req, res, next) {
     try {
       const asistenID = req.params.id;
-      const { golongan, isActive } = req.body;
+      const { golongan, is_active } = req.body;
 
       const dataAsisten = await Asisten.findOne({
         where: {
@@ -95,14 +100,22 @@ class AsistenController {
           res
         );
       } else {
-        // Perubahan golongan
-        await Asisten.update(
-          { golongan, isActive },
-          {
-            where: {
-              asisten_id: asistenID,
-            },
-          }
+        const updatedAslab = {
+          golongan,
+          is_active,
+        };
+
+        await Asisten.update(updatedAslab, {
+          where: {
+            asisten_id: asistenID,
+          },
+        });
+
+        return resSend(
+          200,
+          `Berhasil mengubah data Asisten dengan id ${asistenID}`,
+          updatedAslab,
+          res
         );
       }
     } catch (error) {
@@ -157,7 +170,7 @@ class AsistenController {
 
         return resSend(
           200,
-          `Data Asisten dengan id ${asistenID} berhasil dihapus`,
+          `Berhasil menghapus data Asisten dengan id ${asistenID}`,
           deletedAsisten,
           res
         );

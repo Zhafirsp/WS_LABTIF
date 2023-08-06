@@ -1,5 +1,5 @@
 const resSend = (statusCode, message, data, res) => {
-  res.json(statusCode, {
+  res.status(statusCode).json({
     status: statusCode,
     message,
     data: data,
@@ -7,7 +7,7 @@ const resSend = (statusCode, message, data, res) => {
 };
 
 const resError = (statusCode, message, res) => {
-  res.json(statusCode, {
+  res.status(statusCode).json({
     status: statusCode,
     error: message,
   });

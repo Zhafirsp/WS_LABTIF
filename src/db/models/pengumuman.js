@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Informasi extends Model {
+  class Pengumuman extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Informasi.init(
+  Pengumuman.init(
     {
       info_id: {
         allowNull: false,
@@ -27,19 +27,24 @@ module.exports = (sequelize, DataTypes) => {
       link: DataTypes.STRING,
       tanggal_publish: {
         allowNull: false,
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
-      is_publish: {
-        allowNull: false,
-        type: DataTypes.BOOLEAN,
-      },
+      is_publish: DataTypes.BOOLEAN,
     },
     {
+      hooks: {
+        beforeCreate(model) {
+          if (!model.is_publish) {
+            // default true --> active
+            model.is_publish = true;
+          }
+        },
+      },
       sequelize,
       createdAt: "created_at",
       updatedAt: "updated_at",
-      modelName: "Informasi",
+      modelName: "Pengumuman",
     }
   );
-  return Informasi;
+  return Pengumuman;
 };

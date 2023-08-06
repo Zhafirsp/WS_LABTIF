@@ -9,16 +9,16 @@ class ProgramController {
 
       // Data periode kosong?
       if (!periode) {
-        resError(400, "Periode tidak boleh kosong", res);
+        return resError(400, "Periode tidak boleh kosong", res);
         // Data judul kosong?
       } else if (!judul) {
-        resError(400, "Judul tidak boleh kosong", res);
+        return resError(400, "Judul tidak boleh kosong", res);
       } else if (!deskripsi) {
         // Data deskripsi kosong?
-        resError(400, "Deskripsi tidak boleh kosong", res);
+        return resError(400, "Deskripsi tidak boleh kosong", res);
       } else if (!batas_waktu) {
         // Data batas waktu kosong?
-        resError(400, "Batas waktu tidak boleh kosong", res);
+        return resError(400, "Batas waktu tidak boleh kosong", res);
       } else {
         const periodeExists = await Program.findOne({
           where: {
@@ -38,7 +38,7 @@ class ProgramController {
           });
           return resSend(
             200,
-            "Data program baru berhasil ditambahkan",
+            "Berhasil menambahkan data program baru",
             newProgram,
             res
           );
@@ -60,9 +60,14 @@ class ProgramController {
 
       // Data program kosong?
       if (dataPrograms.length === 0) {
-        resError(404, "Data program kosong", res);
+        return resError(404, "Data program kosong", res);
       } else {
-        resSend(200, "Berhasil mendapatkan data program", dataPrograms, res);
+        return resSend(
+          200,
+          "Berhasil mendapatkan seluruh data program",
+          dataPrograms,
+          res
+        );
       }
     } catch (error) {
       next(error);
@@ -84,9 +89,13 @@ class ProgramController {
 
     // Data program ada?
     if (!dataProgram) {
-      resError(404, `Data program dengan id ${programID} tidak ditemukan`, res);
+      return resError(
+        404,
+        `Data program dengan id ${programID} tidak ditemukan`,
+        res
+      );
     } else {
-      resSend(
+      return resSend(
         200,
         `Berhasil mendapatkan data program dengan id ${programID}`,
         dataProgram,
@@ -115,16 +124,20 @@ class ProgramController {
 
     // Data program ada?
     if (!dataProgram) {
-      resError(404, `Data program dengan id ${programID} tidak ditemukan`, res);
+      return resError(
+        404,
+        `Data program dengan id ${programID} tidak ditemukan`,
+        res
+      );
     } else {
       await Program.update(updatedProgram, {
         where: {
           program_id: Number(programID),
         },
       });
-      resSend(
+      return resSend(
         200,
-        `Data program dengan id ${programID} berhasil diubah`,
+        `Berhasil mengubah data program dengan id ${programID}`,
         updatedProgram,
         res
       );
@@ -145,16 +158,20 @@ class ProgramController {
 
     // Data program ada?
     if (!dataProgram) {
-      resError(404, `Data program dengan id ${programID} tidak ditemukan`, res);
+      return resError(
+        404,
+        `Data program dengan id ${programID} tidak ditemukan`,
+        res
+      );
     } else {
       await Program.destroy({
         where: {
           program_id: Number(programID),
         },
       });
-      resSend(
+      return resSend(
         200,
-        `Data program dengan id ${programID} berhasil dihapus`,
+        `Berhasil menghapus data program dengan id ${programID}`,
         dataProgram,
         res
       );

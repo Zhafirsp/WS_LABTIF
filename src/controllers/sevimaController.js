@@ -26,6 +26,7 @@ class SevimaController {
             nim: item.nim,
             nama_mahasiswa: item.nama,
             email: item.email,
+            email_kampus: item.emailkampus,
             no_hp: item.nohp,
             periode_masuk: item.periodemasuk,
             created_at: new Date(),
@@ -38,7 +39,7 @@ class SevimaController {
         responseArray.push({
           status: 200,
           message:
-            "Data Mahasiswa dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data Mahasiswa dari SEVIMA API ke database",
           data: dataBaruMahasiswa,
         });
       } else {
@@ -54,6 +55,7 @@ class SevimaController {
           if (existingMahasiswa) {
             existingMahasiswa.nama_mahasiswa = mahasiswa.nama;
             existingMahasiswa.email = mahasiswa.email;
+            existingMahasiswa.email_kampus = mahasiswa.emailkampus;
             existingMahasiswa.no_hp = mahasiswa.nohp;
             existingMahasiswa.periode_masuk = mahasiswa.periodemasuk;
 
@@ -61,7 +63,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Data Mahasiswa dengan NIM ${mahasiswa.nim} berhasil diperbarui`,
+              message: `Berhasil memperbaharui data Mahasiswa dengan NIM ${mahasiswa.nim}`,
               data: existingMahasiswa,
             });
           } else {
@@ -70,6 +72,7 @@ class SevimaController {
               nim: mahasiswa.nim,
               nama_mahasiswa: mahasiswa.nama,
               email: mahasiswa.email,
+              email_kampus: mahasiswa.emailkampus,
               no_hp: mahasiswa.nohp,
               periode_masuk: mahasiswa.periodemasuk,
               created_at: new Date(),
@@ -80,7 +83,7 @@ class SevimaController {
 
             responseArray.push({
               status: 201,
-              message: `Data Mahasiswa baru dengan NIM ${mahasiswa.nim} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data Mahasiswa baru dengan NIM ${mahasiswa.nim}`,
               data: dataBaruMahasiswa,
             });
           }
@@ -89,7 +92,7 @@ class SevimaController {
 
       return resSend(
         200,
-        "Pembaruan data Mahasiswa dari SEVIMA berhasil",
+        "Berhasil memperbaharui data Mahasiswa dari SEVIMA",
         responseArray,
         res
       );
@@ -125,7 +128,7 @@ class SevimaController {
         responseArray.push({
           status: 201,
           message:
-            "Data Dosen dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data Dosen dari SEVIMA API ke database",
           data: dataBaruDosen,
         });
       } else {
@@ -148,7 +151,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Data dosen dengan NIP ${dosen.nip} berhasil diperbarui`,
+              message: `Berhasil memperbaharui Data dosen dengan NIP ${dosen.nip}`,
               data: existingDosen,
             });
           } else {
@@ -166,7 +169,7 @@ class SevimaController {
 
             responseArray.push({
               status: 201,
-              message: `Data dosen baru dengan NIP ${dosen.nip} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data dosen baru dengan NIP ${dosen.nip}`,
               data: dataBaruDosen,
             });
           }
@@ -174,7 +177,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Pembaruan data dosen dari SEVIMA berhasil",
+        "Berhasil memperbaharui data dosen dari SEVIMA",
         responseArray,
         res
       );
@@ -222,7 +225,7 @@ class SevimaController {
         responseArray.push({
           status: 201,
           message:
-            "Data mata kuliah dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data mata kuliah dari SEVIMA API ke database",
           data: dataBaruMatkul,
         });
       } else {
@@ -256,7 +259,7 @@ class SevimaController {
             console.log(existingMatkul);
             responseArray.push({
               status: 200,
-              message: `Data mata kuliah dengan kode mk ${matkul.kodemk} berhasil diperbarui`,
+              message: `Berhasil memperbaharui data mata kuliah dengan kode mk ${matkul.kodemk}`,
               data: existingMatkul,
             });
           } else {
@@ -275,7 +278,7 @@ class SevimaController {
 
             responseArray.push({
               status: 201,
-              message: `Data mata kuliah baru dengan kode mk ${matkul.kodemk} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data mata kuliah baru dengan kode mk ${matkul.kodemk}`,
               data: dataBaruMatkul,
             });
           }
@@ -283,7 +286,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Pembaruan data mata kuliah dari SEVIMA berhasil",
+        "Berhasil memperbaharui data mata kuliah dari SEVIMA",
         responseArray,
         res
       );
@@ -343,7 +346,7 @@ class SevimaController {
         responseArray.push({
           status: 201,
           message:
-            "Data kelas dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data kelas dari SEVIMA API ke database",
           data: dataBaruKelas,
         });
       } else {
@@ -367,7 +370,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Data kelas dengan Kelas ID ${kelas.kelasid} berhasil diperbarui`,
+              message: `Berhasil memperbaharui data kelas dengan Kelas ID ${kelas.kelasid}`,
               data: existingKelas,
             });
           } else {
@@ -386,7 +389,7 @@ class SevimaController {
             await Kelas.create(dataBaruKelas);
             responseArray.push({
               status: 201,
-              message: `Data kelas baru dengan Kelas ID ${kelas.kelasid} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data kelas baru dengan Kelas ID ${kelas.kelasid}`,
               data: dataBaruKelas,
             });
           }
@@ -394,7 +397,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Pembaruan data kelas dari SEVIMA berhasil",
+        "Berhasil memperbaharui data kelas dari SEVIMA",
         responseArray,
         res
       );
@@ -432,87 +435,41 @@ class SevimaController {
       // Data jadwal di database kosong?
       if (isEmptyTableJadwal) {
         for (const jadwal of filteredData) {
-          // Cari data kelas berdasarkan kelas_id
-          const kelasData = await Kelas.findOne({
+          // Cari data kelas yang ada di database
+          const dataKelas = await Kelas.findOne({
             where: {
               kelas_id: jadwal.kelasid,
             },
           });
 
-          // Cari data dosen berdasarkan nip
-          const dosenData = await Dosen.findOne({
-            where: {
-              nip: jadwal.nip,
-            },
+          // Cari data dosen yang ada di database
+          const dataDosen = await Dosen.findOne({
+            where: { dosen_nip: jadwal.nip },
           });
 
-          if (kelasData && dosenData) {
+          // Jika data kelas dan dosen ada pada jadwal tersebut, hubungkan dengan data kelas dan dosen yang ada di database
+          // Jika data kelas dan dosen tidak pada jadwal tersebut, tetap masukan jadwal
+
+          if (dataKelas && dataDosen) {
             const dataBaruJadwal = {
-              praktik_id: item.jadwalid,
-              periode: item.periode,
-              pertemuan: item.pertemuan,
-              hari: item.hari,
-              jam_mulai: item.waktumulai,
-              jam_selesai: item.waktuselesai,
-              kode_mk: item.kodemk,
-              kelas_id: item.kelasid,
-              dosen_nip: item.nip,
+              praktik_id: jadwal.jadwalid,
+              periode: jadwal.periode,
+              pertemuan: jadwal.pertemuan,
+              hari: jadwal.hari,
+              jam_mulai: jadwal.waktumulai,
+              jam_selesai: jadwal.waktuselesai,
+              kode_mk: jadwal.kodemk,
               created_at: new Date(),
               updated_at: new Date(),
             };
 
-            await JadwalPraktik.bulkCreate(dataBaruJadwal);
+            await JadwalPraktik.create(dataBaruJadwal);
 
             responseArray.push({
               status: 201,
               message:
-                "Data jadwal dari SEVIMA API berhasil ditambahkan ke database",
+                "Berhasil menambahkan data jadwal dari SEVIMA API ke database",
               data: dataBaruJadwal,
-            });
-          }
-        }
-      } else {
-        // Data jadwal sudah ada di database
-        for (const jadwal of filteredData) {
-          // Cari data jadwal berdasarkan praktik_id
-          const existingJadwal = await JadwalPraktik.findOne({
-            where: {
-              praktik_id: jadwal.jadwalid,
-            },
-          });
-          // Jadwal sudah ada? Lakukan pembaharuan data
-          if (existingJadwal) {
-            existingJadwal.periode = jadwal.periode;
-            existingJadwal.pertemuan = jadwal.pertemuan;
-            existingJadwal.hari = jadwal.hari;
-            existingJadwal.jam_mulai = jadwal.waktumulai;
-            existingJadwal.jam_selesai = jadwal.waktuselesai;
-            existingJadwal.kode_mk = jadwal.kodemk;
-            existingJadwal.kelas_id = jadwal.kelasid;
-            existingJadwal.dosen_nip = jadwal.nip;
-            existingJadwal.updated_at = new Date();
-
-            await existingJadwal.save();
-
-            responseArray.push({
-              status: 200,
-              message: `Data jadwal dengan Praktik ID ${jadwal.jadwalid} berhasil diperbarui`,
-              data: existingJadwal,
-            });
-          } else {
-            // Jadwal belum ada? Tambahkan data baru
-            // Cari data kelas berdasarkan kelas_id
-            const kelasData = await Kelas.findOne({
-              where: {
-                kelas_id: jadwal.kelasid,
-              },
-            });
-
-            // Cari data dosen berdasarkan nip
-            const dosenData = await Dosen.findOne({
-              where: {
-                nip: jadwal.nip,
-              },
             });
 
             if (kelasData && dosenData) {
@@ -540,10 +497,97 @@ class SevimaController {
             }
           }
         }
+      } else {
+        // Data jadwal sudah ada di database
+        for (const jadwal of filteredData) {
+          // Cari data jadwal berdasarkan praktik_id
+          const existingJadwal = await JadwalPraktik.findOne({
+            where: {
+              praktik_id: jadwal.jadwalid,
+            },
+          });
+          // Jadwal sudah ada? Lakukan pembaharuan data
+          if (existingJadwal) {
+            // Cari data kelas yang ada di database
+            const dataKelas = await Kelas.findOne({
+              where: {
+                kelas_id: jadwal.kelasid,
+              },
+            });
+
+            // Cari data dosen yang ada di database
+            const dataDosen = await Dosen.findOne({
+              where: { dosen_nip: jadwal.nip },
+            });
+
+            // Jika data kelas dan dosen ada pada jadwal tersebut, hubungkan dengan data kelas dan dosen yang ada di database
+            // Jika data kelas dan dosen tidak pada jadwal tersebut, tetap masukan jadwal
+
+            if (dataKelas && dataDosen) {
+              existingJadwal.periode = jadwal.periode;
+              existingJadwal.pertemuan = jadwal.pertemuan;
+              existingJadwal.hari = jadwal.hari;
+              existingJadwal.jam_mulai = jadwal.waktumulai;
+              existingJadwal.jam_selesai = jadwal.waktuselesai;
+              existingJadwal.kode_mk = jadwal.kodemk;
+              existingJadwal.kelas_id = jadwal.kelasid;
+              existingJadwal.dosen_nip = jadwal.nip;
+              existingJadwal.updated_at = new Date();
+
+              await existingJadwal.save();
+
+              responseArray.push({
+                status: 200,
+                message: `Berhasil memperbaharui data jadwal dengan Praktik ID ${jadwal.jadwalid}`,
+                data: existingJadwal,
+              });
+            }
+          } else {
+            // Jadwal belum ada? Tambahkan data baru
+
+            // Cari data kelas yang ada di database
+            const dataKelas = await Kelas.findOne({
+              where: {
+                kelas_id: jadwal.kelasid,
+              },
+            });
+
+            // Cari data dosen yang ada di database
+            const dataDosen = await Dosen.findOne({
+              where: { dosen_nip: jadwal.nip },
+            });
+
+            // Jika data kelas dan dosen ada pada jadwal tersebut, hubungkan dengan data kelas dan dosen yang ada di database
+            // Jika data kelas dan dosen tidak pada jadwal tersebut, tetap masukan jadwal
+
+            if (dataKelas && dataDosen) {
+              const dataBaruJadwal = {
+                praktik_id: jadwal.jadwalid,
+                periode: jadwal.periode,
+                pertemuan: jadwal.pertemuan,
+                hari: jadwal.hari,
+                jam_mulai: jadwal.waktumulai,
+                jam_selesai: jadwal.waktuselesai,
+                kode_mk: jadwal.kodemk,
+                kelas_id: jadwal.kelasid,
+                dosen_nip: jadwal.nip,
+                created_at: new Date(),
+                updated_at: new Date(),
+              };
+
+              await JadwalPraktik.create(dataBaruJadwal);
+              responseArray.push({
+                status: 201,
+                message: `Berhasil menambahkan data jadwal praktikum baru dengan ID ${jadwal.jadwalid}`,
+                data: dataBaruJadwal,
+              });
+            }
+          }
+        }
       }
       return resSend(
         200,
-        "Pembaruan data jadwal dari SEVIMA berhasil",
+        "Berhasil memperbaharui data jadwal dari SEVIMA",
         responseArray,
         res
       );

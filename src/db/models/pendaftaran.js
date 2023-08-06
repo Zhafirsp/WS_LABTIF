@@ -37,8 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       nama_mahasiswa: DataTypes.STRING,
       email: DataTypes.STRING,
+      email_kampus: DataTypes.STRING,
       no_hp: DataTypes.STRING,
       file_syarat: DataTypes.STRING,
+      bidang_praktikum: DataTypes.STRING,
       status: {
         type: DataTypes.ENUM("Diterima", "Menunggu", "Ditolak"),
         validate: {

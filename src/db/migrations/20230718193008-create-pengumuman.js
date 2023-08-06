@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Informasis", {
+    await queryInterface.createTable("Pengumumans", {
       info_id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,12 +16,9 @@ module.exports = {
       link: Sequelize.STRING,
       tanggal_publish: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
-      is_publish: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-      },
+      is_publish: Sequelize.BOOLEAN,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -33,6 +30,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Informasis");
+    await queryInterface.dropTable("Pengumumans");
   },
 };

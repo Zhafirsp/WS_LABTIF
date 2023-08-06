@@ -44,14 +44,14 @@ class UserController {
 
       // Ada penambahan data User baru?
       if (createdUsers.length > 0) {
-        resSend(
+        return resSend(
           201,
-          "Data Mahasiswa berhasil didaftarkan sebagai User",
+          "Berhasil mendaftarkan data Mahasiswa sebagai User",
           createdUsers,
           res
         );
       } else {
-        resSend(200, "Data User sudah up-to-date", createdUsers, res);
+        return resSend(200, "Data Mahasiswa kosong", createdUsers, res);
       }
     } catch (error) {
       next(error);
@@ -88,7 +88,12 @@ class UserController {
           role,
         });
 
-        resSend(201, "Akun User baru berhasil ditambahkan", newUser, res);
+        return resSend(
+          201,
+          "Berhasil menambahkan akun User baru",
+          newUser,
+          res
+        );
       }
     } catch (error) {
       next(error);
@@ -107,14 +112,19 @@ class UserController {
       if (dataUsers.length === 0) {
         return resError(404, "Data User kosong", res);
       } else {
-        return resSend(200, "Berhasil mendapatkan data User", dataUsers, res);
+        return resSend(
+          200,
+          "Berhasil mendapatkan seluruh data User",
+          dataUsers,
+          res
+        );
       }
     } catch (error) {
       next(error);
     }
   }
 
-  // GET User by User ID
+  // GET User by ID
   static async getUserById(req, res, next) {
     try {
       const userID = req.params.id;
@@ -130,9 +140,13 @@ class UserController {
 
       // Data User ada?
       if (!dataUser) {
-        resError(404, `Data User dengan id ${userID} tidak ditemukan`, res);
+        return resError(
+          404,
+          `Data User dengan id ${userID} tidak ditemukan`,
+          res
+        );
       } else {
-        resSend(
+        return resSend(
           200,
           `Berhasil mendapatkan data User dengan id ${userID}`,
           dataUser,
@@ -144,7 +158,7 @@ class UserController {
     }
   }
 
-  // UPDATE User by User ID
+  // UPDATE User by ID
   static async updateUserById(req, res, next) {
     const userID = req.params.id;
 
@@ -157,53 +171,62 @@ class UserController {
     });
 
     if (!dataUser) {
-      resError(404, `Data User dengan id ${userID} tidak ditemukan`, res);
+      return resError(
+        404,
+        `Data User dengan id ${userID} tidak ditemukan`,
+        res
+      );
     } else {
-      // Jika ada username atau email yang akan diupdate
-      const filterQuery = {};
-
+      // Jika ada username yang akan diupdate
       if (username) {
-        filterQuery.username = username;
+        return resError(400, "Data username tidak bisa diubah", res);
       }
-      if (email) {
-        filterQuery.email = email;
-      }
-      const existingUser = await User.findOne({
-        where: {
-          [Op.or]: filterQuery,
-        },
-      });
 
-      // User sudah terdaftar?
-      if (existingUser) {
-        if (existingUser.username === username) {
-          return resError(400, "Username sudah terdaftar", res);
-        } else if (existingUser.email === email) {
+      // Jika ada email yang akan diupdate
+      if (email) {
+        const emailExist = await User.findOne({
+          where: {
+            email,
+            user_id: {
+              // Mengecualikan email yang dimiliki akun tersebut
+              [Op.not]: Number(userID),
+            },
+          },
+        });
+
+        // Mencegah duplikasi email
+        if (emailExist) {
           return resError(400, "Email sudah terdaftar", res);
         }
       }
 
+      const userLogin = req.userLogin;
       // Jika ada password yang akan diupdate
       if (password) {
-        const passPattern = new RegExp(
-          "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_/!@#$%^&*.])(?=.{8,})"
-        );
-        if (passPattern.test(password)) {
-          req.body.password = hashPassword(password);
+        // Password hanya bisa diupdate oleh pemilik akun itu sendiri
+        if (Number(userID) !== Number(userLogin?.user_id)) {
+          return resError(400, "Akses Dilarang", res);
         } else {
-          resError(
-            400,
-            "Kata sandi harus memiliki setidaknya 8 karakter yang terdiri dari huruf besar dan huruf kecil, angka, simbol (!@#$_%^&*). Contoh: l4B-T!f2023",
-            res
+          const passPattern = new RegExp(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_/!@#$%^&*.])(?=.{8,})"
           );
+          if (passPattern.test(password)) {
+            req.body.password = hashPassword(password);
+          } else {
+            return resError(
+              400,
+              "Kata sandi harus memiliki setidaknya 8 karakter yang terdiri dari huruf besar dan huruf kecil, angka, simbol (!@#$_%^&*). Contoh: l4B-T!f2023",
+              res
+            );
+          }
         }
       }
 
-      // Jika ada role yang akan diupdate dan userLogin bukan Laboran
+      // Jika ada role yang akan diupdate
       if (role) {
-        const userLogin = req.userLogin;
+        // Role user hanya bisa diupdate oleh Laboran
         if (userLogin?.role !== "Laboran") {
-          return resError(400, "Akses Dilarang!", res);
+          return resError(400, "Akses Dilarang", res);
         }
       }
 
@@ -213,31 +236,9 @@ class UserController {
         },
       });
 
-      // Jika username berubah, dilakukan perubahan nip di tabel Laboran
-      if (username) {
-        const dataLaboran = await Laboran.findOne({
-          where: {
-            user_id: Number(userID),
-          },
-        });
-        // Data Laboran ada?
-        if (dataLaboran) {
-          await Laboran.update(
-            {
-              nip: username,
-            },
-            {
-              where: {
-                user_id: Number(userID),
-              },
-            }
-          );
-        }
-      }
-
-      resSend(
+      return resSend(
         200,
-        `Data User dengan id ${userID} berhasil diubah`,
+        `Berhasil mengubah data User dengan id ${userID}`,
         req.body,
         res
       );
@@ -261,14 +262,18 @@ class UserController {
             user_id: Number(userID),
           },
         });
-        resSend(
+        return resSend(
           200,
-          `Data User dengan id ${userID} berhasil dihapus`,
+          `Berhasil menghapus data User dengan id ${userID}`,
           dataUser,
           res
         );
       } else {
-        resError(404, `Data User dengan id ${userID} tidak ditemukan`, res);
+        return resError(
+          404,
+          `Data User dengan id ${userID} tidak ditemukan`,
+          res
+        );
       }
     } catch (error) {
       next(error);
