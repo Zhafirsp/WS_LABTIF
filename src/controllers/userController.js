@@ -51,7 +51,7 @@ class UserController {
           res
         );
       } else {
-        return resSend(200, "Data User sudah up-to-date", createdUsers, res);
+        return resSend(200, "Data Mahasiswa kosong", createdUsers, res);
       }
     } catch (error) {
       next(error);
@@ -162,7 +162,7 @@ class UserController {
   static async updateUserById(req, res, next) {
     const userID = req.params.id;
 
-    const { password, email, role } = req.body;
+    const { username, password, email, role } = req.body;
 
     const dataUser = await User.findOne({
       where: {
@@ -177,11 +177,20 @@ class UserController {
         res
       );
     } else {
+      // Jika ada username yang akan diupdate
+      if (username) {
+        return resError(400, "Data username tidak bisa diubah", res);
+      }
+
       // Jika ada email yang akan diupdate
       if (email) {
         const emailExist = await User.findOne({
           where: {
             email,
+            user_id: {
+              // Mengecualikan email yang dimiliki akun tersebut
+              [Op.not]: Number(userID),
+            },
           },
         });
 
@@ -196,7 +205,7 @@ class UserController {
       if (password) {
         // Password hanya bisa diupdate oleh pemilik akun itu sendiri
         if (Number(userID) !== Number(userLogin?.user_id)) {
-          return resError(400, "Akses Dilarang!", res);
+          return resError(400, "Akses Dilarang", res);
         } else {
           const passPattern = new RegExp(
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_/!@#$%^&*.])(?=.{8,})"
@@ -217,7 +226,7 @@ class UserController {
       if (role) {
         // Role user hanya bisa diupdate oleh Laboran
         if (userLogin?.role !== "Laboran") {
-          return resError(400, "Akses Dilarang!", res);
+          return resError(400, "Akses Dilarang", res);
         }
       }
 

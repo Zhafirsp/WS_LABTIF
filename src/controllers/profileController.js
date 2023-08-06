@@ -1,4 +1,7 @@
+const { Op } = require("sequelize");
 const { User } = require("../db/models");
+const { hashPassword } = require("../helpers/bcrypt");
+const { resSend, resError } = require("../helpers/response");
 
 class ProfileController {
   // GET Data Profile
@@ -10,19 +13,14 @@ class ProfileController {
         where: {
           user_id: Number(userLogin.user_id),
         },
-        include: {
-          model: Mahasiswa,
-        },
       });
 
       const response = {
         user_id: user.user_id,
         username: user.username,
-        nama_mahasiswa: user.Mahasiswa.nama_mahasiswa,
         email: user.email,
         no_hp: user.no_hp,
         image_url: user.image_url,
-        role: user.role,
       };
 
       if (!user) {
@@ -30,7 +28,7 @@ class ProfileController {
       } else {
         return resSend(
           200,
-          `Berhasil mendapatkan data profile dengan username${userLogin?.username}`,
+          `Berhasil mendapatkan data profile milik username${userLogin?.username}`,
           response,
           res
         );
@@ -43,7 +41,9 @@ class ProfileController {
   // UPDATE Data Profile
   static async updateProfile(req, res, next) {
     try {
-      const { password, email } = req.body;
+      const userLogin = req.userLogin;
+
+      const { username, password, email, role } = req.body;
 
       const user = await User.findOne({
         where: {
@@ -51,11 +51,20 @@ class ProfileController {
         },
       });
 
+      // Jika ada username yang akan diupdate
+      if (username) {
+        return resError(400, "Data username tidak bisa diubah", res);
+      }
+
       // Jika ada email yang akan diupdate
       if (email) {
         const emailExist = await User.findOne({
           where: {
             email,
+            user_id: {
+              // Mengecualikan email yang dimiliki akun tersebut
+              [Op.not]: Number(userLogin?.user_id),
+            },
           },
         });
 
@@ -81,6 +90,14 @@ class ProfileController {
         }
       }
 
+      // Jika ada role yang akan diupdate
+      if (role) {
+        // Role user hanya bisa diupdate oleh Laboran
+        if (userLogin?.role !== "Laboran") {
+          return resError(400, "Akses Dilarang", res);
+        }
+      }
+
       const userID = user?.user_id;
 
       await User.update(req.body, {
@@ -91,7 +108,7 @@ class ProfileController {
 
       return resSend(
         200,
-        `Berhasil mengubah data profile dengan username${userLogin?.username}`,
+        `Berhasil mengubah data profile milik username ${userLogin?.username}`,
         req.body,
         res
       );
