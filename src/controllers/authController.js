@@ -92,8 +92,6 @@ class AuthController {
       const dataUser = {
         user_id: user.user_id,
         username: user.username,
-        email: user.email,
-        no_hp: user.no_hp,
         role: user.role,
       };
 
@@ -101,7 +99,7 @@ class AuthController {
       const token = generateToken(dataUser, expiresIn);
 
       res.status(200).send({
-        message: "Refresh Token berhasil",
+        message: " Berhasil mendapatkan refresh token",
         access_token: token,
         expires_in: expiresIn.toString(),
       });
@@ -114,43 +112,6 @@ class AuthController {
       } else {
         return resError(500, "Internal server error", res);
       }
-    }
-  }
-
-  // GET Currest User
-  static async currentUser(req, res, next) {
-    try {
-      const username = req.userLogin.username;
-
-      const user = await User.findOne({
-        where: {
-          username,
-        },
-        include: {
-          model: Mahasiswa,
-        },
-      });
-
-      const response = {
-        user_id: user.user_id,
-        username: user.username,
-        nama_mahasiswa: user.Mahasiswa.nama_mahasiswa,
-        email: user.email,
-        role: user.role,
-      };
-
-      if (!user) {
-        return resError(404, "Data User tidak ditemukan", res);
-      } else {
-        return resSend(
-          200,
-          "Ini adalah data user yang sedang login",
-          response,
-          res
-        );
-      }
-    } catch (error) {
-      next(error);
     }
   }
 

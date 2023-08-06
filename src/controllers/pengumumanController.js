@@ -9,7 +9,7 @@ class PengumumanController {
 
       // Data judul kosong?
       if (!judul) {
-        resError(400, "Judul tidak boleh kosong", res);
+        return resError(400, "Judul tidak boleh kosong", res);
       } else {
         // Mencegah duplikasi judul
         const judulExists = await Pengumuman.findOne({
@@ -90,7 +90,7 @@ class PengumumanController {
       } else {
         return resSend(
           200,
-          "Berhasil mendapatkan data pengumuman dengan status publish aktif",
+          "Berhasil mendapatkan seluruh data pengumuman dengan status publish aktif",
           dataPengumuman,
           res
         );

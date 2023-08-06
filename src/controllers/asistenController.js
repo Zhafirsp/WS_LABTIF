@@ -15,7 +15,12 @@ class AsistenController {
       if (dataAsistens.length === 0) {
         resError(404, "Data Asisten kosong", res);
       } else {
-        resSend(200, "Berhasil mendapatkan data Asisten", dataAsistens, res);
+        resSend(
+          200,
+          "Berhasil mendapatkan seluruh data Asisten",
+          dataAsistens,
+          res
+        );
       }
     } catch (error) {
       next(error);
@@ -40,7 +45,7 @@ class AsistenController {
     } else {
       resSend(
         200,
-        "Berhasil mendapatkan data Asisten dengan status aktif",
+        "Berhasil mendapatkan seluruh data Asisten dengan status aktif",
         dataAsisten,
         res
       );
@@ -76,7 +81,7 @@ class AsistenController {
   static async updateAslabByID(req, res, next) {
     try {
       const asistenID = req.params.id;
-      const { golongan, isActive } = req.body;
+      const { golongan, is_active } = req.body;
 
       const dataAsisten = await Asisten.findOne({
         where: {
@@ -95,14 +100,22 @@ class AsistenController {
           res
         );
       } else {
-        // Perubahan golongan
-        await Asisten.update(
-          { golongan, isActive },
-          {
-            where: {
-              asisten_id: asistenID,
-            },
-          }
+        const updatedAslab = {
+          golongan,
+          is_active,
+        };
+
+        await Asisten.update(updatedAslab, {
+          where: {
+            asisten_id: asistenID,
+          },
+        });
+
+        return resSend(
+          200,
+          `Berhasil mengubah data Asisten dengan id ${asistenID}`,
+          updatedAslab,
+          res
         );
       }
     } catch (error) {
@@ -157,7 +170,7 @@ class AsistenController {
 
         return resSend(
           200,
-          `Data Asisten dengan id ${asistenID} berhasil dihapus`,
+          `Berhasil menghapus data Asisten dengan id ${asistenID}`,
           deletedAsisten,
           res
         );

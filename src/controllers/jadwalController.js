@@ -25,7 +25,7 @@ class JadwalController {
       } else {
         return resSend(
           200,
-          `Berhasil mendapatkan jadwal praktikum by periode ${periode}`,
+          `Berhasil mendapatkan seluruh data jadwal praktikum by periode ${periode}`,
           dataPraktiks,
           res
         );
@@ -162,7 +162,7 @@ class JadwalController {
       } else {
         resSend(
           200,
-          `Berhasil mendapatkan data jadwal piket dengan praktik id ${praktikID}`,
+          `Berhasil mendapatkan seluruh data jadwal piket dengan praktik id ${praktikID}`,
           dataPikets,
           res
         );

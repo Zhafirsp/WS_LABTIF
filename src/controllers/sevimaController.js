@@ -39,7 +39,7 @@ class SevimaController {
         responseArray.push({
           status: 200,
           message:
-            "Data Mahasiswa dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data Mahasiswa dari SEVIMA API ke database",
           data: dataBaruMahasiswa,
         });
       } else {
@@ -63,7 +63,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Data Mahasiswa dengan NIM ${mahasiswa.nim} berhasil diperbarui`,
+              message: `Berhasil memperbaharui data Mahasiswa dengan NIM ${mahasiswa.nim}`,
               data: existingMahasiswa,
             });
           } else {
@@ -83,7 +83,7 @@ class SevimaController {
 
             responseArray.push({
               status: 201,
-              message: `Data Mahasiswa baru dengan NIM ${mahasiswa.nim} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data Mahasiswa baru dengan NIM ${mahasiswa.nim}`,
               data: dataBaruMahasiswa,
             });
           }
@@ -92,7 +92,7 @@ class SevimaController {
 
       return resSend(
         200,
-        "Pembaruan data Mahasiswa dari SEVIMA berhasil",
+        "Berhasil memperbaharui data Mahasiswa dari SEVIMA",
         responseArray,
         res
       );
@@ -128,7 +128,7 @@ class SevimaController {
         responseArray.push({
           status: 201,
           message:
-            "Data Dosen dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data Dosen dari SEVIMA API ke database",
           data: dataBaruDosen,
         });
       } else {
@@ -151,7 +151,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Data dosen dengan NIP ${dosen.nip} berhasil diperbarui`,
+              message: `Berhasil memperbaharui Data dosen dengan NIP ${dosen.nip}`,
               data: existingDosen,
             });
           } else {
@@ -169,7 +169,7 @@ class SevimaController {
 
             responseArray.push({
               status: 201,
-              message: `Data dosen baru dengan NIP ${dosen.nip} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data dosen baru dengan NIP ${dosen.nip}`,
               data: dataBaruDosen,
             });
           }
@@ -177,7 +177,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Pembaruan data dosen dari SEVIMA berhasil",
+        "Berhasil memperbaharui data dosen dari SEVIMA",
         responseArray,
         res
       );
@@ -225,7 +225,7 @@ class SevimaController {
         responseArray.push({
           status: 201,
           message:
-            "Data mata kuliah dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data mata kuliah dari SEVIMA API ke database",
           data: dataBaruMatkul,
         });
       } else {
@@ -259,7 +259,7 @@ class SevimaController {
             console.log(existingMatkul);
             responseArray.push({
               status: 200,
-              message: `Data mata kuliah dengan kode mk ${matkul.kodemk} berhasil diperbarui`,
+              message: `Berhasil memperbaharui data mata kuliah dengan kode mk ${matkul.kodemk}`,
               data: existingMatkul,
             });
           } else {
@@ -278,7 +278,7 @@ class SevimaController {
 
             responseArray.push({
               status: 201,
-              message: `Data mata kuliah baru dengan kode mk ${matkul.kodemk} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data mata kuliah baru dengan kode mk ${matkul.kodemk}`,
               data: dataBaruMatkul,
             });
           }
@@ -286,7 +286,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Pembaruan data mata kuliah dari SEVIMA berhasil",
+        "Berhasil memperbaharui data mata kuliah dari SEVIMA",
         responseArray,
         res
       );
@@ -346,7 +346,7 @@ class SevimaController {
         responseArray.push({
           status: 201,
           message:
-            "Data kelas dari SEVIMA API berhasil ditambahkan ke database",
+            "Berhasil menambahkan data kelas dari SEVIMA API ke database",
           data: dataBaruKelas,
         });
       } else {
@@ -370,7 +370,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Data kelas dengan Kelas ID ${kelas.kelasid} berhasil diperbarui`,
+              message: `Berhasil memperbaharui data kelas dengan Kelas ID ${kelas.kelasid}`,
               data: existingKelas,
             });
           } else {
@@ -389,7 +389,7 @@ class SevimaController {
             await Kelas.create(dataBaruKelas);
             responseArray.push({
               status: 201,
-              message: `Data kelas baru dengan Kelas ID ${kelas.kelasid} berhasil ditambahkan`,
+              message: `Berhasil menambahkan data kelas baru dengan Kelas ID ${kelas.kelasid}`,
               data: dataBaruKelas,
             });
           }
@@ -397,7 +397,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Pembaruan data kelas dari SEVIMA berhasil",
+        "Berhasil memperbaharui data kelas dari SEVIMA",
         responseArray,
         res
       );
@@ -468,7 +468,7 @@ class SevimaController {
             responseArray.push({
               status: 201,
               message:
-                "Data jadwal dari SEVIMA API berhasil ditambahkan ke database",
+                "Berhasil menambahkan data jadwal dari SEVIMA API ke database",
               data: dataBaruJadwal,
             });
           }
@@ -514,7 +514,7 @@ class SevimaController {
 
               responseArray.push({
                 status: 200,
-                message: `Data jadwal dengan Praktik ID ${jadwal.jadwalid} berhasil diperbarui`,
+                message: `Berhasil memperbaharui data jadwal dengan Praktik ID ${jadwal.jadwalid}`,
                 data: existingJadwal,
               });
             }
@@ -554,7 +554,7 @@ class SevimaController {
               await JadwalPraktik.create(dataBaruJadwal);
               responseArray.push({
                 status: 201,
-                message: `Data jadwal praktikum baru dengan ID ${jadwal.jadwalid} berhasil ditambahkan`,
+                message: `Berhasil menambahkan data jadwal praktikum baru dengan ID ${jadwal.jadwalid}`,
                 data: dataBaruJadwal,
               });
             }
@@ -563,7 +563,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Pembaruan data jadwal dari SEVIMA berhasil",
+        "Berhasil memperbaharui data jadwal dari SEVIMA",
         responseArray,
         res
       );

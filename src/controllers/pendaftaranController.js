@@ -133,11 +133,11 @@ class PendaftaranController {
 
       // Data pendaftaran kosong?
       if (dataPendaftarans.length === 0) {
-        resError(404, "Data pendaftaran kosong", res);
+        return resError(404, "Data pendaftaran kosong", res);
       } else {
-        resSend(
+        return resSend(
           200,
-          "Berhasil mendapatkan data pendaftaran",
+          "Berhasil mendapatkan seluruh data pendaftaran",
           dataPendaftarans,
           res
         );
@@ -163,13 +163,13 @@ class PendaftaranController {
 
       // Data pendaftaran ada?
       if (!dataPendaftaran) {
-        resError(
+        return resError(
           404,
           `Data pendaftaran dengan NIM ${mahasiswaNIM} tidak ditemukan`,
           res
         );
       } else {
-        resSend(
+        return resSend(
           200,
           `Berhasil mendapatkan data pendaftaran dengan NIM ${mahasiswaNIM}`,
           dataPendaftaran,
@@ -214,7 +214,7 @@ class PendaftaranController {
         } else {
           return resSend(
             200,
-            `Berhasil mendapatkan data pengumuman periode ${periode}`,
+            `Berhasil mendapatkan seluruh data pengumuman dengan periode ${periode}`,
             dataPengumuman,
             res
           );
@@ -340,7 +340,7 @@ class PendaftaranController {
 
                 return resSend(
                   201,
-                  `Data asisten baru dengan nim ${dataPendaftaran.nim} berhasil ditambahkan`,
+                  `Berhasil menambahkan data asisten baru dengan nim ${dataPendaftaran.nim}`,
                   newAsisten,
                   res
                 );
@@ -368,7 +368,7 @@ class PendaftaranController {
             };
             return resSend(
               200,
-              `Validasi data pendaftaran dengan NIM ${dataPendaftaran.nim} berhasil dilakukan`,
+              `Berhasil melakukan validasi data pendaftaran dengan NIM ${dataPendaftaran.nim}`,
               validasi,
               res
             );
