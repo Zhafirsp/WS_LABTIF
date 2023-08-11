@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.addConstraint("JadwalPraktiks", {
       fields: ["kelas_id"],
       type: "foreign key",
-      name: "fk_kelasID_in_JadwalPraktik",
+      name: "fk-kelasID-in-JadwalPraktik",
       references: {
         //Required field
         table: "Kelas",
@@ -19,7 +19,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeConstraint(
       "JadwalPraktiks",
-      "fk_kelasID_in_JadwalPraktik",
+      "fk-kelasID-in-JadwalPraktik",
       {}
     );
   },
