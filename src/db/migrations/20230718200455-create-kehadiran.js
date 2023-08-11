@@ -8,25 +8,20 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER(11),
       },
-      asisten_id: {
-        allowNull: false,
-        type: Sequelize.STRING(11),
-      },
-      nama_asisten: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       piket_id: {
         allowNull: false,
         type: Sequelize.INTEGER(11),
       },
+      pertemuan: Sequelize.INTEGER(11),
+      asisten_id: Sequelize.STRING(11),
+      pengganti_id: Sequelize.STRING(11),
+      nama_asisten: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       status: {
         allowNull: false,
         type: Sequelize.ENUM("Hadir", "Izin", "Alpha"),
-      },
-      pengganti_id: {
-        allowNull: false,
-        type: Sequelize.STRING(11),
       },
       created_at: {
         allowNull: false,

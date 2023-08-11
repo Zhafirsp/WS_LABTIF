@@ -16,14 +16,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(11),
       },
-      kelas_id: {
-        // allowNull: false,
-        type: Sequelize.INTEGER(11),
-      },
-      dosen_nip: {
-        // allowNull: false,
-        type: Sequelize.STRING(11),
-      },
+      kelas_id: Sequelize.INTEGER(11),
+      dosen_nip: Sequelize.STRING(11),
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

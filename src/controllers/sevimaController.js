@@ -459,6 +459,8 @@ class SevimaController {
               jam_mulai: jadwal.waktumulai,
               jam_selesai: jadwal.waktuselesai,
               kode_mk: jadwal.kodemk,
+              kelas_id: jadwal.kelasid,
+              dosen_nip: jadwal.nip,
               created_at: new Date(),
               updated_at: new Date(),
             };

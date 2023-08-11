@@ -42,14 +42,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING(11),
       },
-      kelas_id: {
-        // allowNull: false,
-        type: DataTypes.INTEGER(11),
-      },
-      dosen_nip: {
-        // allowNull: false,
-        type: DataTypes.STRING(11),
-      },
+      kelas_id: DataTypes.INTEGER(11),
+      dosen_nip: DataTypes.STRING(11),
     },
     {
       sequelize,

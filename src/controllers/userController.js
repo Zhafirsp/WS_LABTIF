@@ -64,17 +64,17 @@ class UserController {
       const { username, password, email, no_hp, image_url, role } = req.body;
 
       // Mencegah duplikasi username dan email
-      const existingUser = await User.findOne({
+      const userExist = await User.findOne({
         where: {
           [Op.or]: [{ username }, { email }],
         },
       });
 
       // User sudah terdaftar?
-      if (existingUser) {
-        if (existingUser.username === username) {
+      if (userExist) {
+        if (userExist.username === username) {
           return resError(400, "Username sudah terdaftar", res);
-        } else if (existingUser.email === email) {
+        } else if (userExist.email === email) {
           return resError(400, "Email sudah terdaftar", res);
         }
       } else {
