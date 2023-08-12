@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "asisten_id",
         foreignKey: "asisten_id",
       });
+      Asisten.hasMany(models.Kehadiran, {
+        sourceKey: "asisten_id",
+        foreignKey: "pengganti_id",
+      });
     }
   }
   Asisten.init(

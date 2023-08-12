@@ -34,16 +34,18 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER(11),
       },
-      kelas_id: DataTypes.INTEGER(11),
       praktik_id: {
         allowNull: false,
         type: DataTypes.INTEGER(11),
       },
+      periode: DataTypes.STRING(11),
+      kelas_id: DataTypes.INTEGER(11),
       pertemuan: DataTypes.INTEGER(11),
       asisten_id: {
         allowNull: false,
         type: DataTypes.STRING(11),
       },
+      nama_asisten: DataTypes.STRING,
     },
     {
       sequelize,

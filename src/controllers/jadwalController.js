@@ -1,4 +1,3 @@
-const { Op } = require("sequelize");
 const { Asisten, JadwalPraktik, JadwalPiket } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
 
@@ -6,7 +5,7 @@ class JadwalController {
   // GET All Jadwal Praktik By Periode
   static async getAllPraktikByPeriode(req, res, next) {
     try {
-      const periode = req.params.periode;
+      const { periode } = req.body;
 
       const dataPraktiks = await JadwalPraktik.findAll({
         where: {
@@ -27,7 +26,7 @@ class JadwalController {
       } else {
         return resSend(
           200,
-          `Berhasil mendapatkan seluruh data jadwal praktikum by periode ${periode}`,
+          `Berhasil mendapatkan seluruh data jadwal praktikum dengan periode ${periode}`,
           dataPraktiks,
           res
         );
@@ -42,7 +41,7 @@ class JadwalController {
     try {
       const kelasID = req.params.kelasID;
 
-      const { asisten_id } = req.body;
+      const { periode, asisten_id } = req.body;
 
       /*
        Berdasarkan kelas id alasannya:
@@ -51,17 +50,18 @@ class JadwalController {
       */
 
       // Mencari kelas id yang ada pada jadwal praktik
-      const dataKelas = await JadwalPraktik.findOne({
+      const dataPraktiks = await JadwalPraktik.findOne({
         where: {
+          periode,
           kelas_id: Number(kelasID),
         },
       });
 
       // Data kelas tidak ada?
-      if (!dataKelas) {
+      if (!dataPraktiks) {
         return resError(
           404,
-          `Data kelas dengan kelas id ${kelasID} tidak ditemukan`,
+          `Data jadwal praktikum periode ${periode} dengan kelas id ${kelasID} tidak ditemukan`,
           res
         );
       } else {
@@ -83,6 +83,7 @@ class JadwalController {
           // Apakah asisten sudah terdaftar pada jadwal piket?
           const existingPiket = await JadwalPiket.findOne({
             where: {
+              periode,
               kelas_id: Number(kelasID),
               asisten_id,
             },
@@ -95,7 +96,7 @@ class JadwalController {
           if (existingPiket) {
             return resError(
               400,
-              `Asisten dengan id ${asisten_id} sudah terdaftar pada kelas dengan id ${kelasID}`,
+              `Asisten dengan id ${asisten_id} sudah terdaftar pada jadwal praktikum periode ${periode} dengan kelas id ${kelasID}`,
               res
             );
           }
@@ -103,9 +104,10 @@ class JadwalController {
           // Mencari data praktik_id yang ada pada kelas_id tersebut
           const praktikIDs = await JadwalPraktik.findAll({
             where: {
+              periode,
               kelas_id: Number(kelasID),
             },
-            attributes: ["kelas_id", "praktik_id", "pertemuan"],
+            attributes: ["praktik_id", "periode", "kelas_id", "pertemuan"],
           });
 
           // Hitung asisten yang sudah ada pada jadwal praktikum tersebut
@@ -129,16 +131,18 @@ class JadwalController {
           // Data asisten belum melebihi 3?
           // Menambahkan jadwal piket baru untuk setiap praktik_id dalam kelas
           const newPiket = praktikIDs.map((praktik) => ({
-            kelas_id: praktik.kelas_id,
             praktik_id: praktik.praktik_id,
             pertemuan: praktik.pertemuan,
+            periode: praktik.periode,
+            kelas_id: praktik.kelas_id,
             asisten_id,
+            nama_asisten: dataAsisten.nama_asisten,
           }));
 
           await JadwalPiket.bulkCreate(newPiket);
           return resSend(
             201,
-            `Berhasil menambahkan jadwal piket baru untuk Asisten dengan id ${asisten_id} pada kelas id ${kelasID}`,
+            `Berhasil menambahkan jadwal piket baru periode ${periode} untuk Asisten dengan id ${asisten_id} pada kelas id ${kelasID}`,
             newPiket,
             res
           );
@@ -149,10 +153,15 @@ class JadwalController {
     }
   }
 
-  // GET All Jadwal Piket
-  static async getAllPiket(req, res, next) {
+  // GET All Jadwal Piket By Periode
+  static async getAllPiketByPeriode(req, res, next) {
     try {
+      const { periode } = req.body;
+
       const dataPikets = await JadwalPiket.findAll({
+        where: {
+          periode,
+        },
         attributes: {
           exclude: ["created_at", "updated_at"],
         },
@@ -160,11 +169,15 @@ class JadwalController {
 
       // Data Piket kosong?
       if (dataPikets.length === 0) {
-        return resError(404, "Data jadwal piket kosong", res);
+        return resError(
+          404,
+          `Data jadwal piket dengan periode ${periode} tidak ditemukan`,
+          res
+        );
       } else {
         return resSend(
           200,
-          "Berhasil mendapatkan seluruh data jadwal piket",
+          `Berhasil mendapatkan seluruh data jadwal piket dengan periode ${periode}`,
           dataPikets,
           res
         );
@@ -178,9 +191,11 @@ class JadwalController {
   static async getPiketByKelasId(req, res, next) {
     try {
       const kelasID = req.params.kelasID;
+      const { periode } = req.body;
 
       const dataPikets = await JadwalPiket.findAll({
         where: {
+          periode,
           kelas_id: Number(kelasID),
         },
         attributes: {
@@ -189,16 +204,16 @@ class JadwalController {
       });
 
       // Data jadwal piket tidak ada?
-      if (!dataPikets) {
+      if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket dengan kelas id ${kelasID} tidak ditemukan`,
+          `Data jadwal piket periode ${periode} dengan kelas id ${kelasID} tidak ditemukan`,
           res
         );
       } else {
         resSend(
           200,
-          `Berhasil mendapatkan seluruh data jadwal piket dengan kelas id ${kelasID}`,
+          `Berhasil mendapatkan seluruh data jadwal piket periode ${periode} dengan kelas id ${kelasID}`,
           dataPikets,
           res
         );
@@ -213,10 +228,12 @@ class JadwalController {
     try {
       const kelasID = req.params.kelasID;
       const asistenID = req.params.asistenID;
+      const { periode } = req.body;
 
       // Mencari kelas id yang ada pada jadwal piket
       const dataPikets = await JadwalPiket.findAll({
         where: {
+          periode,
           kelas_id: Number(kelasID),
           asisten_id: asistenID,
         },
@@ -229,11 +246,11 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket dengan kelas id ${kelasID} dan asisten id ${asistenID} tidak ditemukan`,
+          `Data jadwal piket periode ${periode} dengan kelas id ${kelasID} dan asisten id ${asistenID} tidak ditemukan`,
           res
         );
       } else {
-        const { asisten_id } = req.body;
+        const { asisten_id, periode } = req.body;
 
         // Apakah data asisten ada pada tabel Asisten?
         const dataAsisten = await Asisten.findOne({
@@ -249,28 +266,56 @@ class JadwalController {
             `Data Asisten dengan id ${asistenID} tidak ditemukan`,
             res
           );
+        } else {
+          // Apakah asisten sudah terdaftar pada jadwal piket?
+          const existingAsisten = await JadwalPiket.findOne({
+            where: {
+              periode,
+              kelas_id: Number(kelasID),
+              asisten_id,
+            },
+          });
+
+          // Data asisten sudah terdaftar?
+          if (existingAsisten) {
+            return resError(
+              400,
+              `Asisten dengan id ${asisten_id} sudah terdaftar pada jadwal piket periode ${periode} dengan kelas id ${kelasID}`,
+              res
+            );
+          } else {
+            // Data asisten belum ada pada jadwal piket?
+            const updatedPiket = dataPikets.map((piket) => ({
+              periode: piket.periode,
+              piket_id: piket.piket_id,
+              praktik_id: piket.praktik_id,
+              asisten_id,
+              nama_asisten: dataAsisten.nama_asisten,
+            }));
+
+            // Melakukan perubahan asisten pada jadwal piket berdasarkan kelas_id
+            await JadwalPiket.update(
+              {
+                asisten_id,
+                nama_asisten: dataAsisten.nama_asisten,
+              },
+              {
+                where: {
+                  periode,
+                  kelas_id: Number(kelasID),
+                  asisten_id: asistenID,
+                },
+              }
+            );
+
+            return resSend(
+              200,
+              `Berhasil mengubah jadwal piket periode ${periode} pada kelas id ${kelasID} dan asisten dengan id ${asistenID}`,
+              updatedPiket,
+              res
+            );
+          }
         }
-
-        const updatedPiket = dataPikets.map((piket) => ({
-          piket_id: piket.piket_id,
-          praktik_id: piket.praktik_id,
-          asisten_id,
-        }));
-
-        // Melakukan perubahan asisten pada jadwal piket berdasarkan kelas_id
-        await JadwalPiket.update(req.body, {
-          where: {
-            kelas_id: Number(kelasID),
-            asisten_id: asistenID,
-          },
-        });
-
-        return resSend(
-          200,
-          `Berhasil mengubah jadwal piket dengan kelas id ${kelasID} dan asisten dengan id ${asistenID}`,
-          updatedPiket,
-          res
-        );
       }
     } catch (error) {
       next(error);
@@ -281,9 +326,11 @@ class JadwalController {
   static async deletePiketByKelasId(req, res, next) {
     try {
       const kelasID = req.params.kelasID;
+      const { periode } = req.body;
 
       const dataPikets = await JadwalPiket.findAll({
         where: {
+          periode,
           kelas_id: Number(kelasID),
         },
         attributes: {
@@ -295,18 +342,19 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket dengan kelas id ${kelasID} tidak ditemukan`,
+          `Data jadwal piket periode ${periode} dengan kelas id ${kelasID} tidak ditemukan`,
           res
         );
       } else {
         await JadwalPiket.destroy({
           where: {
+            periode,
             kelas_id: Number(kelasID),
           },
         });
         return resSend(
           200,
-          `Berhasil menghapus semua data jadwal piket yang ada pada kelas id ${kelasID}`,
+          `Berhasil menghapus semua data jadwal piket periode ${periode} yang ada pada kelas id ${kelasID}`,
           dataPikets,
           res
         );
@@ -321,10 +369,12 @@ class JadwalController {
     try {
       const kelasID = req.params.kelasID;
       const asistenID = req.params.asistenID;
+      const { periode } = req.body;
 
       // Mencari kelas id yang ada pada jadwal piket
       const dataPikets = await JadwalPiket.findAll({
         where: {
+          periode,
           kelas_id: Number(kelasID),
           asisten_id: asistenID,
         },
@@ -337,25 +387,28 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket dengan kelas id ${kelasID} dan asisten id ${asistenID} tidak ditemukan`,
+          `Data jadwal piket periode ${periode} dengan kelas id ${kelasID} dan asisten id ${asistenID} tidak ditemukan`,
           res
         );
       } else {
         const deletedPiket = dataPikets.map((piket) => ({
+          periode: piket.periode,
           piket_id: piket.piket_id,
           praktik_id: piket.praktik_id,
           asisten_id: piket.asisten_id,
+          nama_asisten: piket.nama_asisten,
         }));
 
         await JadwalPiket.destroy({
           where: {
+            periode,
             kelas_id: Number(kelasID),
             asisten_id: asistenID,
           },
         });
         return resSend(
           200,
-          `Berhasil menghapus jadwal piket dengan kelas id ${kelasID} dan asisten dengan id ${asistenID}`,
+          `Berhasil menghapus jadwal piket periode ${periode} dengan kelas id ${kelasID} dan asisten dengan id ${asistenID}`,
           deletedPiket,
           res
         );

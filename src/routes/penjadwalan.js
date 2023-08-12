@@ -4,13 +4,13 @@ const router = express.Router();
 const JadwalController = require("../controllers/jadwalController");
 
 // GET All Data Jadwal Praktikum By Periode
-router.get("/praktiks/:periode", JadwalController.getAllPraktikByPeriode);
+router.get("/praktiks", JadwalController.getAllPraktikByPeriode);
 
 // Add New Jadwal Piket by Kelas ID
 router.post("/piket/:kelasID", JadwalController.addPiketByKelasId);
 
-// GET All Data Jadwal Piket
-router.get("/pikets", JadwalController.getAllPiket);
+// GET All Data Jadwal Piket by Periode
+router.get("/pikets", JadwalController.getAllPiketByPeriode);
 
 // GET All Data Jadwal Piket by Kelas ID
 router.get("/pikets/:kelasID", JadwalController.getPiketByKelasId);

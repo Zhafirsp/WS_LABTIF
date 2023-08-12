@@ -8,16 +8,18 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER(11),
       },
-      kelas_id: Sequelize.INTEGER(11),
       praktik_id: {
         allowNull: false,
         type: Sequelize.INTEGER(11),
       },
+      periode: Sequelize.STRING(11),
+      kelas_id: Sequelize.INTEGER(11),
       pertemuan: Sequelize.INTEGER(11),
       asisten_id: {
         allowNull: false,
         type: Sequelize.STRING(11),
       },
+      nama_asisten: Sequelize.STRING,
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
