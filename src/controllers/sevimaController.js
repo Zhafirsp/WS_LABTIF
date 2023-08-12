@@ -473,6 +473,30 @@ class SevimaController {
                 "Berhasil menambahkan data jadwal dari SEVIMA API ke database",
               data: dataBaruJadwal,
             });
+
+            if (kelasData && dosenData) {
+              const dataBaruJadwal = {
+                praktik_id: jadwal.jadwalid,
+                periode: jadwal.periode,
+                pertemuan: jadwal.pertemuan,
+                hari: jadwal.hari,
+                jam_mulai: jadwal.waktumulai,
+                jam_selesai: jadwal.waktuselesai,
+                kode_mk: jadwal.kodemk,
+                kelas_id: jadwal.kelasid,
+                dosen_nip: jadwal.nip,
+                created_at: new Date(),
+                updated_at: new Date(),
+              };
+
+              await JadwalPraktik.create(dataBaruJadwal);
+
+              responseArray.push({
+                status: 201,
+                message: `Data jadwal baru dengan Praktik ID ${jadwal.jadwalid} berhasil ditambahkan`,
+                data: dataBaruJadwal,
+              });
+            }
           }
         }
       } else {
