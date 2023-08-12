@@ -39,8 +39,19 @@ class KehadiranController {
         );
       } else {
         let penggantiAslab;
+        let namaPengganti;
+
         // Ada inputan pengganti_id
         if (pengganti_id) {
+          // Mencegah pengganti_id diisi dengan data asisten pada jadwal piket
+          if (pengganti_id === dataPiket.asisten_id) {
+            return resError(
+              400,
+              "Pengganti ID tidak bisa sama dengan Asisten ID yang tidak hadir",
+              res
+            );
+          }
+
           // Apakah pengganti_id ada di data Asisten?
           penggantiAslab = await Asisten.findOne({
             where: { asisten_id: pengganti_id },
@@ -53,6 +64,9 @@ class KehadiranController {
               `Data Asisten dengan id ${pengganti_id} tidak ditemukan`,
               res
             );
+          } else {
+            // Data Pengganti ada? Set namaPengganti sesuai dengan pengganti_id
+            namaPengganti = penggantiAslab.nama_asisten;
           }
         }
 
@@ -67,7 +81,7 @@ class KehadiranController {
         if ((status === "Izin" || status === "Alpha") && !finalPenggantiID) {
           return resError(
             400,
-            "Status Izin atau Aplha memerlukan pengganti_id yang valid",
+            "Status Izin atau Alpha memerlukan pengganti_id yang valid",
             res
           );
         }
@@ -76,9 +90,11 @@ class KehadiranController {
           piket_id: dataPiket.piket_id,
           pertemuan: dataPiket.pertemuan,
           asisten_id: dataPiket.asisten_id,
-          pengganti_id: finalPenggantiID,
-          // nama_asisten,
+          nama_asisten: dataPiket.nama_asisten,
           status,
+          pengganti_id: finalPenggantiID,
+          // Jika asisten hadir, set nama_pengganti null
+          nama_pengganti: status === "Hadir" ? null : namaPengganti,
         };
 
         await Kehadiran.create(newKehadiran);
@@ -95,14 +111,32 @@ class KehadiranController {
     }
   }
 
-  // Get Kehadiran By Asisten Id
-  static async getKehadiranByAslabID(req, res, next) {
+  // Get All Kehadiran
+  static async getAllKehadiranByPeriode(req, res, next) {
     try {
-      const aslabID = req.params.aslabID;
+      const { periode } = req.body;
+
+      const dataPiket = await JadwalPiket.findAll({
+        where: {
+          periode,
+        },
+      });
+
+      // Data Jadwal Piket tidak ada?
+      if (dataPiket.length === 0) {
+        return resError(
+          404,
+          `Data jadwal piket periode ${periode} tidak ditemukan`,
+          res
+        );
+      }
+
+      // Mengumpulkan piket_id yang ditemukan pada jadwal piket sesuai dengan periode
+      const piketIDs = dataPiket.map((piket) => piket.piket_id);
 
       const dataKehadirans = await Kehadiran.findAll({
         where: {
-          asisten_id: aslabID,
+          piket_id: piketIDs,
         },
         attributes: {
           exclude: ["created_at", "updated_at"],
@@ -113,13 +147,13 @@ class KehadiranController {
       if (dataKehadirans.length === 0) {
         return resError(
           404,
-          `Data kehadiran dengan asisten id ${aslabID} tidak ditemukan`,
+          `Data kehadiran untuk jadwal piket periode ${periode} tidak ditemukan`,
           res
         );
       } else {
         return resSend(
           200,
-          `Berhasil mendapatkan data kehadiran asisten dengan id ${aslabID}`,
+          `Berhasil mendapatkan seluruh data kehadiran untuk jadwal piket periode ${periode}`,
           dataKehadirans,
           res
         );
@@ -129,21 +163,50 @@ class KehadiranController {
     }
   }
 
-  // Get All Kehadiran
-  static async getAllKehadiran(req, res, next) {
+  // Get Kehadiran By Asisten Id
+  static async getAllKehadiranByAslabID(req, res, next) {
     try {
+      const { periode, asisten_id } = req.body;
+
+      const dataPiket = await JadwalPiket.findAll({
+        where: {
+          periode,
+          asisten_id,
+        },
+      });
+
+      // Data Jadwal Piket tidak ada?
+      if (dataPiket.length === 0) {
+        return resError(
+          404,
+          `Data jadwal piket periode ${periode} dengan asisten id ${asisten_id} tidak ditemukan`,
+          res
+        );
+      }
+
+      // Mengumpulkan piket_id yang ditemukan pada jadwal piket sesuai dengan periode dan asisten_id
+      const piketIDs = dataPiket.map((piket) => piket.piket_id);
+
       const dataKehadirans = await Kehadiran.findAll({
+        where: {
+          piket_id: piketIDs,
+        },
         attributes: {
           exclude: ["created_at", "updated_at"],
         },
       });
 
+      // Data Kehadiran tidak ada?
       if (dataKehadirans.length === 0) {
-        return resError(404, "Data kehadiran kosong", res);
+        return resError(
+          404,
+          `Data kehadiran untuk jadwal piket periode ${periode} dengan asisten id ${asisten_id} tidak ditemukan`,
+          res
+        );
       } else {
         return resSend(
           200,
-          "Berhasil mendapatkan seluruh data kehadiran",
+          `Berhasil mendapatkan data kehadiran untuk jadwal piket periode ${periode} dengan asisten dengan id ${asisten_id}`,
           dataKehadirans,
           res
         );

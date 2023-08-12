@@ -36,7 +36,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       pertemuan: DataTypes.INTEGER(11),
       asisten_id: DataTypes.STRING(11),
-      pengganti_id: DataTypes.STRING(11),
       nama_asisten: DataTypes.STRING,
       status: {
         allowNull: false,
@@ -48,6 +47,8 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      pengganti_id: DataTypes.STRING(11),
+      nama_pengganti: DataTypes.STRING,
     },
     {
       sequelize,
