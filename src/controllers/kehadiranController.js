@@ -253,7 +253,7 @@ class KehadiranController {
   static async updateKehadiranById(req, res, next) {
     try {
       const absenID = req.params.id;
-      const { asisten_id, nama_asisten, status, pengganti_id } = req.body;
+      const { status, pengganti_id } = req.body;
 
       const dataKehadiran = await Kehadiran.findOne({
         where: {
@@ -268,33 +268,59 @@ class KehadiranController {
           res
         );
       } else {
-        // Jika ada data asisten atau pengganti yang akan diupdate
-        if (asisten_id || pengganti_id) {
-          const dataAsisten = await Asisten.findOne({
-            where: {
-              asisten_id,
-            },
+        let penggantiAslab;
+        let namaPengganti;
+
+        // Jika ada pengganti yang akan diupdate
+        if (pengganti_id) {
+          // Mencegah pengganti_id diisi dengan data asisten pada jadwal piket
+          if (pengganti_id === dataKehadiran.asisten_id) {
+            return resError(
+              400,
+              "Pengganti ID tidak bisa sama dengan Asisten ID yang tidak hadir",
+              res
+            );
+          }
+
+          // Apakah pengganti_id ada di data Asisten?
+          penggantiAslab = await Asisten.findOne({
+            where: { asisten_id: pengganti_id },
           });
 
-          // Ubah nama asisten pada data kehadiran
-          dataKehadiran.nama_asisten = dataAsisten.nama_asisten;
-          await dataKehadiran.save();
+          // Data Pengganti tidak ada?
+          if (!penggantiAslab) {
+            return resError(
+              404,
+              `Data Asisten dengan id ${pengganti_id} tidak ditemukan`,
+              res
+            );
+          } else {
+            // Data Pengganti ada? Set namaPengganti sesuai dengan pengganti_id
+            namaPengganti = penggantiAslab.nama_asisten;
+          }
         }
 
-        // Jika ada data nama asisten yang akan diupdate
-        if (nama_asisten) {
+        // Jika status kehadiran "Hadir" pengganti_id akan null
+        // Jika tidak, akan diisi dengan pengganti_id
+        let finalPenggantiID = status === "Hadir" ? null : pengganti_id;
+
+        // Jika status kehadiran "Hadir" dan update menjadi "Izin" atau "Alpha", pengganti_id tidak boleh null
+        if (
+          dataKehadiran.status === "Hadir" &&
+          (status === "Izin" || status === "Alpha") &&
+          !finalPenggantiID
+        ) {
           return resError(
             400,
-            "Data nama asisten hanya bisa di update dari data Asisten",
+            "Status Izin atau Alpha memerlukan pengganti_id yang valid",
             res
           );
         }
 
         const updatedKehadiran = {
-          asisten_id,
-          nama_asisten,
+          pengganti_id: finalPenggantiID,
+          nama_pengganti: status === "Hadir" ? null : namaPengganti,
           status,
-          pengganti_id,
         };
 
         await Kehadiran.update(updatedKehadiran, {
