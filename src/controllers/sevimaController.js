@@ -5,6 +5,7 @@ const {
   Matkul,
   Kelas,
   JadwalPraktik,
+  Krs,
 } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
 
@@ -448,7 +449,6 @@ class SevimaController {
           });
 
           // Jika data kelas dan dosen ada pada jadwal tersebut, hubungkan dengan data kelas dan dosen yang ada di database
-          // Jika data kelas dan dosen tidak pada jadwal tersebut, tetap masukan jadwal
 
           if (dataKelas && dataDosen) {
             const dataBaruJadwal = {
@@ -460,6 +460,7 @@ class SevimaController {
               jam_selesai: jadwal.waktuselesai,
               kode_mk: jadwal.kodemk,
               kelas_id: jadwal.kelasid,
+              nama_kelas: dataKelas.nama_kelas,
               dosen_nip: jadwal.nip,
               created_at: new Date(),
               updated_at: new Date(),
@@ -473,30 +474,6 @@ class SevimaController {
                 "Berhasil menambahkan data jadwal dari SEVIMA API ke database",
               data: dataBaruJadwal,
             });
-
-            if (kelasData && dosenData) {
-              const dataBaruJadwal = {
-                praktik_id: jadwal.jadwalid,
-                periode: jadwal.periode,
-                pertemuan: jadwal.pertemuan,
-                hari: jadwal.hari,
-                jam_mulai: jadwal.waktumulai,
-                jam_selesai: jadwal.waktuselesai,
-                kode_mk: jadwal.kodemk,
-                kelas_id: jadwal.kelasid,
-                dosen_nip: jadwal.nip,
-                created_at: new Date(),
-                updated_at: new Date(),
-              };
-
-              await JadwalPraktik.create(dataBaruJadwal);
-
-              responseArray.push({
-                status: 201,
-                message: `Data jadwal baru dengan Praktik ID ${jadwal.jadwalid} berhasil ditambahkan`,
-                data: dataBaruJadwal,
-              });
-            }
           }
         }
       } else {
@@ -533,6 +510,7 @@ class SevimaController {
               existingJadwal.jam_selesai = jadwal.waktuselesai;
               existingJadwal.kode_mk = jadwal.kodemk;
               existingJadwal.kelas_id = jadwal.kelasid;
+              existingJadwal.nama_kelas = dataKelas.nama_kelas;
               existingJadwal.dosen_nip = jadwal.nip;
               existingJadwal.updated_at = new Date();
 
@@ -572,6 +550,7 @@ class SevimaController {
                 jam_selesai: jadwal.waktuselesai,
                 kode_mk: jadwal.kodemk,
                 kelas_id: jadwal.kelasid,
+                nama_kelas: dataKelas.nama_kelas,
                 dosen_nip: jadwal.nip,
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -590,6 +569,63 @@ class SevimaController {
       return resSend(
         200,
         "Berhasil memperbaharui data jadwal dari SEVIMA",
+        responseArray,
+        res
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // UPDATE Data KRS
+  static async updateDataKRS(req, res, next) {
+    try {
+      const { periode } = req.body;
+
+      const krsArray = await SevimaHelper.getKRSMahasiswaIF(periode, limit);
+
+      const isEmptyTableKRS = (await Krs.count()) === 0;
+      const responseArray = [];
+
+      //Mencari data Mahasiswa dan diambil nim
+      const mhsList = await Mahasiswa.findAll({
+        attributes: ["nim"],
+      });
+
+      // Membuat array baru dari mhsList (nim di tabel Mahasiswa)
+      const nimList = mhsList.map((mhs) => mhs.nim);
+      console.log(nimList);
+
+      // Mengambil data yang sesuai dengan kode_mk, kelas_id, dan dosen_nip yang ada di database
+      const filteredData = krsArray.filter((item) =>
+        nimList.find((nim) => nim === item.nim)
+      );
+
+      // Data krs di database kosong?
+      if (isEmptyTableKRS) {
+        for (const krs of filteredData) {
+          const newKRS = {
+            periode: krs.idperiode,
+            kode_mk: krs.idmk,
+            nama_kelas: krs.namakelas,
+            nim: krs.nim,
+            created_at: new Date(),
+            updated_at: new Date(),
+          };
+
+          await Krs.create(newKRS);
+
+          responseArray.push({
+            status: 201,
+            message: `Berhasil menambahkan data KRS periode ${periode} dari SEVIMA API ke database`,
+            data: newKRS,
+          });
+        }
+      }
+
+      return resSend(
+        200,
+        "Berhasil memperbaharui data krs dari SEVIMA",
         responseArray,
         res
       );

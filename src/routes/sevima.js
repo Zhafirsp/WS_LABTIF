@@ -8,5 +8,6 @@ router.post("/dosen", SevimaController.updateDataDosen);
 router.post("/matakuliah", SevimaController.updateDataMatkul);
 router.post("/kelas", SevimaController.updateDataKelas);
 router.post("/jadwalpraktik", SevimaController.updateDataJadwal);
+router.post("/krs", SevimaController.updateDataKRS);
 
 module.exports = router;

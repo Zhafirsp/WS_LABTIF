@@ -43,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(11),
       },
       kelas_id: DataTypes.INTEGER(11),
+      nama_kelas: DataTypes.STRING,
       dosen_nip: DataTypes.STRING(11),
     },
     {

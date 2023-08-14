@@ -24,7 +24,17 @@ class SevimaHelper {
       const data = response.data;
       return data;
     } catch (error) {
-      throw new Error("Gagal mendapatkan data dari Sevima API");
+      const responseError = error?.response?.data;
+      if (responseError?.error === "not_found") {
+        throw new Error(responseError?.error_message);
+      } else if (responseError?.error === "invalid_token") {
+        throw new Error(responseError?.error_message);
+      } else {
+        throw new Error(
+          responseError?.error_message ||
+            "Gagal mendapatkan data Mahasiswa IF dari Sevima API"
+        );
+      }
     }
   }
 
@@ -44,7 +54,17 @@ class SevimaHelper {
       const data = response.data;
       return data;
     } catch (error) {
-      throw new Error("Gagal mendapatkan data dari Sevima API");
+      const responseError = error?.response?.data;
+      if (responseError?.error === "not_found") {
+        throw new Error(responseError?.error_message);
+      } else if (responseError?.error === "invalid_token") {
+        throw new Error(responseError?.error_message);
+      } else {
+        throw new Error(
+          responseError?.error_message ||
+            "Gagal mendapatkan data Dosen IF dari Sevima API"
+        );
+      }
     }
   }
 
@@ -65,7 +85,17 @@ class SevimaHelper {
       const data = response.data;
       return data;
     } catch (error) {
-      throw new Error("Gagal mendapatkan data dari Sevima API");
+      const responseError = error?.response?.data;
+      if (responseError?.error === "not_found") {
+        throw new Error(responseError?.error_message);
+      } else if (responseError?.error === "invalid_token") {
+        throw new Error(responseError?.error_message);
+      } else {
+        throw new Error(
+          responseError?.error_message ||
+            "Gagal mendapatkan data mata kuliah praktikum dari Sevima API"
+        );
+      }
     }
   }
 
@@ -87,7 +117,17 @@ class SevimaHelper {
       const data = response.data;
       return data;
     } catch (error) {
-      throw new Error("Gagal mendapatkan data dari Sevima API");
+      const responseError = error?.response?.data;
+      if (responseError?.error === "not_found") {
+        throw new Error(responseError?.error_message);
+      } else if (responseError?.error === "invalid_token") {
+        throw new Error(responseError?.error_message);
+      } else {
+        throw new Error(
+          responseError?.error_message ||
+            "Gagal mendapatkan data kelas praktikum dari Sevima API"
+        );
+      }
     }
   }
 
@@ -101,7 +141,6 @@ class SevimaHelper {
         params: {
           periode: periode.toString(),
           programstudi: "S1 Teknik Informatika",
-          // pertemuan: "1",
           kurikulum: kurikulum.toString(),
           limit: limit.toString(),
         },
@@ -110,7 +149,49 @@ class SevimaHelper {
       const data = response.data;
       return data;
     } catch (error) {
-      throw new Error("Gagal mendapatkan data dari Sevima API");
+      const responseError = error?.response?.data;
+      if (responseError?.error === "not_found") {
+        throw new Error(responseError?.error_message);
+      } else if (responseError?.error === "invalid_token") {
+        throw new Error(responseError?.error_message);
+      } else {
+        throw new Error(
+          responseError?.error_message ||
+            "Gagal mendapatkan data jadwal praktikum dari Sevima API"
+        );
+      }
+    }
+  }
+
+  static async getKRSMahasiswaIF(periode, limit) {
+    try {
+      const token = await getToken();
+      const response = await axios.get(sevimaURL + "/krsmahasiswa", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          idperiode: periode.toString(),
+          limit: limit.toString(),
+          jenismatakuliah: "Praktikum",
+          // nim: "193040001",
+        },
+      });
+
+      const data = response.data;
+      return data;
+    } catch (error) {
+      const responseError = error?.response?.data;
+      if (responseError?.error === "not_found") {
+        throw new Error(responseError?.error_message);
+      } else if (responseError?.error === "invalid_token") {
+        throw new Error(responseError?.error_message);
+      } else {
+        throw new Error(
+          responseError?.error_message ||
+            "Gagal mendapatkan data krs dari Sevima API"
+        );
+      }
     }
   }
 }

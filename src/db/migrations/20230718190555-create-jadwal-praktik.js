@@ -17,6 +17,7 @@ module.exports = {
         type: Sequelize.STRING(11),
       },
       kelas_id: Sequelize.INTEGER(11),
+      nama_kelas: Sequelize.STRING,
       dosen_nip: Sequelize.STRING(11),
       created_at: {
         allowNull: false,
