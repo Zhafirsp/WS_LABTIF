@@ -47,7 +47,7 @@ class PenilaianController {
   }
 
   // GET Praktikan Periode KRS Kode MK
-  static async getAllPraktikan(req, res, next) {
+  static async getKRSById(req, res, next) {
     try {
       const krsID = req.params.krsID;
 
