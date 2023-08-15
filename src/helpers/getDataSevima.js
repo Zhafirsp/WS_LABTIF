@@ -38,17 +38,25 @@ class SevimaHelper {
     }
   }
 
-  static async getDosenIF(limit) {
+  static async getDosenIF(homebase, limit, nip) {
     try {
       const token = await getToken();
+
+      const params = {
+        homebase: homebase.toString(),
+        limit: limit.toString(),
+      };
+
+      // Jika ada data nip di body tambahkan sebagai parameter
+      if (nip) {
+        params.nip = nip.toString();
+      }
+
       const response = await axios.get(sevimaURL + "/dosen", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: {
-          homebase: "Teknik Informatika",
-          limit: limit.toString(),
-        },
+        params: params,
       });
 
       const data = response.data;
@@ -174,7 +182,6 @@ class SevimaHelper {
           idperiode: periode.toString(),
           limit: limit.toString(),
           jenismatakuliah: "Praktikum",
-          // nim: "193040001",
         },
       });
 

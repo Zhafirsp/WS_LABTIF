@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "kelas_id",
         foreignKey: "kelas_id",
       });
-      // Kelas.hasOne(models.Krs, {
-      //   sourceKey: "nama_kelas",
-      //   foreignKey: "nama_kelas",
-      // });
+      Kelas.hasOne(models.Krs, {
+        sourceKey: "kelas_id",
+        foreignKey: "kelas_id",
+      });
     }
   }
   Kelas.init(
