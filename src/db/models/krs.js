@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "kode_mk",
         targetKey: "kode_mk",
       });
-      // Krs.belongsTo(models.Kelas, {
-      //   foreignKey: "nama_kelas",
-      //   targetKey: "nama_kelas",
-      // });
+      Krs.belongsTo(models.Kelas, {
+        foreignKey: "kelas_id",
+        targetKey: "kelas_id",
+      });
       Krs.hasMany(models.Penilaian, {
         sourceKey: "krs_id",
         foreignKey: "krs_id",
@@ -34,11 +34,12 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER(11),
       },
-      periode: DataTypes.STRING(11),
+      periode_krs: DataTypes.STRING(11),
       kode_mk: {
         allowNull: false,
         type: DataTypes.STRING(11),
       },
+      kelas_id: DataTypes.INTEGER(11),
       nama_kelas: DataTypes.STRING,
       nim: {
         allowNull: false,

@@ -2,14 +2,14 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.addConstraint("JadwalPraktiks", {
-      fields: ["kelas_id"],
+    await queryInterface.addConstraint("Kehadirans", {
+      fields: ["pengganti_id"],
       type: "foreign key",
-      name: "fk-kelasID-in-JadwalPraktik",
+      name: "fk-penggantiID-in-Kehadiran",
       references: {
-        //Required field
-        table: "Kelas",
-        field: "kelas_id",
+        // Required field
+        table: "Asistens",
+        field: "asisten_id",
       },
       onDelete: "cascade",
       onUpdate: "cascade",
@@ -18,8 +18,8 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeConstraint(
-      "JadwalPraktiks",
-      "fk-kelasID-in-JadwalPraktik",
+      "Kehadirans",
+      "fk-penggantiID-in-Kehadiran",
       {}
     );
   },

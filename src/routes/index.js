@@ -12,6 +12,8 @@ const pengumumanRoutes = require("./pengumuman");
 const programRoutes = require("./program");
 const pendaftaranRoutes = require("./pendaftaran");
 const penjadwalanRoutes = require("./penjadwalan");
+const kehadiranRoutes = require("./kehadiran");
+const penilaianRoutes = require("./penilaian");
 
 // Check pink
 router.get("/ping", (req, res) => {
@@ -28,5 +30,7 @@ router.use("/pengumuman", pengumumanRoutes);
 router.use("/programs", programRoutes);
 router.use("/pendaftarans", pendaftaranRoutes);
 router.use("/jadwal", penjadwalanRoutes);
+router.use("/kehadiran", kehadiranRoutes);
+router.use("/penilaian", penilaianRoutes);
 
 module.exports = router;
