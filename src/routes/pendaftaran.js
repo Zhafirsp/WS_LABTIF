@@ -15,18 +15,18 @@ router.post(
   PendaftaranController.addPendaftaranByProgramId
 );
 
-// GET Pengumuman By Periode
-router.get(
-  "/pengumuman/:periode",
-  Authorization.verifyLaboran,
-  PendaftaranController.getPengumumanByPeriode
-);
-
 // DELETE Pendaftaran By ProgramID
 router.delete(
   "/:programID",
   Authorization.verifyMahasiswa,
   PendaftaranController.deletePendaftaranByProgramId
+);
+
+// GET Pengumuman By Periode
+router.get(
+  "/pengumuman/:periode",
+  Authorization.verifyLaboran,
+  PendaftaranController.getPengumumanByPeriode
 );
 
 // --- LABORAN ---

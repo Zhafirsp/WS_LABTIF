@@ -20,7 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "kelas_id",
         foreignKey: "kelas_id",
       });
-      Kelas.hasOne(models.Krs, {
+      Kelas.hasMany(models.Krs, {
+        sourceKey: "kelas_id",
+        foreignKey: "kelas_id",
+      });
+      Kelas.hasMany(models.Penilaian, {
         sourceKey: "kelas_id",
         foreignKey: "kelas_id",
       });

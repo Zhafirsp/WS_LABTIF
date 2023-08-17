@@ -3,7 +3,9 @@ const router = express.Router();
 
 const PenilaianController = require("../controllers/penilaianController");
 
-router.get("/:kelasID", PenilaianController.getAllPraktikan);
-router.get("/:krsID", PenilaianController.getKRSById);
+router.post("/:krsID", PenilaianController.addNewNilaiByKrsId);
+router.get("/praktikan/:kelasID", PenilaianController.getAllPraktikanByKelasId);
+router.get("/rekap/:kelasID", PenilaianController.getAllNilaiByKelasId);
+router.get("/:krsID", PenilaianController.getNilaiByKrsId);
 
 module.exports = router;

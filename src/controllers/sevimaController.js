@@ -597,6 +597,7 @@ class SevimaController {
             const matchingKelas = await Kelas.findOne({
               where: {
                 kode_mk: krs.idmk,
+                periode: krs.idperiode,
                 nama_kelas: krs.namakelas,
               },
             });
@@ -648,6 +649,7 @@ class SevimaController {
           const matchingKelas = await Kelas.findOne({
             where: {
               kode_mk: krs.idmk,
+              periode: krs.idperiode,
               nama_kelas: krs.namakelas,
             },
           });

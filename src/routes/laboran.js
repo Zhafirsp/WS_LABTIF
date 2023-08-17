@@ -3,7 +3,7 @@ const router = express.Router();
 
 const LaboranController = require("../controllers/laboranController");
 
-router.get("/:username", LaboranController.addLaboranByUsername);
+// router.get("/:username", LaboranController.addLaboranByUsername);
 router.post("/:username", LaboranController.addLaboranByUsername);
 router.get("/", LaboranController.getAllLaboran);
 router.get("/:nip", LaboranController.getLaboranByNip);
