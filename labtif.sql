@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `asistens`
+-- Struktur dari tabel `Asistens`
 --
 
-CREATE TABLE `asistens` (
+CREATE TABLE `Asistens` (
   `asisten_id` varchar(11) NOT NULL,
   `nim` varchar(11) NOT NULL,
   `nama_asisten` varchar(255) NOT NULL,
@@ -43,10 +43,10 @@ CREATE TABLE `asistens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `asistens`
+-- Dumping data untuk tabel `Asistens`
 --
 
-INSERT INTO `asistens` (`asisten_id`, `nim`, `nama_asisten`, `email`, `email_kampus`, `no_hp`, `bidang_praktikum`, `golongan`, `periode`, `is_active`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Asistens` (`asisten_id`, `nim`, `nama_asisten`, `email`, `email_kampus`, `no_hp`, `bidang_praktikum`, `golongan`, `periode`, `is_active`, `created_at`, `updated_at`) VALUES
 ('AS23001', '193040154', 'ELTI RAHMAWATI', 'elti.rahmawati19@gmail.com', '193040154@mail.unpas.ac.id', '082254243461', 'Basis Data', 'C', '2023', 1, '2023-08-12 16:49:22', '2023-08-12 16:49:22'),
 ('AS23002', '193040159', 'FAJRI KHOIRUNNISA', 'fajrikh01@gmail.com', '193040159@mail.unpas.ac.id', '083823084118', 'Basis Data', 'C', '2023', 1, '2023-08-12 16:49:26', '2023-08-12 16:49:26'),
 ('AS23003', '193040042', 'SUHENDANI', 'kazzdani3@gmail.com', '193040042.suhendani@mail.unpas.ac.id', '081212679636', 'Basis Data', 'C', '2023', 1, '2023-08-12 16:49:29', '2023-08-12 16:49:29'),
@@ -135,10 +135,10 @@ INSERT INTO `dosens` (`dosen_nip`, `nama_dosen`, `email`, `jenis_pegawai`, `imag
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `jadwalpikets`
+-- Struktur dari tabel `Jadwalpikets`
 --
 
-CREATE TABLE `jadwalpikets` (
+CREATE TABLE `Jadwalpikets` (
   `piket_id` int(11) NOT NULL,
   `praktik_id` int(11) NOT NULL,
   `periode` varchar(11) DEFAULT NULL,
@@ -151,10 +151,10 @@ CREATE TABLE `jadwalpikets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `jadwalpikets`
+-- Dumping data untuk tabel `Jadwalpikets`
 --
 
-INSERT INTO `jadwalpikets` (`piket_id`, `praktik_id`, `periode`, `kelas_id`, `pertemuan`, `asisten_id`, `nama_asisten`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Jadwalpikets` (`piket_id`, `praktik_id`, `periode`, `kelas_id`, `pertemuan`, `asisten_id`, `nama_asisten`, `created_at`, `updated_at`) VALUES
 (81, 197447, '20222', 470866, 1, 'AS23001', 'ELTI RAHMAWATI', '2023-08-12 18:08:58', '2023-08-12 18:08:58'),
 (82, 197448, '20222', 470866, 2, 'AS23001', 'ELTI RAHMAWATI', '2023-08-12 18:08:58', '2023-08-12 18:08:58'),
 (83, 197449, '20222', 470866, 3, 'AS23001', 'ELTI RAHMAWATI', '2023-08-12 18:08:58', '2023-08-12 18:08:58'),
@@ -207,10 +207,10 @@ INSERT INTO `jadwalpikets` (`piket_id`, `praktik_id`, `periode`, `kelas_id`, `pe
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `jadwalpraktiks`
+-- Struktur dari tabel `Jadwalpraktiks`
 --
 
-CREATE TABLE `jadwalpraktiks` (
+CREATE TABLE `Jadwalpraktiks` (
   `praktik_id` int(11) NOT NULL,
   `periode` varchar(11) DEFAULT NULL,
   `pertemuan` int(11) DEFAULT NULL,
@@ -225,10 +225,10 @@ CREATE TABLE `jadwalpraktiks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `jadwalpraktiks`
+-- Dumping data untuk tabel `Jadwalpraktiks`
 --
 
-INSERT INTO `jadwalpraktiks` (`praktik_id`, `periode`, `pertemuan`, `hari`, `jam_mulai`, `jam_selesai`, `kode_mk`, `kelas_id`, `dosen_nip`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Jadwalpraktiks` (`praktik_id`, `periode`, `pertemuan`, `hari`, `jam_mulai`, `jam_selesai`, `kode_mk`, `kelas_id`, `dosen_nip`, `created_at`, `updated_at`) VALUES
 (197239, '20222', 1, 'SENIN', '13:00:00', '15:30:00', 'IF21W0407', 470864, '0423088302', '2023-08-12 16:44:41', '2023-08-12 16:44:41'),
 (197240, '20222', 2, 'SENIN', '13:00:00', '15:30:00', 'IF21W0407', 470864, '0423088302', '2023-08-12 16:44:41', '2023-08-12 16:44:41'),
 (197241, '20222', 3, 'SENIN', '13:00:00', '15:30:00', 'IF21W0407', 470864, '0423088302', '2023-08-12 16:44:41', '2023-08-12 16:44:41'),
@@ -537,10 +537,10 @@ INSERT INTO `jadwalpraktiks` (`praktik_id`, `periode`, `pertemuan`, `hari`, `jam
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kehadirans`
+-- Struktur dari tabel `Kehadirans`
 --
 
-CREATE TABLE `kehadirans` (
+CREATE TABLE `Kehadirans` (
   `absen_id` int(11) NOT NULL,
   `piket_id` int(11) NOT NULL,
   `pertemuan` int(11) DEFAULT NULL,
@@ -554,10 +554,10 @@ CREATE TABLE `kehadirans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `kehadirans`
+-- Dumping data untuk tabel `Kehadirans`
 --
 
-INSERT INTO `kehadirans` (`absen_id`, `piket_id`, `pertemuan`, `asisten_id`, `nama_asisten`, `pengganti_id`, `nama_pengganti`, `status`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Kehadirans` (`absen_id`, `piket_id`, `pertemuan`, `asisten_id`, `nama_asisten`, `pengganti_id`, `nama_pengganti`, `status`, `created_at`, `updated_at`) VALUES
 (1, 83, 3, 'AS23001', 'ELTI RAHMAWATI', NULL, NULL, 'Hadir', '2023-08-12 18:30:07', '2023-08-12 18:30:07'),
 (2, 84, 4, 'AS23001', 'ELTI RAHMAWATI', 'AS23002', 'FAJRI KHOIRUNNISA', 'Izin', '2023-08-12 18:31:36', '2023-08-12 18:31:36'),
 (3, 85, 5, 'AS23001', 'ELTI RAHMAWATI', 'AS23002', 'FAJRI KHOIRUNNISA', 'Izin', '2023-08-12 18:32:32', '2023-08-12 18:32:32'),
@@ -569,10 +569,10 @@ INSERT INTO `kehadirans` (`absen_id`, `piket_id`, `pertemuan`, `asisten_id`, `na
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kelas`
+-- Struktur dari tabel `Kelas`
 --
 
-CREATE TABLE `kelas` (
+CREATE TABLE `Kelas` (
   `kelas_id` int(11) NOT NULL,
   `nama_kelas` varchar(255) DEFAULT NULL,
   `nama_ruang` varchar(255) DEFAULT NULL,
@@ -584,10 +584,10 @@ CREATE TABLE `kelas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `kelas`
+-- Dumping data untuk tabel `Kelas`
 --
 
-INSERT INTO `kelas` (`kelas_id`, `nama_kelas`, `nama_ruang`, `kapasitas`, `kode_mk`, `periode`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Kelas` (`kelas_id`, `nama_kelas`, `nama_ruang`, `kapasitas`, `kode_mk`, `periode`, `created_at`, `updated_at`) VALUES
 (469756, 'A', 'SB602 - Lab IF SB 602', 45, 'IF21W0407', '20222', '2023-08-12 16:44:34', '2023-08-12 16:44:34'),
 (469760, 'A', 'SB601 - Lab IF SB 601', 45, 'IF21W0408', '20222', '2023-08-12 16:44:34', '2023-08-12 16:44:34'),
 (469768, 'A', 'SB602 - Lab IF SB 602', 45, 'IF21W0608', '20222', '2023-08-12 16:44:34', '2023-08-12 16:44:34'),
@@ -614,10 +614,10 @@ INSERT INTO `kelas` (`kelas_id`, `nama_kelas`, `nama_ruang`, `kapasitas`, `kode_
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `krs`
+-- Struktur dari tabel `Krs`
 --
 
-CREATE TABLE `krs` (
+CREATE TABLE `Krs` (
   `krs_id` int(11) NOT NULL,
   `periode` varchar(11) DEFAULT NULL,
   `kode_mk` varchar(11) NOT NULL,
@@ -627,13 +627,25 @@ CREATE TABLE `krs` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `Krs`
+--
+
+INSERT INTO `Krs` (`krs_id`, `periode_krs`, `kode_mk`, `kelas_id`, `nama_kelas`, `nim`, `created_at`, `updated_at`) VALUES
+(1, '20222', 'IF21W0408', 469760, 'A', '193040058', '2023-08-18 14:51:45', '2023-08-18 14:51:45'),
+(2, '20222', 'IF21W0408', 469760, 'A', '193040025', '2023-08-18 14:51:45', '2023-08-18 14:51:45'),
+(3, '20222', 'IF21W0608', 470893, 'B', '193040001', '2023-08-18 14:51:45', '2023-08-18 14:51:45'),
+(4, '20222', 'IF21W0608', 470893, 'B', '193040088', '2023-08-18 14:51:45', '2023-08-18 14:51:45'),
+(5, '20222', 'IF21W0608', 470895, 'D', '193040154', '2023-08-18 14:51:46', '2023-08-18 14:51:46'),
+(6, '20222', 'IF21W0608', 470895, 'D', '193040159', '2023-08-18 14:51:46', '2023-08-18 14:51:46');
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `laborans`
+-- Struktur dari tabel `Laborans`
 --
 
-CREATE TABLE `laborans` (
+CREATE TABLE `Laborans` (
   `nip` varchar(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `nama_laboran` varchar(255) NOT NULL,
@@ -643,19 +655,19 @@ CREATE TABLE `laborans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `laborans`
+-- Dumping data untuk tabel `Laborans`
 --
 
-INSERT INTO `laborans` (`nip`, `user_id`, `nama_laboran`, `jenis_pegawai`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Laborans` (`nip`, `user_id`, `nama_laboran`, `jenis_pegawai`, `created_at`, `updated_at`) VALUES
 ('IF397', 1, 'Moch. Ilham Anugrah, ST., M.ENG.', 'Laboran', '2023-08-12 16:45:14', '2023-08-12 16:45:14');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `mahasiswas`
+-- Struktur dari tabel `Mahasiswas`
 --
 
-CREATE TABLE `mahasiswas` (
+CREATE TABLE `Mahasiswas` (
   `nim` varchar(11) NOT NULL,
   `nama_mahasiswa` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -668,10 +680,10 @@ CREATE TABLE `mahasiswas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `mahasiswas`
+-- Dumping data untuk tabel `Mahasiswas`
 --
 
-INSERT INTO `mahasiswas` (`nim`, `nama_mahasiswa`, `email`, `email_kampus`, `no_hp`, `periode_masuk`, `user_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Mahasiswas` (`nim`, `nama_mahasiswa`, `email`, `email_kampus`, `no_hp`, `periode_masuk`, `user_id`, `created_at`, `updated_at`) VALUES
 ('193040001', 'PUTRA HANIF AMMARTA', 'putrahanif437@gmail.com', '193040001.putra@mail.unpas.ac.id', '089658842008', '20191', 2, '2023-08-12 16:44:19', '2023-08-12 16:45:20'),
 ('193040025', 'SOFYAN EGI LESMANA', 'contact.sofyanegi@gmail.com', '193040025.sofyan@mail.unpas.ac.id', '0895330087325', '20191', 3, '2023-08-12 16:44:19', '2023-08-12 16:45:21'),
 ('193040027', 'ZAHRA DWI AMEILIA', 'zahradwiameilia1@gmail.com', '193040027.zahra@mail.unpas.ac.id', '083817041467', '20191', 4, '2023-08-12 16:44:19', '2023-08-12 16:45:21'),
@@ -686,10 +698,10 @@ INSERT INTO `mahasiswas` (`nim`, `nama_mahasiswa`, `email`, `email_kampus`, `no_
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `matkuls`
+-- Struktur dari tabel `Matkuls`
 --
 
-CREATE TABLE `matkuls` (
+CREATE TABLE `Matkuls` (
   `kode_mk` varchar(11) NOT NULL,
   `nama_mk` varchar(255) NOT NULL,
   `kurikulum` varchar(255) NOT NULL,
@@ -700,10 +712,10 @@ CREATE TABLE `matkuls` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `matkuls`
+-- Dumping data untuk tabel `Matkuls`
 --
 
-INSERT INTO `matkuls` (`kode_mk`, `nama_mk`, `kurikulum`, `sks_mk`, `dosen_nip`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Matkuls` (`kode_mk`, `nama_mk`, `kurikulum`, `sks_mk`, `dosen_nip`, `created_at`, `updated_at`) VALUES
 ('IF21W0307', 'Praktikum Basis Data', '221', 2, '0428018502', '2023-08-12 16:44:30', '2023-08-12 16:44:30'),
 ('IF21W0308', 'Praktikum Infrastruktur', '221', 1, '0421128501', '2023-08-12 16:44:30', '2023-08-12 16:44:30'),
 ('IF21W0407', 'Praktikum Multimedia', '221', 2, NULL, '2023-08-12 16:44:30', '2023-08-12 16:44:30'),
@@ -719,10 +731,10 @@ INSERT INTO `matkuls` (`kode_mk`, `nama_mk`, `kurikulum`, `sks_mk`, `dosen_nip`,
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pendaftarans`
+-- Struktur dari tabel `Pendaftarans`
 --
 
-CREATE TABLE `pendaftarans` (
+CREATE TABLE `Pendaftarans` (
   `daftar_id` int(11) NOT NULL,
   `program_id` int(11) NOT NULL,
   `tanggal_daftar` datetime NOT NULL,
@@ -739,10 +751,10 @@ CREATE TABLE `pendaftarans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pendaftarans`
+-- Dumping data untuk tabel `Pendaftarans`
 --
 
-INSERT INTO `pendaftarans` (`daftar_id`, `program_id`, `tanggal_daftar`, `nim`, `nama_mahasiswa`, `email`, `email_kampus`, `no_hp`, `file_syarat`, `bidang_praktikum`, `status`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Pendaftarans` (`daftar_id`, `program_id`, `tanggal_daftar`, `nim`, `nama_mahasiswa`, `email`, `email_kampus`, `no_hp`, `file_syarat`, `bidang_praktikum`, `status`, `created_at`, `updated_at`) VALUES
 (1, 1, '2023-08-12 16:47:04', '193040001', 'PUTRA HANIF AMMARTA', 'putrahanif437@gmail.com', '193040001.putra@mail.unpas.ac.id', '089658842008', 'ada URL ceritanya', 'Basis Data', 'Diterima', '2023-08-12 16:47:04', '2023-08-12 16:49:31'),
 (2, 1, '2023-08-12 16:47:50', '193040042', 'SUHENDANI', 'kazzdani3@gmail.com', '193040042.suhendani@mail.unpas.ac.id', '081212679636', 'ada URL ceritanya', 'Basis Data', 'Diterima', '2023-08-12 16:47:50', '2023-08-12 16:49:29'),
 (3, 1, '2023-08-12 16:48:19', '193040159', 'FAJRI KHOIRUNNISA', 'fajrikh01@gmail.com', '193040159@mail.unpas.ac.id', '083823084118', 'ada URL ceritanya', 'Basis Data', 'Diterima', '2023-08-12 16:48:19', '2023-08-12 16:49:26'),
@@ -751,10 +763,10 @@ INSERT INTO `pendaftarans` (`daftar_id`, `program_id`, `tanggal_daftar`, `nim`, 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pengumumans`
+-- Struktur dari tabel `Pengumumans`
 --
 
-CREATE TABLE `pengumumans` (
+CREATE TABLE `Pengumumans` (
   `info_id` int(11) NOT NULL,
   `judul` varchar(255) NOT NULL,
   `dokumen` varchar(255) DEFAULT NULL,
@@ -768,10 +780,10 @@ CREATE TABLE `pengumumans` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `penilaians`
+-- Struktur dari tabel `Penilaians`
 --
 
-CREATE TABLE `penilaians` (
+CREATE TABLE `Penilaians` (
   `nilai_id` int(11) NOT NULL,
   `krs_id` int(11) NOT NULL,
   `tugas_ke` int(11) NOT NULL,
@@ -780,13 +792,22 @@ CREATE TABLE `penilaians` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `Penilaians`
+--
+
+INSERT INTO `Penilaians` (`nilai_id`, `kelas_id`, `krs_id`, `nim`, `cpmk`, `tugas_ke`, `nilai`, `created_at`, `updated_at`) VALUES
+(1, 470893, 3, '193040001', 1, 1, 87, '2023-08-18 14:57:26', '2023-08-18 14:57:26'),
+(2, 470893, 3, '193040001', 1, 2, 80, '2023-08-18 14:58:03', '2023-08-18 16:17:54'),
+(5, 469760, 1, '193040058', 1, 2, 90, '2023-08-18 15:08:08', '2023-08-18 15:08:08');
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `programs`
+-- Struktur dari tabel `Programs`
 --
 
-CREATE TABLE `programs` (
+CREATE TABLE `Programs` (
   `program_id` int(11) NOT NULL,
   `periode` varchar(11) NOT NULL,
   `judul` varchar(255) NOT NULL,
@@ -797,36 +818,36 @@ CREATE TABLE `programs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `programs`
+-- Dumping data untuk tabel `Programs`
 --
 
-INSERT INTO `programs` (`program_id`, `periode`, `judul`, `deskripsi`, `batas_waktu`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Programs` (`program_id`, `periode`, `judul`, `deskripsi`, `batas_waktu`, `created_at`, `updated_at`) VALUES
 (1, '2023', 'Pendaftaran periode 2023-2024', 'Upload persyaratan dibawah ini', '2023-07-31 16:59:59', '2023-08-12 16:46:49', '2023-08-12 16:46:49');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `sequelizemeta`
+-- Struktur dari tabel `Sequelizemeta`
 --
 
-CREATE TABLE `sequelizemeta` (
+CREATE TABLE `Sequelizemeta` (
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data untuk tabel `sequelizemeta`
+-- Dumping data untuk tabel `Sequelizemeta`
 --
 
-INSERT INTO `sequelizemeta` (`name`) VALUES
+INSERT INTO `Sequelizemeta` (`name`) VALUES
 ('20230716204535-create-user.js'),
 ('20230716205634-create-mahasiswa.js'),
 ('20230716210247-create-laboran.js'),
 ('20230718062215-create-asisten.js'),
 ('20230718184840-create-dosen.js'),
 ('20230718185105-create-matkul.js'),
-('20230718185656-create-kelas.js'),
+('20230718185656-create-Kelas.js'),
 ('20230718190555-create-jadwal-praktik.js'),
-('20230718191634-create-krs.js'),
+('20230718191634-create-Krs.js'),
 ('20230718193008-create-pengumuman.js'),
 ('20230718193010-create-program.js'),
 ('20230718193411-create-pendaftaran.js'),
@@ -856,10 +877,10 @@ INSERT INTO `sequelizemeta` (`name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Struktur dari tabel `Users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `Users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -873,10 +894,10 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data untuk tabel `Users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `no_hp`, `image_url`, `role`, `access_token`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Users` (`user_id`, `username`, `password`, `email`, `no_hp`, `image_url`, `role`, `access_token`, `created_at`, `updated_at`) VALUES
 (1, 'IF397', '$2b$10$oiovQLuzkBjxJdkc6glXoelS82btXALLCX.yFQi.VP1WGi2rQk3U6', 'ilham.anugrah@unpas.ac.id', NULL, NULL, 'Laboran', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6IklGMzk3Iiwicm9sZSI6IkxhYm9yYW4iLCJpYXQiOjE2OTE4NTg5NDIsImV4cCI6MTY5MTk0NTM0Mn0.YcYy2-C8NdgEOsNmXz8QzZmsIYtBLT21LKcFzms3GtA', '2023-08-12 16:45:01', '2023-08-12 16:49:02'),
 (2, '193040001', '$2b$10$ArTs/cTtXMAuFp/FCUbEKOxcaVpbJqHXlujPrq8rdaSo0nJp6858O', 'putrahanif437@gmail.com', '089658842008', NULL, 'Asisten', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6IjE5MzA0MDAwMSIsInJvbGUiOiJNYWhhc2lzd2EiLCJpYXQiOjE2OTE4NTg3OTIsImV4cCI6MTY5MTk0NTE5Mn0.2vWJsNXKj1GTU2geQk78EJK82KaHM_On1DZ1sWApVwo', '2023-08-12 16:45:20', '2023-08-12 16:49:31'),
 (3, '193040025', '$2b$10$v8NaI9dYn.J9X.tZmEMNd.BoSwPEl1UpWDPmsMxChFDpDOoX3v2lu', 'contact.sofyanegi@gmail.com', '0895330087325', NULL, 'Mahasiswa', NULL, '2023-08-12 16:45:20', '2023-08-12 16:45:20'),
@@ -894,9 +915,9 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `email`, `no_hp`, `image
 --
 
 --
--- Indeks untuk tabel `asistens`
+-- Indeks untuk tabel `Asistens`
 --
-ALTER TABLE `asistens`
+ALTER TABLE `Asistens`
   ADD PRIMARY KEY (`asisten_id`),
   ADD UNIQUE KEY `asisten_id` (`asisten_id`),
   ADD KEY `fk-NIM-in-Asisten` (`nim`);
@@ -908,111 +929,111 @@ ALTER TABLE `dosens`
   ADD PRIMARY KEY (`dosen_nip`);
 
 --
--- Indeks untuk tabel `jadwalpikets`
+-- Indeks untuk tabel `Jadwalpikets`
 --
-ALTER TABLE `jadwalpikets`
+ALTER TABLE `Jadwalpikets`
   ADD PRIMARY KEY (`piket_id`),
   ADD KEY `fk-kelasID-in-JadwalPiket` (`kelas_id`),
   ADD KEY `fk-praktikID-in-JadwalPiket` (`praktik_id`),
   ADD KEY `fk-asistenID-in-JadwalPiket` (`asisten_id`);
 
 --
--- Indeks untuk tabel `jadwalpraktiks`
+-- Indeks untuk tabel `Jadwalpraktiks`
 --
-ALTER TABLE `jadwalpraktiks`
+ALTER TABLE `Jadwalpraktiks`
   ADD PRIMARY KEY (`praktik_id`),
   ADD KEY `fk-kodeMK-in-JadwalPraktik` (`kode_mk`),
   ADD KEY `fk-kelasID-in-JadwalPraktik` (`kelas_id`),
   ADD KEY `fk-dosenNIP-in-JadwalPraktik` (`dosen_nip`);
 
 --
--- Indeks untuk tabel `kehadirans`
+-- Indeks untuk tabel `Kehadirans`
 --
-ALTER TABLE `kehadirans`
+ALTER TABLE `Kehadirans`
   ADD PRIMARY KEY (`absen_id`),
   ADD KEY `fk-asistenID-in-Kehadiran` (`asisten_id`),
   ADD KEY `fk-penggantiID-in-Kehadiran` (`pengganti_id`),
   ADD KEY `fk-piketID-in-Kehadiran` (`piket_id`);
 
 --
--- Indeks untuk tabel `kelas`
+-- Indeks untuk tabel `Kelas`
 --
-ALTER TABLE `kelas`
+ALTER TABLE `Kelas`
   ADD PRIMARY KEY (`kelas_id`),
   ADD UNIQUE KEY `kelas_id` (`kelas_id`),
   ADD KEY `fk-kodeMK-in-Kelas` (`kode_mk`);
 
 --
--- Indeks untuk tabel `krs`
+-- Indeks untuk tabel `Krs`
 --
-ALTER TABLE `krs`
+ALTER TABLE `Krs`
   ADD PRIMARY KEY (`krs_id`),
   ADD KEY `fk-NIM-in-KRS` (`nim`),
   ADD KEY `fk-kodeMK-in-KRS` (`kode_mk`);
 
 --
--- Indeks untuk tabel `laborans`
+-- Indeks untuk tabel `Laborans`
 --
-ALTER TABLE `laborans`
+ALTER TABLE `Laborans`
   ADD PRIMARY KEY (`nip`),
   ADD UNIQUE KEY `nip` (`nip`),
   ADD KEY `fk-userID-in-Laboran` (`user_id`);
 
 --
--- Indeks untuk tabel `mahasiswas`
+-- Indeks untuk tabel `Mahasiswas`
 --
-ALTER TABLE `mahasiswas`
+ALTER TABLE `Mahasiswas`
   ADD PRIMARY KEY (`nim`),
   ADD UNIQUE KEY `nim` (`nim`),
   ADD KEY `fk-userID-in-Mahasiswa` (`user_id`);
 
 --
--- Indeks untuk tabel `matkuls`
+-- Indeks untuk tabel `Matkuls`
 --
-ALTER TABLE `matkuls`
+ALTER TABLE `Matkuls`
   ADD PRIMARY KEY (`kode_mk`),
   ADD UNIQUE KEY `kode_mk` (`kode_mk`),
   ADD KEY `fk-dosenNIP-in-Matkul` (`dosen_nip`);
 
 --
--- Indeks untuk tabel `pendaftarans`
+-- Indeks untuk tabel `Pendaftarans`
 --
-ALTER TABLE `pendaftarans`
+ALTER TABLE `Pendaftarans`
   ADD PRIMARY KEY (`daftar_id`),
   ADD KEY `fk-programID-in-Pendaftaran` (`program_id`),
   ADD KEY `fk-NIM-in-Pendaftaran` (`nim`);
 
 --
--- Indeks untuk tabel `pengumumans`
+-- Indeks untuk tabel `Pengumumans`
 --
-ALTER TABLE `pengumumans`
+ALTER TABLE `Pengumumans`
   ADD PRIMARY KEY (`info_id`);
 
 --
--- Indeks untuk tabel `penilaians`
+-- Indeks untuk tabel `Penilaians`
 --
-ALTER TABLE `penilaians`
+ALTER TABLE `Penilaians`
   ADD PRIMARY KEY (`nilai_id`),
   ADD KEY `fk-krsID-in-Penilaian` (`krs_id`);
 
 --
--- Indeks untuk tabel `programs`
+-- Indeks untuk tabel `Programs`
 --
-ALTER TABLE `programs`
+ALTER TABLE `Programs`
   ADD PRIMARY KEY (`program_id`),
   ADD UNIQUE KEY `periode` (`periode`);
 
 --
--- Indeks untuk tabel `sequelizemeta`
+-- Indeks untuk tabel `Sequelizemeta`
 --
-ALTER TABLE `sequelizemeta`
+ALTER TABLE `Sequelizemeta`
   ADD PRIMARY KEY (`name`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indeks untuk tabel `users`
+-- Indeks untuk tabel `Users`
 --
-ALTER TABLE `users`
+ALTER TABLE `Users`
   ADD PRIMARY KEY (`user_id`);
 
 --
@@ -1020,51 +1041,51 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT untuk tabel `jadwalpikets`
+-- AUTO_INCREMENT untuk tabel `Jadwalpikets`
 --
-ALTER TABLE `jadwalpikets`
+ALTER TABLE `Jadwalpikets`
   MODIFY `piket_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
--- AUTO_INCREMENT untuk tabel `kehadirans`
+-- AUTO_INCREMENT untuk tabel `Kehadirans`
 --
-ALTER TABLE `kehadirans`
+ALTER TABLE `Kehadirans`
   MODIFY `absen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `krs`
+-- AUTO_INCREMENT untuk tabel `Krs`
 --
-ALTER TABLE `krs`
+ALTER TABLE `Krs`
   MODIFY `krs_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `pendaftarans`
+-- AUTO_INCREMENT untuk tabel `Pendaftarans`
 --
-ALTER TABLE `pendaftarans`
+ALTER TABLE `Pendaftarans`
   MODIFY `daftar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `pengumumans`
+-- AUTO_INCREMENT untuk tabel `Pengumumans`
 --
-ALTER TABLE `pengumumans`
+ALTER TABLE `Pengumumans`
   MODIFY `info_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `penilaians`
+-- AUTO_INCREMENT untuk tabel `Penilaians`
 --
-ALTER TABLE `penilaians`
+ALTER TABLE `Penilaians`
   MODIFY `nilai_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `programs`
+-- AUTO_INCREMENT untuk tabel `Programs`
 --
-ALTER TABLE `programs`
+ALTER TABLE `Programs`
   MODIFY `program_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT untuk tabel `Users`
 --
-ALTER TABLE `users`
+ALTER TABLE `Users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
@@ -1072,78 +1093,78 @@ ALTER TABLE `users`
 --
 
 --
--- Ketidakleluasaan untuk tabel `asistens`
+-- Ketidakleluasaan untuk tabel `Asistens`
 --
-ALTER TABLE `asistens`
-  ADD CONSTRAINT `fk-NIM-in-Asisten` FOREIGN KEY (`nim`) REFERENCES `mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Asistens`
+  ADD CONSTRAINT `fk-NIM-in-Asisten` FOREIGN KEY (`nim`) REFERENCES `Mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `jadwalpikets`
+-- Ketidakleluasaan untuk tabel `Jadwalpikets`
 --
-ALTER TABLE `jadwalpikets`
-  ADD CONSTRAINT `fk-asistenID-in-JadwalPiket` FOREIGN KEY (`asisten_id`) REFERENCES `asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-kelasID-in-JadwalPiket` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-praktikID-in-JadwalPiket` FOREIGN KEY (`praktik_id`) REFERENCES `jadwalpraktiks` (`praktik_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Jadwalpikets`
+  ADD CONSTRAINT `fk-asistenID-in-JadwalPiket` FOREIGN KEY (`asisten_id`) REFERENCES `Asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-kelasID-in-JadwalPiket` FOREIGN KEY (`kelas_id`) REFERENCES `Kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-praktikID-in-JadwalPiket` FOREIGN KEY (`praktik_id`) REFERENCES `Jadwalpraktiks` (`praktik_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `jadwalpraktiks`
+-- Ketidakleluasaan untuk tabel `Jadwalpraktiks`
 --
-ALTER TABLE `jadwalpraktiks`
+ALTER TABLE `Jadwalpraktiks`
   ADD CONSTRAINT `fk-dosenNIP-in-JadwalPraktik` FOREIGN KEY (`dosen_nip`) REFERENCES `dosens` (`dosen_nip`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-kelasID-in-JadwalPraktik` FOREIGN KEY (`kelas_id`) REFERENCES `kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-kodeMK-in-JadwalPraktik` FOREIGN KEY (`kode_mk`) REFERENCES `matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk-kelasID-in-JadwalPraktik` FOREIGN KEY (`kelas_id`) REFERENCES `Kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-kodeMK-in-JadwalPraktik` FOREIGN KEY (`kode_mk`) REFERENCES `Matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `kehadirans`
+-- Ketidakleluasaan untuk tabel `Kehadirans`
 --
-ALTER TABLE `kehadirans`
-  ADD CONSTRAINT `fk-asistenID-in-Kehadiran` FOREIGN KEY (`asisten_id`) REFERENCES `asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-penggantiID-in-Kehadiran` FOREIGN KEY (`pengganti_id`) REFERENCES `asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-piketID-in-Kehadiran` FOREIGN KEY (`piket_id`) REFERENCES `jadwalpikets` (`piket_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Kehadirans`
+  ADD CONSTRAINT `fk-asistenID-in-Kehadiran` FOREIGN KEY (`asisten_id`) REFERENCES `Asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-penggantiID-in-Kehadiran` FOREIGN KEY (`pengganti_id`) REFERENCES `Asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-piketID-in-Kehadiran` FOREIGN KEY (`piket_id`) REFERENCES `Jadwalpikets` (`piket_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `kelas`
+-- Ketidakleluasaan untuk tabel `Kelas`
 --
-ALTER TABLE `kelas`
-  ADD CONSTRAINT `fk-kodeMK-in-Kelas` FOREIGN KEY (`kode_mk`) REFERENCES `matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Kelas`
+  ADD CONSTRAINT `fk-kodeMK-in-Kelas` FOREIGN KEY (`kode_mk`) REFERENCES `Matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `krs`
+-- Ketidakleluasaan untuk tabel `Krs`
 --
-ALTER TABLE `krs`
-  ADD CONSTRAINT `fk-NIM-in-KRS` FOREIGN KEY (`nim`) REFERENCES `mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-kodeMK-in-KRS` FOREIGN KEY (`kode_mk`) REFERENCES `matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Krs`
+  ADD CONSTRAINT `fk-NIM-in-KRS` FOREIGN KEY (`nim`) REFERENCES `Mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-kodeMK-in-KRS` FOREIGN KEY (`kode_mk`) REFERENCES `Matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `laborans`
+-- Ketidakleluasaan untuk tabel `Laborans`
 --
-ALTER TABLE `laborans`
-  ADD CONSTRAINT `fk-userID-in-Laboran` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Laborans`
+  ADD CONSTRAINT `fk-userID-in-Laboran` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `mahasiswas`
+-- Ketidakleluasaan untuk tabel `Mahasiswas`
 --
-ALTER TABLE `mahasiswas`
-  ADD CONSTRAINT `fk-userID-in-Mahasiswa` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Mahasiswas`
+  ADD CONSTRAINT `fk-userID-in-Mahasiswa` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `matkuls`
+-- Ketidakleluasaan untuk tabel `Matkuls`
 --
-ALTER TABLE `matkuls`
+ALTER TABLE `Matkuls`
   ADD CONSTRAINT `fk-dosenNIP-in-Matkul` FOREIGN KEY (`dosen_nip`) REFERENCES `dosens` (`dosen_nip`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `pendaftarans`
+-- Ketidakleluasaan untuk tabel `Pendaftarans`
 --
-ALTER TABLE `pendaftarans`
-  ADD CONSTRAINT `fk-NIM-in-Pendaftaran` FOREIGN KEY (`nim`) REFERENCES `mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-programID-in-Pendaftaran` FOREIGN KEY (`program_id`) REFERENCES `programs` (`program_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Pendaftarans`
+  ADD CONSTRAINT `fk-NIM-in-Pendaftaran` FOREIGN KEY (`nim`) REFERENCES `Mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-programID-in-Pendaftaran` FOREIGN KEY (`program_id`) REFERENCES `Programs` (`program_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `penilaians`
+-- Ketidakleluasaan untuk tabel `Penilaians`
 --
-ALTER TABLE `penilaians`
-  ADD CONSTRAINT `fk-krsID-in-Penilaian` FOREIGN KEY (`krs_id`) REFERENCES `krs` (`krs_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Penilaians`
+  ADD CONSTRAINT `fk-krsID-in-Penilaian` FOREIGN KEY (`krs_id`) REFERENCES `Krs` (`krs_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
