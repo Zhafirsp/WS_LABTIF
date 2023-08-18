@@ -55,10 +55,10 @@ INSERT INTO `Asistens` (`asisten_id`, `nim`, `nama_asisten`, `email`, `email_kam
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `dosens`
+-- Struktur dari tabel `Dosens`
 --
 
-CREATE TABLE `dosens` (
+CREATE TABLE `Dosens` (
   `dosen_nip` varchar(11) NOT NULL,
   `nama_dosen` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -69,10 +69,10 @@ CREATE TABLE `dosens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `dosens`
+-- Dumping data untuk tabel `Dosens`
 --
 
-INSERT INTO `dosens` (`dosen_nip`, `nama_dosen`, `email`, `jenis_pegawai`, `image_url`, `created_at`, `updated_at`) VALUES
+INSERT INTO `Dosens` (`dosen_nip`, `nama_dosen`, `email`, `jenis_pegawai`, `image_url`, `created_at`, `updated_at`) VALUES
 ('0402088504', ' FAJAR DARMAWAN, ST., M.KOM ', 'fajar.2885@gmail.com', 'Dosen', NULL, '2023-08-12 16:44:24', '2023-08-12 16:44:24'),
 ('0404048901', ' ASEP SOMANTRI ST.,MT', 'somantri89@gmail.com', 'Dosen', NULL, '2023-08-12 16:44:24', '2023-08-12 16:44:24'),
 ('0404058001', ' AAN ALBONE ', NULL, 'Dosen', NULL, '2023-08-12 16:44:24', '2023-08-12 16:44:24'),
@@ -130,6 +130,7 @@ INSERT INTO `dosens` (`dosen_nip`, `nama_dosen`, `email`, `jenis_pegawai`, `imag
 ('9904009250', ' SHANTI HERLIANI ', NULL, 'Dosen', NULL, '2023-08-12 16:44:24', '2023-08-12 16:44:24'),
 ('9904019435', ' IR. COMALUDDIN TARSIM, M.SI. ', 'comaluddin@yahoo.com', 'Dosen', NULL, '2023-08-12 16:44:24', '2023-08-12 16:44:24'),
 ('9990107353', ' R DJUNAEDY SAKAM ', NULL, 'Dosen', NULL, '2023-08-12 16:44:24', '2023-08-12 16:44:24'),
+('IF306', ' Acep Hendra ST. M.Kom', 'info.inkara@gmail.com', 'Dosen', NULL, '2023-08-18 14:47:36', '2023-08-18 14:47:36'),
 ('IF397', ' MOCH. ILHAM ANUGRAH, ST., M.ENG. ', 'surelna.ilham@gmail.com', 'Dosen', NULL, '2023-08-12 16:44:24', '2023-08-12 16:44:24');
 
 -- --------------------------------------------------------
@@ -619,8 +620,9 @@ INSERT INTO `Kelas` (`kelas_id`, `nama_kelas`, `nama_ruang`, `kapasitas`, `kode_
 
 CREATE TABLE `Krs` (
   `krs_id` int(11) NOT NULL,
-  `periode` varchar(11) DEFAULT NULL,
+  `periode_krs` varchar(11) DEFAULT NULL,
   `kode_mk` varchar(11) NOT NULL,
+  `kelas_id` int(11) DEFAULT NULL,
   `nama_kelas` varchar(255) DEFAULT NULL,
   `nim` varchar(11) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -785,9 +787,12 @@ CREATE TABLE `Pengumumans` (
 
 CREATE TABLE `Penilaians` (
   `nilai_id` int(11) NOT NULL,
+  `kelas_id` int(11) DEFAULT NULL,
   `krs_id` int(11) NOT NULL,
-  `tugas_ke` int(11) NOT NULL,
-  `nilai` int(11) NOT NULL,
+  `nim` varchar(11) DEFAULT NULL,
+  `cpmk` int(11) DEFAULT NULL,
+  `tugas_ke` int(11) DEFAULT NULL,
+  `nilai` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -872,6 +877,8 @@ INSERT INTO `Sequelizemeta` (`name`) VALUES
 ('20230719091648-add-fk-piketID-in-Kehadiran.js'),
 ('20230719092552-add-fk-NIM-in-KRS.js'),
 ('20230719092842-add-fk-kodeMK-in-KRS.js'),
+('20230719093156-add-fk-kelasID-in-KRS.js'),
+('20230719093278-add-fk-kelasID-in-Penilaian.js'),
 ('20230719094329-add-fk-krsID-in-Penilaian.js');
 
 -- --------------------------------------------------------
@@ -923,9 +930,9 @@ ALTER TABLE `Asistens`
   ADD KEY `fk-NIM-in-Asisten` (`nim`);
 
 --
--- Indeks untuk tabel `dosens`
+-- Indeks untuk tabel `Dosens`
 --
-ALTER TABLE `dosens`
+ALTER TABLE `Dosens`
   ADD PRIMARY KEY (`dosen_nip`);
 
 --
@@ -969,7 +976,8 @@ ALTER TABLE `Kelas`
 ALTER TABLE `Krs`
   ADD PRIMARY KEY (`krs_id`),
   ADD KEY `fk-NIM-in-KRS` (`nim`),
-  ADD KEY `fk-kodeMK-in-KRS` (`kode_mk`);
+  ADD KEY `fk-kodeMK-in-KRS` (`kode_mk`),
+  ADD KEY `fk-kelasID-in-KRS` (`kelas_id`);
 
 --
 -- Indeks untuk tabel `Laborans`
@@ -1014,6 +1022,7 @@ ALTER TABLE `Pengumumans`
 --
 ALTER TABLE `Penilaians`
   ADD PRIMARY KEY (`nilai_id`),
+  ADD KEY `fk-kelasID-in-Penilaian` (`kelas_id`),
   ADD KEY `fk-krsID-in-Penilaian` (`krs_id`);
 
 --
@@ -1044,25 +1053,25 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT untuk tabel `Jadwalpikets`
 --
 ALTER TABLE `Jadwalpikets`
-  MODIFY `piket_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `piket_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `Kehadirans`
 --
 ALTER TABLE `Kehadirans`
-  MODIFY `absen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `absen_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `Krs`
 --
 ALTER TABLE `Krs`
-  MODIFY `krs_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `krs_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `Pendaftarans`
 --
 ALTER TABLE `Pendaftarans`
-  MODIFY `daftar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `daftar_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `Pengumumans`
@@ -1074,19 +1083,19 @@ ALTER TABLE `Pengumumans`
 -- AUTO_INCREMENT untuk tabel `Penilaians`
 --
 ALTER TABLE `Penilaians`
-  MODIFY `nilai_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `nilai_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `Programs`
 --
 ALTER TABLE `Programs`
-  MODIFY `program_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `program_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -1110,7 +1119,7 @@ ALTER TABLE `Jadwalpikets`
 -- Ketidakleluasaan untuk tabel `Jadwalpraktiks`
 --
 ALTER TABLE `Jadwalpraktiks`
-  ADD CONSTRAINT `fk-dosenNIP-in-JadwalPraktik` FOREIGN KEY (`dosen_nip`) REFERENCES `dosens` (`dosen_nip`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-dosenNIP-in-JadwalPraktik` FOREIGN KEY (`dosen_nip`) REFERENCES `Dosens` (`dosen_nip`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-kelasID-in-JadwalPraktik` FOREIGN KEY (`kelas_id`) REFERENCES `Kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-kodeMK-in-JadwalPraktik` FOREIGN KEY (`kode_mk`) REFERENCES `Matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -1133,6 +1142,7 @@ ALTER TABLE `Kelas`
 --
 ALTER TABLE `Krs`
   ADD CONSTRAINT `fk-NIM-in-KRS` FOREIGN KEY (`nim`) REFERENCES `Mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk-kelasID-in-KRS` FOREIGN KEY (`kelas_id`) REFERENCES `Kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-kodeMK-in-KRS` FOREIGN KEY (`kode_mk`) REFERENCES `Matkuls` (`kode_mk`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -1151,7 +1161,7 @@ ALTER TABLE `Mahasiswas`
 -- Ketidakleluasaan untuk tabel `Matkuls`
 --
 ALTER TABLE `Matkuls`
-  ADD CONSTRAINT `fk-dosenNIP-in-Matkul` FOREIGN KEY (`dosen_nip`) REFERENCES `dosens` (`dosen_nip`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk-dosenNIP-in-Matkul` FOREIGN KEY (`dosen_nip`) REFERENCES `Dosens` (`dosen_nip`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `Pendaftarans`
@@ -1164,6 +1174,7 @@ ALTER TABLE `Pendaftarans`
 -- Ketidakleluasaan untuk tabel `Penilaians`
 --
 ALTER TABLE `Penilaians`
+  ADD CONSTRAINT `fk-kelasID-in-Penilaian` FOREIGN KEY (`kelas_id`) REFERENCES `Kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-krsID-in-Penilaian` FOREIGN KEY (`krs_id`) REFERENCES `Krs` (`krs_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
