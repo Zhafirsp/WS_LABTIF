@@ -120,6 +120,9 @@ class ProgramController {
       where: {
         program_id: Number(programID),
       },
+      attributes: {
+        exclude: ["created_at", "updated_at"],
+      },
     });
 
     // Data program ada?
