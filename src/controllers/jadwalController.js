@@ -2,40 +2,6 @@ const { Asisten, JadwalPraktik, JadwalPiket } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
 
 class JadwalController {
-  // GET All Jadwal Praktik By Periode
-  static async getAllPraktikByPeriode(req, res, next) {
-    try {
-      const { periode } = req.body;
-
-      const dataPraktiks = await JadwalPraktik.findAll({
-        where: {
-          periode,
-        },
-        attributes: {
-          exclude: ["created_at", "updated_at"],
-        },
-      });
-
-      // Data Praktik kosong?
-      if (dataPraktiks.length === 0) {
-        return resError(
-          404,
-          `Data jadwal praktik dengan periode ${periode} tidak ditemukan`,
-          res
-        );
-      } else {
-        return resSend(
-          200,
-          `Berhasil mendapatkan seluruh data jadwal praktikum dengan periode ${periode}`,
-          dataPraktiks,
-          res
-        );
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
   // Add New Jadwal Piket By Kelas ID
   static async addPiketByKelasId(req, res, next) {
     try {

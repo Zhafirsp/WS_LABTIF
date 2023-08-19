@@ -725,6 +725,78 @@ class SevimaController {
       next(error);
     }
   }
+
+  // GET All Jadwal Praktikum By Periode
+  static async getAllJadwalByPeriode(req, res, next) {
+    try {
+      const { periode } = req.body;
+
+      const dataPraktiks = await JadwalPraktik.findAll({
+        where: {
+          periode,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+      });
+
+      // Data Praktik kosong?
+      if (dataPraktiks.length === 0) {
+        return resError(
+          404,
+          `Data jadwal praktikum dengan periode ${periode} tidak ditemukan`,
+          res
+        );
+      } else {
+        return resSend(
+          200,
+          `Berhasil mendapatkan seluruh data jadwal praktikum dengan periode ${periode}`,
+          dataPraktiks,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // GET All Praktikan Kelas ID
+  static async getAllPraktikanByKelasId(req, res, next) {
+    try {
+      const kelasID = req.params.kelasID;
+
+      const dataKRS = await Krs.findAll({
+        where: {
+          kelas_id: kelasID,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+        include: {
+          model: Mahasiswa,
+          attributes: ["nama_mahasiswa"],
+        },
+      });
+
+      // Data KRS kosong?
+      if (dataKRS.length === 0) {
+        return resError(
+          404,
+          `Data Praktikan dengan kelas id ${kelasID} tidak ditemukan`,
+          res
+        );
+      } else {
+        return resSend(
+          200,
+          `Berhasil mendapatkan data Praktikan pada kelas id ${kelasID}`,
+          dataKRS,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = SevimaController;

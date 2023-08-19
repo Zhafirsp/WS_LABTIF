@@ -29,7 +29,7 @@ router.use("/asistens", asistenRoutes);
 router.use("/pengumuman", pengumumanRoutes);
 router.use("/programs", programRoutes);
 router.use("/pendaftarans", pendaftaranRoutes);
-router.use("/jadwal", penjadwalanRoutes);
+router.use("/jadwalpikets", penjadwalanRoutes);
 router.use("/kehadiran", kehadiranRoutes);
 router.use("/penilaian", penilaianRoutes);
 

@@ -3,44 +3,6 @@ const { Matkul, Kelas, Mahasiswa, Krs, Penilaian } = require("../db/models");
 const { resError, resSend } = require("../helpers/response");
 
 class PenilaianController {
-  // GET Praktikan Kelas ID
-  static async getAllPraktikanByKelasId(req, res, next) {
-    try {
-      const kelasID = req.params.kelasID;
-
-      const dataKRS = await Krs.findAll({
-        where: {
-          kelas_id: kelasID,
-        },
-        attributes: {
-          exclude: ["created_at", "updated_at"],
-        },
-        include: {
-          model: Mahasiswa,
-          attributes: ["nama_mahasiswa"],
-        },
-      });
-
-      // Data KRS kosong?
-      if (dataKRS.length === 0) {
-        return resError(
-          404,
-          `Data Praktikan dengan kelas id ${kelasID} tidak ditemukan`,
-          res
-        );
-      } else {
-        return resSend(
-          200,
-          `Berhasil mendapatkan data Praktikan pada kelas id ${kelasID}`,
-          dataKRS,
-          res
-        );
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
   // Add New Penilaian
   static async addNewNilaiByKrsId(req, res, next) {
     try {
