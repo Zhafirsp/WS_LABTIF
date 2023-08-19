@@ -10,7 +10,7 @@ const { resError, resSend } = require("../helpers/response");
 
 class PendaftaranController {
   // ADD new Pendaftaran
-  static async addPendaftaranByProgramId(req, res, next) {
+  static async addDaftarByProgramId(req, res, next) {
     try {
       const programID = req.params.programID;
 
@@ -122,10 +122,15 @@ class PendaftaranController {
     }
   }
 
-  // GET All Pendaftaran
-  static async getAllPendaftaran(req, res, next) {
+  // GET All Pendaftaran By Program ID
+  static async getAllDaftarByProgramId(req, res, next) {
     try {
+      const programID = req.params.programID;
+
       const dataPendaftarans = await Pendaftaran.findAll({
+        where: {
+          program_id: Number(programID),
+        },
         attributes: {
           exclude: ["created_at", "updated_at"],
         },
@@ -133,11 +138,15 @@ class PendaftaranController {
 
       // Data pendaftaran kosong?
       if (dataPendaftarans.length === 0) {
-        return resError(404, "Data pendaftaran kosong", res);
+        return resError(
+          404,
+          `Data pendaftaran pada program id ${programID} tidak ditemukan`,
+          res
+        );
       } else {
         return resSend(
           200,
-          "Berhasil mendapatkan seluruh data pendaftaran",
+          `Berhasil mendapatkan seluruh data pendaftaran pada program id ${programID}`,
           dataPendaftarans,
           res
         );
@@ -148,7 +157,7 @@ class PendaftaranController {
   }
 
   // GET Pendaftaran By NIM
-  static async getPendaftaranByNim(req, res, next) {
+  static async getDaftarByNim(req, res, next) {
     try {
       const mahasiswaNIM = req.params.nim;
 
@@ -181,44 +190,40 @@ class PendaftaranController {
     }
   }
 
-  // GET Pengumuman By Periode
-  static async getPengumumanByPeriode(req, res, next) {
+  // GET Pendaftaran By Program ID dan Status
+  static async getDaftarByStatus(req, res, next) {
     try {
-      const periode = req.params.periode;
+      const programID = req.params.programID;
+      const { status } = req.body;
 
-      const program = await Program.findOne({
+      // Jika tidak ada inputan status
+      if (!status) {
+        return resError(400, "Data status harus ada", res);
+      }
+
+      const dataPendaftaran = await Pendaftaran.findAll({
         where: {
-          periode,
+          program_id: Number(programID),
+          status,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
         },
       });
 
-      if (!program) {
+      if (dataPendaftaran.length === 0) {
         return resError(
           404,
-          `Data program dengan periode ${periode} tidak ditemukan`,
+          `Data pendaftaran pada program id ${programID} dengan status ${status} tidak ditemukan`,
           res
         );
       } else {
-        const dataPengumuman = await Pendaftaran.findAll({
-          where: {
-            program_id: program.program_id,
-          },
-          attributes: {
-            exclude: ["created_at", "updated_at"],
-          },
-        });
-
-        // Data pengumuman ada?
-        if (dataPengumuman.length === 0) {
-          return resError(404, "Data Pengumuman kosong", res);
-        } else {
-          return resSend(
-            200,
-            `Berhasil mendapatkan seluruh data pengumuman dengan periode ${periode}`,
-            dataPengumuman,
-            res
-          );
-        }
+        return resSend(
+          200,
+          `Berhasil mendapatkan seluruh data pendaftaran pada program id ${programID} dengan status ${status}`,
+          dataPendaftaran,
+          res
+        );
       }
     } catch (error) {
       next(error);
@@ -387,8 +392,8 @@ class PendaftaranController {
     }
   }
 
-  // DELETE Pendaftaran By NIM
-  static async deletePendaftaranByProgramId(req, res, next) {
+  // DELETE File By Program ID
+  static async deleteFileByProgramId(req, res, next) {
     try {
       const programID = req.params.programID;
 
@@ -400,7 +405,11 @@ class PendaftaranController {
 
       // Data program tidak ada?
       if (!dataProgram) {
-        return resError(404, "Data program tidak ditemukan", res);
+        return resError(
+          404,
+          `Data pendaftaran dengan program id ${programID} tidak ditemukan`,
+          res
+        );
       } else {
         const userLogin = req.userLogin;
 

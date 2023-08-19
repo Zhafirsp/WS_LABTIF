@@ -12,43 +12,43 @@ router.use(Authenticated);
 router.post(
   "/:programID",
   Authorization.verifyMahasiswa,
-  PendaftaranController.addPendaftaranByProgramId
+  PendaftaranController.addDaftarByProgramId
 );
 
 // DELETE Pendaftaran By ProgramID
 router.delete(
   "/:programID",
   Authorization.verifyMahasiswa,
-  PendaftaranController.deletePendaftaranByProgramId
-);
-
-// GET Pengumuman By Periode
-router.get(
-  "/pengumuman/:periode",
-  Authorization.verifyLaboran,
-  PendaftaranController.getPengumumanByPeriode
+  PendaftaranController.deleteFileByProgramId
 );
 
 // --- LABORAN ---
-// UPDATE status or Validasi
+// UPDATE status or Validasi By Daftar ID
 router.post(
   "/penerimaan/:id",
   Authorization.verifyLaboran,
   PendaftaranController.updateStatusById
 );
 
-// GET All Pendaftaran
+// GET All Pendaftaran By Program ID
 router.get(
-  "/",
+  "/:programID",
   Authorization.verifyLaboran,
-  PendaftaranController.getAllPendaftaran
+  PendaftaranController.getAllDaftarByProgramId
 );
 
 // GET Pendaftaran By NIM
 router.get(
-  "/:nim",
+  "/nim/:nim",
   Authorization.verifyLaboran,
-  PendaftaranController.getPendaftaranByNim
+  PendaftaranController.getDaftarByNim
+);
+
+// GET Pendaftaran By Program ID dan Status
+router.get(
+  "/penerimaan/:programID",
+  Authorization.verifyLaboran,
+  PendaftaranController.getDaftarByStatus
 );
 
 module.exports = router;

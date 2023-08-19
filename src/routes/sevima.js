@@ -7,7 +7,7 @@ router.post("/mahasiswa", SevimaController.updateDataMahasiswa);
 router.post("/dosen", SevimaController.updateDataDosen);
 router.post("/matakuliah", SevimaController.updateDataMatkul);
 router.post("/kelas", SevimaController.updateDataKelas);
-router.post("/jadwalpraktik", SevimaController.updateDataJadwal);
+router.post("/jadwalpraktikum", SevimaController.updateDataJadwal);
 router.post("/krs", SevimaController.updateDataKRS);
 
 // GET All Data Jadwal Praktikum By Periode
