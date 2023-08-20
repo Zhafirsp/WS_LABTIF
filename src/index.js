@@ -25,6 +25,7 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
+  credentials: true, // Mengizinkan pengiriman cookie (kredensial)
 };
 
 app.use(cors(corsOptions));
