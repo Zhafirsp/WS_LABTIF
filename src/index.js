@@ -8,6 +8,7 @@ const routes = require("./routes");
 const errorHandler = require("./middleware/errorHandler");
 
 const port = process.env.APP_PORT;
+const labtifURL = process.env.BASEURL_LABTIF_FE;
 
 const app = express();
 
@@ -15,7 +16,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Ganti dengan origin frontend Anda
+    origin: labtifURL, // Ganti dengan origin frontend Anda
     credentials: true, // Mengizinkan pengiriman cookie (kredensial)
   })
 );
