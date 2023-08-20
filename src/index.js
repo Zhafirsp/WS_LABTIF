@@ -12,13 +12,22 @@ const port = process.env.APP_PORT;
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: "http://localhost:3000", // Ganti dengan origin frontend Anda
-    methods: ["GET", "POST", "PUT", "DELETE"], // Atur metode permintaan yang diizinkan
-    credentials: true, // Jika Anda mengirimkan cookie
-  })
-);
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://api-staging-labtif.cyclic.cloud",
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 app.use(
   express.urlencoded({
