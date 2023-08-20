@@ -8,28 +8,17 @@ const routes = require("./routes");
 const errorHandler = require("./middleware/errorHandler");
 
 const port = process.env.APP_PORT;
+const labtifURL = process.env.BASEURL_LABTIF_FE;
 
 const app = express();
 
 // Middleware
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://api-staging-labtif.cyclic.cloud",
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  exposedHeaders: ["Access-Control-Allow-Origin"],
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: labtifURL, // Ganti dengan origin frontend Anda
+    credentials: true, // Mengizinkan pengiriman cookie (kredensial)
+  })
+);
 
 app.use(
   express.urlencoded({
