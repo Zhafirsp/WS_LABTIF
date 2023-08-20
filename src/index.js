@@ -12,7 +12,14 @@ const port = process.env.APP_PORT;
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Ganti dengan origin frontend Anda
+    methods: ["GET", "POST", "PUT", "DELETE"], // Atur metode permintaan yang diizinkan
+    credentials: true, // Jika Anda mengirimkan cookie
+  })
+);
+
 app.use(
   express.urlencoded({
     extended: true,
