@@ -166,13 +166,13 @@ class KehadiranController {
   // Get Kehadiran By Asisten Id
   static async getAllKehadiranByAslabID(req, res, next) {
     try {
-      const asistenID = req.params.asistenID;
+      const aslabID = req.params.aslabID;
       const { periode } = req.body;
 
       const dataPiket = await JadwalPiket.findAll({
         where: {
           periode,
-          asisten_id: asistenID,
+          asisten_id: aslabID,
         },
       });
 
@@ -180,7 +180,7 @@ class KehadiranController {
       if (dataPiket.length === 0) {
         return resError(
           404,
-          `Data jadwal piket periode ${periode} dengan asisten id ${asistenID} tidak ditemukan`,
+          `Data jadwal piket periode ${periode} dengan asisten id ${aslabID} tidak ditemukan`,
           res
         );
       }
@@ -201,13 +201,13 @@ class KehadiranController {
       if (dataKehadirans.length === 0) {
         return resError(
           404,
-          `Data kehadiran untuk jadwal piket periode ${periode} dengan asisten id ${asistenID} tidak ditemukan`,
+          `Data kehadiran untuk jadwal piket periode ${periode} dengan asisten id ${aslabID} tidak ditemukan`,
           res
         );
       } else {
         return resSend(
           200,
-          `Berhasil mendapatkan data kehadiran untuk jadwal piket periode ${periode} dengan asisten dengan id ${asistenID}`,
+          `Berhasil mendapatkan data kehadiran untuk jadwal piket periode ${periode} dengan asisten dengan id ${aslabID}`,
           dataKehadirans,
           res
         );

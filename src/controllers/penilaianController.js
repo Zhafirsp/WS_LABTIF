@@ -4,7 +4,7 @@ const { resError, resSend } = require("../helpers/response");
 
 class PenilaianController {
   // Add New Penilaian
-  static async addNewNilaiByKrsId(req, res, next) {
+  static async addNilaiByKrsId(req, res, next) {
     try {
       const krsID = req.params.krsID;
       const { cpmk, tugas_ke, nilai } = req.body;

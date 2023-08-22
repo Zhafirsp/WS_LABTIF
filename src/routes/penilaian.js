@@ -3,7 +3,7 @@ const router = express.Router();
 
 const PenilaianController = require("../controllers/penilaianController");
 
-router.post("/:krsID", PenilaianController.addNewNilaiByKrsId);
+router.post("/:krsID", PenilaianController.addNilaiByKrsId);
 router.get("/rekap/:kelasID", PenilaianController.getAllNilaiByKelasId);
 router.get("/:krsID", PenilaianController.getNilaiByKrsId);
 router.put("/:id", PenilaianController.updateNilaiById);
