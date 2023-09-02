@@ -10,7 +10,7 @@ class SevimaHelper {
   static async getMahasiswaIF(periode, limit) {
     try {
       const token = await getToken();
-      const response = await axios.get(sevimaURL + "/biodatamhs", {
+      const response = await axios.get("sevimaURL" + "/biodatamhs", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

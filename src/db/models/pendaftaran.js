@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.INTEGER(11),
       },
-      tanggal_daftar: DataTypes.DATE,
+      tanggal_daftar: DataTypes.DATEONLY,
       nim: {
         allowNull: false,
         type: DataTypes.STRING(11),
