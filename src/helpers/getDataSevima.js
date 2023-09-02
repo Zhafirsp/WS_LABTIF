@@ -149,6 +149,7 @@ class SevimaHelper {
         params: {
           periode: periode.toString(),
           programstudi: "S1 Teknik Informatika",
+          sistemkuliah: "Reguler Pagi",
           kurikulum: kurikulum.toString(),
           limit: limit.toString(),
         },
