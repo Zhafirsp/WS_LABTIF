@@ -403,6 +403,7 @@ class SevimaController {
         res
       );
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
