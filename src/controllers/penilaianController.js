@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Matkul, Kelas, Mahasiswa, Krs, Penilaian } = require("../db/models");
+const { Mahasiswa, Krs, Penilaian, JadwalPiket } = require("../db/models");
 const { resError, resSend } = require("../helpers/response");
 
 class PenilaianController {
@@ -22,8 +22,8 @@ class PenilaianController {
         },
       });
 
-      // Data KRS tidak ada?
       if (!dataKRS) {
+        // Data KRS tidak ada?
         return resError(
           404,
           `Data Praktikan dengan krs id ${krsID} tidak ditemukan`,
@@ -31,55 +31,77 @@ class PenilaianController {
         );
       }
 
-      // Data cpmk kosong?
-      if (!cpmk) {
-        return resError(400, "Data CPMK tidak boleh kosong", res);
-      }
-      // Data tugas kosong?
-      else if (!tugas_ke) {
-        return resError(400, "Data keterangan tugas tidak boleh kosong", res);
-      }
-      // Data nilai kosong?
-      else if (!nilai) {
-        return resError(400, "Data nilai tidak boleh kosong", res);
-      }
+      const userAslab = req.userAsisten;
 
-      // Data KRS ada? lakukan pemeriksaan data nilai untuk mencegah duplikasi data nilai pada tugas-ke dengan cpmk yang sama
-      const nilaiExist = await Penilaian.findOne({
+      // Asisten memiliki jadwal piket untuk kelas yang akan dinilai?
+      const allowedAslab = await JadwalPiket.findOne({
         where: {
-          krs_id: Number(krsID),
-          cpmk,
-          tugas_ke,
+          asisten_id: userAslab.asisten_id,
+          kelas_id: dataKRS.kelas_id,
         },
       });
 
-      // Data nilai sudah ada pada krs ID?
-      if (nilaiExist) {
+      // Asisten tidak memiliki jadwal piket pada kelas ini (kelas pada data KRS Praktikan)
+      if (!allowedAslab) {
         return resError(
-          400,
-          `Data penilaian untuk cpmk ${cpmk} dan tugas ke-${tugas_ke} sudah ada pada krs id ${krsID}`,
+          403,
+          `Akses Dilarang! Anda tidak memiliki jadwal piket kelas id ${dataKRS.kelas_id}`,
           res
         );
       }
 
-      const newNilai = {
-        kelas_id: dataKRS.kelas_id,
-        krs_id: dataKRS.krs_id,
-        nim: dataKRS.nim,
-        nama_mahasiswa: dataKRS.Mahasiswa.nama_mahasiswa,
-        cpmk,
-        tugas_ke,
-        nilai,
-      };
+      // Asisten memiliki jadwal piket pada kelas ini (kelas pada data KRS Praktikan)
+      else {
+        // Data cpmk kosong?
+        if (!cpmk) {
+          return resError(400, "Data CPMK tidak boleh kosong", res);
+        }
+        // Data tugas kosong?
+        else if (!tugas_ke) {
+          return resError(400, "Data keterangan tugas tidak boleh kosong", res);
+        }
+        // Data nilai kosong?
+        else if (!nilai) {
+          return resError(400, "Data nilai tidak boleh kosong", res);
+        }
 
-      await Penilaian.create(newNilai);
+        // Data KRS ada? lakukan pemeriksaan data nilai untuk mencegah duplikasi data nilai pada tugas-ke dengan cpmk yang sama
+        const nilaiExist = await Penilaian.findOne({
+          where: {
+            krs_id: Number(krsID),
+            cpmk,
+            tugas_ke,
+          },
+        });
 
-      return resSend(
-        201,
-        `Berhasil menambahkan data penilaian baru pada krs id ${krsID}`,
-        newNilai,
-        res
-      );
+        // Data nilai sudah ada pada krs ID?
+        if (nilaiExist) {
+          return resError(
+            400,
+            `Data penilaian untuk cpmk ${cpmk} dan tugas ke-${tugas_ke} sudah ada pada krs id ${krsID}`,
+            res
+          );
+        }
+
+        const newNilai = {
+          kelas_id: dataKRS.kelas_id,
+          krs_id: dataKRS.krs_id,
+          nim: dataKRS.nim,
+          nama_mahasiswa: dataKRS.Mahasiswa.nama_mahasiswa,
+          cpmk,
+          tugas_ke,
+          nilai,
+        };
+
+        await Penilaian.create(newNilai);
+
+        return resSend(
+          201,
+          `Berhasil menambahkan data penilaian baru pada krs id ${krsID}`,
+          newNilai,
+          res
+        );
+      }
     } catch (error) {
       next(error);
     }
@@ -189,37 +211,59 @@ class PenilaianController {
         );
       }
 
-      // Mencegah duplikasi jika ada perubahan cpmk atau tugas-ke
-      if (cpmk !== dataNilai.cpmk || tugas_ke !== dataNilai.tugas_ke) {
-        const existingNilai = await Penilaian.findOne({
-          where: {
-            krs_id: dataNilai.krs_id,
-            cpmk,
-            tugas_ke,
-          },
-        });
+      const userAslab = req.userAsisten;
 
-        if (existingNilai) {
-          return resError(
-            400,
-            `Data nilai untuk cpmk ${cpmk} dan tugas-ke${tugas_ke} sudah ada pada krs dengan id ${existingNilai.nilai_id}`,
-            res
-          );
-        }
+      // Asisten memiliki jadwal piket untuk kelas yang akan dinilai?
+      const allowedAslab = await JadwalPiket.findOne({
+        where: {
+          asisten_id: userAslab.asisten_id,
+          kelas_id: dataNilai.kelas_id,
+        },
+      });
+
+      // Asisten tidak memiliki jadwal piket pada kelas ini (kelas pada data KRS Praktikan)
+      if (!allowedAslab) {
+        return resError(
+          403,
+          `Akses Dilarang! Anda tidak memiliki jadwal piket untuk kelas id ${dataNilai.kelas_id}`,
+          res
+        );
       }
 
-      dataNilai.cpmk = cpmk;
-      dataNilai.tugas_ke = tugas_ke;
-      dataNilai.nilai = nilai;
+      // Asisten memiliki jadwal piket pada kelas ini (kelas pada data KRS Praktikan)
+      else {
+        // Mencegah duplikasi jika ada perubahan cpmk atau tugas-ke
+        if (cpmk !== dataNilai.cpmk || tugas_ke !== dataNilai.tugas_ke) {
+          const existingNilai = await Penilaian.findOne({
+            where: {
+              krs_id: dataNilai.krs_id,
+              cpmk,
+              tugas_ke,
+            },
+          });
 
-      await dataNilai.save();
+          if (existingNilai) {
+            return resError(
+              400,
+              `Data nilai untuk cpmk ${cpmk} dan tugas-ke${tugas_ke} sudah ada pada krs dengan id ${existingNilai.nilai_id}`,
+              res
+            );
+          }
+        }
 
-      return resSend(
-        200,
-        `Berhasil mengubah data nilai dengan id ${nilaiID}`,
-        dataNilai,
-        res
-      );
+        dataNilai.cpmk = cpmk;
+        dataNilai.tugas_ke = tugas_ke;
+        dataNilai.nilai = nilai;
+
+        await dataNilai.save();
+
+        return resSend(
+          200,
+          `Berhasil mengubah data nilai dengan id ${nilaiID}`,
+          dataNilai,
+          res
+        );
+      }
     } catch (error) {
       next(error);
     }
@@ -251,7 +295,29 @@ class PenilaianController {
           `Data nilai dengan krs id ${krsID} tidak ditemukan`,
           res
         );
-      } else {
+      }
+
+      const userAslab = req.userAsisten;
+
+      // Asisten memiliki jadwal piket untuk kelas yang akan dinilai?
+      const allowedAslab = await JadwalPiket.findOne({
+        where: {
+          asisten_id: userAslab.asisten_id,
+          kelas_id: dataNilai[0].kelas_id, // Mengambil kelas_id dari index ke-0 karena kelas_id hanya membutuhkan satu hasil pencarian dari dataNilai findAll
+        },
+      });
+
+      // Asisten tidak memiliki jadwal piket pada kelas ini (kelas pada data KRS Praktikan)
+      if (!allowedAslab) {
+        return resError(
+          403,
+          `Akses Dilarang! Anda tidak memiliki jadwal piket untuk kelas id ${dataNilai[0].kelas_id}`,
+          res
+        );
+      }
+
+      // Asisten memiliki jadwal piket pada kelas ini (kelas pada data KRS Praktikan)
+      else {
         await Penilaian.destroy({
           where: {
             krs_id: Number(krsID),

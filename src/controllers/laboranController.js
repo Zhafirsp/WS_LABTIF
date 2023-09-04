@@ -115,7 +115,7 @@ class LaboranController {
   }
 
   // UPDATE Laboran by NIP
-  static async updateLaboranByNIP(req, res, next) {
+  static async updateLaboranByNip(req, res, next) {
     try {
       const laboranNIP = req.params.nip;
 
@@ -164,7 +164,7 @@ class LaboranController {
   }
 
   // DELETE Laboran by NIP
-  static async deleteLaboranByNIP(req, res, next) {
+  static async deleteLaboranByNip(req, res, next) {
     try {
       const laboranNIP = req.params.nip;
 

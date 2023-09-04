@@ -136,10 +136,10 @@ INSERT INTO `Dosens` (`dosen_nip`, `nama_dosen`, `email`, `jenis_pegawai`, `imag
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `Jadwalpikets`
+-- Struktur dari tabel `JadwalPikets`
 --
 
-CREATE TABLE `Jadwalpikets` (
+CREATE TABLE `JadwalPikets` (
   `piket_id` int(11) NOT NULL,
   `praktik_id` int(11) NOT NULL,
   `periode` varchar(11) DEFAULT NULL,
@@ -152,10 +152,10 @@ CREATE TABLE `Jadwalpikets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `Jadwalpikets`
+-- Dumping data untuk tabel `JadwalPikets`
 --
 
-INSERT INTO `Jadwalpikets` (`piket_id`, `praktik_id`, `periode`, `kelas_id`, `pertemuan`, `asisten_id`, `nama_asisten`, `created_at`, `updated_at`) VALUES
+INSERT INTO `JadwalPikets` (`piket_id`, `praktik_id`, `periode`, `kelas_id`, `pertemuan`, `asisten_id`, `nama_asisten`, `created_at`, `updated_at`) VALUES
 (81, 197447, '20222', 470866, 1, 'AS23001', 'ELTI RAHMAWATI', '2023-08-12 18:08:58', '2023-08-12 18:08:58'),
 (82, 197448, '20222', 470866, 2, 'AS23001', 'ELTI RAHMAWATI', '2023-08-12 18:08:58', '2023-08-12 18:08:58'),
 (83, 197449, '20222', 470866, 3, 'AS23001', 'ELTI RAHMAWATI', '2023-08-12 18:08:58', '2023-08-12 18:08:58'),
@@ -985,9 +985,9 @@ ALTER TABLE `Dosens`
   ADD PRIMARY KEY (`dosen_nip`);
 
 --
--- Indeks untuk tabel `Jadwalpikets`
+-- Indeks untuk tabel `JadwalPikets`
 --
-ALTER TABLE `Jadwalpikets`
+ALTER TABLE `JadwalPikets`
   ADD PRIMARY KEY (`piket_id`),
   ADD KEY `fk-kelasID-in-JadwalPiket` (`kelas_id`),
   ADD KEY `fk-praktikID-in-JadwalPiket` (`praktik_id`),
@@ -1099,9 +1099,9 @@ ALTER TABLE `Users`
 --
 
 --
--- AUTO_INCREMENT untuk tabel `Jadwalpikets`
+-- AUTO_INCREMENT untuk tabel `JadwalPikets`
 --
-ALTER TABLE `Jadwalpikets`
+ALTER TABLE `JadwalPikets`
   MODIFY `piket_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -1157,9 +1157,9 @@ ALTER TABLE `Asistens`
   ADD CONSTRAINT `fk-NIM-in-Asisten` FOREIGN KEY (`nim`) REFERENCES `Mahasiswas` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `Jadwalpikets`
+-- Ketidakleluasaan untuk tabel `JadwalPikets`
 --
-ALTER TABLE `Jadwalpikets`
+ALTER TABLE `JadwalPikets`
   ADD CONSTRAINT `fk-asistenID-in-JadwalPiket` FOREIGN KEY (`asisten_id`) REFERENCES `Asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-kelasID-in-JadwalPiket` FOREIGN KEY (`kelas_id`) REFERENCES `Kelas` (`kelas_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-praktikID-in-JadwalPiket` FOREIGN KEY (`praktik_id`) REFERENCES `JadwalPraktiks` (`praktik_id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1178,7 +1178,7 @@ ALTER TABLE `JadwalPraktiks`
 ALTER TABLE `Kehadirans`
   ADD CONSTRAINT `fk-asistenID-in-Kehadiran` FOREIGN KEY (`asisten_id`) REFERENCES `Asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk-penggantiID-in-Kehadiran` FOREIGN KEY (`pengganti_id`) REFERENCES `Asistens` (`asisten_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk-piketID-in-Kehadiran` FOREIGN KEY (`piket_id`) REFERENCES `Jadwalpikets` (`piket_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk-piketID-in-Kehadiran` FOREIGN KEY (`piket_id`) REFERENCES `JadwalPikets` (`piket_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `Kelas`

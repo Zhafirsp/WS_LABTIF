@@ -13,12 +13,12 @@ router.get("/", JadwalController.getAllPiketByPeriode);
 router.get("/:kelasID", JadwalController.getPiketByKelasId);
 
 // UPDATE Data Jadwal Piket by Kelas ID dan asisten ID
-router.put("/:aslabID", JadwalController.updatePiketByAslabID);
+router.put("/:aslabID", JadwalController.updatePiketByAslabId);
 
 // DELETE Jadwal Piket By Kelas ID --> Menghapus semua jadwal piket yang ada pada kelas id
 router.delete("/:kelasID", JadwalController.deletePiketByKelasId);
 
 // DELETE Data Jadwal Piket by Asisten ID --> Menghapus semua jadwal piket yang ada pada asisten id
-router.delete("/asisten/:aslabID", JadwalController.deletePiketByAslabID);
+router.delete("/asisten/:aslabID", JadwalController.deletePiketByAslabId);
 
 module.exports = router;

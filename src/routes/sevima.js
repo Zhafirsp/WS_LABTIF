@@ -8,12 +8,15 @@ router.post("/dosen", SevimaController.updateDataDosen);
 router.post("/matakuliah", SevimaController.updateDataMatkul);
 router.post("/kelas", SevimaController.updateDataKelas);
 router.post("/jadwalpraktikum", SevimaController.updateDataJadwal);
-router.post("/krs", SevimaController.updateDataKRS);
+router.post("/krs", SevimaController.updateDataKrs);
 
 // GET All Data Jadwal Praktikum By Periode
 router.get("/jadwalpraktikum", SevimaController.getAllJadwalByPeriode);
 
 // GET All Praktikan By Kelas ID
 router.get("/praktikan/:kelasID", SevimaController.getAllPraktikanByKelasId);
+
+// GET All Mahasiswa By Periode
+router.get("/mahasiswa/:periode", SevimaController.getAllMahasiswaByPeriode);
 
 module.exports = router;

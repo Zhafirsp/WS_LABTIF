@@ -555,7 +555,7 @@ class SevimaController {
   }
 
   // UPDATE Data KRS
-  static async updateDataKRS(req, res, next) {
+  static async updateDataKrs(req, res, next) {
     try {
       const { periode, limit } = req.body;
 
@@ -752,6 +752,40 @@ class SevimaController {
           200,
           `Berhasil mendapatkan seluruh data jadwal praktikum dengan periode ${periode}`,
           dataPraktiks,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // GET All Mahasiswa By Periode
+  static async getAllMahasiswaByPeriode(req, res, next) {
+    try {
+      const periode = req.params.periode;
+
+      const dataMhs = await Mahasiswa.findAll({
+        where: {
+          periode_masuk: periode,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+      });
+
+      // Data Mahasiswa kosong?
+      if (dataMhs.length === 0) {
+        return resError(
+          404,
+          `Data Mahasiswa dengan periode ${periode} tidak ditemukan`,
+          res
+        );
+      } else {
+        return resSend(
+          200,
+          `Berhasil mendapatkan data Mahasiswa pada periode ${periode}`,
+          dataMhs,
           res
         );
       }

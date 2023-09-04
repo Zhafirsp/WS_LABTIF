@@ -190,7 +190,7 @@ class JadwalController {
   }
 
   // UPDATE Jadwal Piket By Asisten ID
-  static async updatePiketByAslabID(req, res, next) {
+  static async updatePiketByAslabId(req, res, next) {
     try {
       const aslabID = req.params.aslabID;
       const { kelas_id, periode } = req.body;
@@ -330,7 +330,7 @@ class JadwalController {
   }
 
   // DELETE Data Jadwal Piket by Asisten ID --> Menghapus semua jadwal piket yang ada pada asisten id
-  static async deletePiketByAslabID(req, res, next) {
+  static async deletePiketByAslabId(req, res, next) {
     try {
       const aslabID = req.params.aslabID;
       const { kelas_id, periode } = req.body;
