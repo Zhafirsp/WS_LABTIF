@@ -37,7 +37,7 @@ class ProgramController {
             batas_waktu,
           });
           return resSend(
-            200,
+            201,
             "Berhasil menambahkan data program baru",
             newProgram,
             res

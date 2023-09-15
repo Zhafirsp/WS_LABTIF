@@ -13,10 +13,10 @@ router.post("/krs", SevimaController.updateDataKrs);
 // GET All Data Jadwal Praktikum By Periode
 router.get("/jadwalpraktikum", SevimaController.getAllJadwalByPeriode);
 
-// GET All Praktikan By Kelas ID
-router.get("/praktikan/:kelasID", SevimaController.getAllPraktikanByKelasId);
-
 // GET All Mahasiswa By Periode
-router.get("/mahasiswa/:periode", SevimaController.getAllMahasiswaByPeriode);
+router.get("/mahasiswa", SevimaController.getAllMahasiswaByPeriode);
+
+// GET All Praktikan By Kelas ID
+router.get("/praktikan", SevimaController.getAllPraktikanByKelasId);
 
 module.exports = router;

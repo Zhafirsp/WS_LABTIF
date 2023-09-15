@@ -108,7 +108,7 @@ class JadwalController {
           await JadwalPiket.bulkCreate(newPiket);
           return resSend(
             201,
-            `Berhasil menambahkan jadwal piket baru periode ${periode} untuk Asisten dengan id ${asisten_id} pada kelas id ${kelasID}`,
+            `Berhasil menambahkan jadwal piket asisten baru periode ${periode} untuk Asisten dengan id ${asisten_id} pada kelas id ${kelasID}`,
             newPiket,
             res
           );
@@ -137,13 +137,13 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket dengan periode ${periode} tidak ditemukan`,
+          `Data jadwal piket asisten dengan periode ${periode} tidak ditemukan`,
           res
         );
       } else {
         return resSend(
           200,
-          `Berhasil mendapatkan seluruh data jadwal piket dengan periode ${periode}`,
+          `Berhasil mendapatkan seluruh data jadwal piket asisten dengan periode ${periode}`,
           dataPikets,
           res
         );
@@ -173,13 +173,13 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket periode ${periode} dengan kelas id ${kelasID} tidak ditemukan`,
+          `Data jadwal piket asisten periode ${periode} dengan kelas id ${kelasID} tidak ditemukan`,
           res
         );
       } else {
         resSend(
           200,
-          `Berhasil mendapatkan seluruh data jadwal piket periode ${periode} dengan kelas id ${kelasID}`,
+          `Berhasil mendapatkan seluruh data jadwal piket asisten periode ${periode} dengan kelas id ${kelasID}`,
           dataPikets,
           res
         );
@@ -211,7 +211,7 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket periode ${periode} dengan kelas id ${kelas_id} dan asisten id ${aslabID} tidak ditemukan`,
+          `Data jadwal piket asisten periode ${periode} dengan kelas id ${kelas_id} dan asisten id ${aslabID} tidak ditemukan`,
           res
         );
       } else {
@@ -275,7 +275,7 @@ class JadwalController {
 
             return resSend(
               200,
-              `Berhasil mengubah jadwal piket periode ${periode} pada kelas id ${kelas_id} dan asisten dengan id ${aslabID}`,
+              `Berhasil mengubah jadwal piket asisten periode ${periode} pada kelas id ${kelas_id} dan asisten dengan id ${aslabID}`,
               updatedPiket,
               res
             );
@@ -307,7 +307,7 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket periode ${periode} dengan kelas id ${kelasID} tidak ditemukan`,
+          `Data jadwal piket asisten periode ${periode} dengan kelas id ${kelasID} tidak ditemukan`,
           res
         );
       } else {
@@ -319,7 +319,7 @@ class JadwalController {
         });
         return resSend(
           200,
-          `Berhasil menghapus semua data jadwal piket periode ${periode} yang ada pada kelas id ${kelasID}`,
+          `Berhasil menghapus semua data jadwal piket asisten periode ${periode} pada kelas id ${kelasID}`,
           dataPikets,
           res
         );
@@ -351,7 +351,7 @@ class JadwalController {
       if (dataPikets.length === 0) {
         return resError(
           404,
-          `Data jadwal piket periode ${periode} dengan kelas id ${kelas_id} dan asisten id ${aslabID} tidak ditemukan`,
+          `Data jadwal piket asisten periode ${periode} dengan kelas id ${kelas_id} dan asisten id ${aslabID} tidak ditemukan`,
           res
         );
       } else {
@@ -372,7 +372,7 @@ class JadwalController {
         });
         return resSend(
           200,
-          `Berhasil menghapus jadwal piket periode ${periode} dengan kelas id ${kelas_id} dan asisten dengan id ${aslabID}`,
+          `Berhasil menghapus jadwal piket asisten periode ${periode} dengan kelas id ${kelas_id} dan asisten dengan id ${aslabID}`,
           deletedPiket,
           res
         );

@@ -7,7 +7,7 @@ dotenv.config();
 const sevimaURL = process.env.BASEURL_SEVIMA;
 
 class SevimaHelper {
-  static async getMahasiswaIF(periode, limit) {
+  static async getMahasiswaIf(periode, limit) {
     try {
       const token = await getToken();
       const response = await axios.get(sevimaURL + "/biodatamhs", {
@@ -38,7 +38,7 @@ class SevimaHelper {
     }
   }
 
-  static async getDosenIF(homebase, limit, nip) {
+  static async getDosenIf(homebase, limit, nip) {
     try {
       const token = await getToken();
 
@@ -172,7 +172,7 @@ class SevimaHelper {
     }
   }
 
-  static async getKRSMahasiswaIF(periode, limit) {
+  static async getKrsMahasiswaIf(periode, limit) {
     try {
       const token = await getToken();
       const response = await axios.get(sevimaURL + "/krsmahasiswa", {

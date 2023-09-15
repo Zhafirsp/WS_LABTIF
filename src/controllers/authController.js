@@ -9,7 +9,7 @@ const {
 
 class AuthController {
   // Login
-  static async Login(req, res, next) {
+  static async login(req, res, next) {
     try {
       const { username, password } = req.body;
 
@@ -48,7 +48,7 @@ class AuthController {
 
           // response sama dengan live_token SEVIMA
           return res.status(200).send({
-            message: "User Berhasil Login",
+            message: "Berhasil login",
             access_token: token,
             expires_in: expiresIn.toString(),
           });
@@ -99,7 +99,7 @@ class AuthController {
       const token = generateToken(dataUser, expiresIn);
 
       res.status(200).send({
-        message: " Berhasil mendapatkan refresh token",
+        message: "Berhasil mendapatkan refresh token",
         access_token: token,
         expires_in: expiresIn.toString(),
       });
@@ -116,7 +116,7 @@ class AuthController {
   }
 
   // Logout
-  static async Logout(req, res, next) {
+  static async logout(req, res, next) {
     try {
       /* 
         Optional chaining (?.) 
@@ -141,7 +141,9 @@ class AuthController {
         // Menghapus refresh_token yang ada di cookie
         res.clearCookie("refresh_token");
 
-        return resSend(200, "User Berhasil Logout ", null, res);
+        return res.status(200).send({
+          message: "Berhasil logout",
+        });
       }
 
       // Data user ada?
@@ -153,7 +155,9 @@ class AuthController {
       );
 
       res.clearCookie("refresh_token");
-      return resSend(200, "User Berhasil Logout ", null, res);
+      return res.status(200).send({
+        message: "Berhasil logout",
+      });
     } catch (error) {
       next(error);
     }

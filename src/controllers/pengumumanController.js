@@ -32,7 +32,7 @@ class PengumumanController {
         });
 
         return resSend(
-          200,
+          201,
           "Berhasil menambahkan data pengumuman baru",
           newPengumuman,
           res

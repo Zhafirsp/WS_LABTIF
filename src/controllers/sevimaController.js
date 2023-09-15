@@ -15,7 +15,7 @@ class SevimaController {
     try {
       const { periode, limit } = req.body;
 
-      const mahasiswaArray = await SevimaHelper.getMahasiswaIF(periode, limit);
+      const mahasiswaArray = await SevimaHelper.getMahasiswaIf(periode, limit);
       const isEmptyTableMahasiswa = (await Mahasiswa.count()) === 0;
 
       const responseArray = [];
@@ -64,7 +64,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Berhasil memperbaharui data Mahasiswa dengan NIM ${mahasiswa.nim}`,
+              message: `Berhasil memperbarui data Mahasiswa dengan NIM ${mahasiswa.nim}`,
               data: existingMahasiswa,
             });
           } else {
@@ -93,7 +93,7 @@ class SevimaController {
 
       return resSend(
         200,
-        "Berhasil memperbaharui data Mahasiswa dari SEVIMA",
+        "Berhasil memperbarui data Mahasiswa dari SEVIMA",
         responseArray,
         res
       );
@@ -106,7 +106,7 @@ class SevimaController {
   static async updateDataDosen(req, res, next) {
     try {
       const { homebase, limit, nip } = req.body;
-      const dosenArray = await SevimaHelper.getDosenIF(homebase, limit, nip);
+      const dosenArray = await SevimaHelper.getDosenIf(homebase, limit, nip);
 
       const isEmptyTableDosen = (await Dosen.count()) === 0;
       const responseArray = [];
@@ -152,7 +152,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Berhasil memperbaharui Data dosen dengan NIP ${dosen.nip}`,
+              message: `Berhasil memperbarui Data dosen dengan NIP ${dosen.nip}`,
               data: existingDosen,
             });
           } else {
@@ -178,7 +178,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Berhasil memperbaharui data dosen dari SEVIMA",
+        "Berhasil memperbarui data dosen dari SEVIMA",
         responseArray,
         res
       );
@@ -260,7 +260,7 @@ class SevimaController {
             console.log(existingMatkul);
             responseArray.push({
               status: 200,
-              message: `Berhasil memperbaharui data mata kuliah dengan kode mk ${matkul.kodemk}`,
+              message: `Berhasil memperbarui data mata kuliah dengan kode mk ${matkul.kodemk}`,
               data: existingMatkul,
             });
           } else {
@@ -287,7 +287,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Berhasil memperbaharui data mata kuliah dari SEVIMA",
+        "Berhasil memperbarui data mata kuliah dari SEVIMA",
         responseArray,
         res
       );
@@ -371,7 +371,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Berhasil memperbaharui data kelas dengan Kelas ID ${kelas.kelasid}`,
+              message: `Berhasil memperbarui data kelas dengan Kelas ID ${kelas.kelasid}`,
               data: existingKelas,
             });
           } else {
@@ -398,7 +398,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Berhasil memperbaharui data kelas dari SEVIMA",
+        "Berhasil memperbarui data kelas dari SEVIMA",
         responseArray,
         res
       );
@@ -468,7 +468,7 @@ class SevimaController {
         responseArray.push({
           status: 201,
           message:
-            "Berhasil menambahkan data jadwal baru dari SEVIMA API ke database",
+            "Berhasil menambahkan data jadwal praktikum baru dari SEVIMA API ke database",
           data: dataJadwal,
         });
       } else {
@@ -507,7 +507,7 @@ class SevimaController {
 
             responseArray.push({
               status: 200,
-              message: `Berhasil memperbaharui data jadwal dengan Praktik ID ${jadwal.jadwalid}`,
+              message: `Berhasil memperbarui data jadwal praktikum dengan Praktik ID ${jadwal.jadwalid}`,
               data: existingJadwal,
             });
           } else {
@@ -545,7 +545,7 @@ class SevimaController {
       }
       return resSend(
         200,
-        "Berhasil memperbaharui data jadwal dari SEVIMA",
+        "Berhasil memperbarui data jadwal praktikum dari SEVIMA",
         responseArray,
         res
       );
@@ -559,7 +559,7 @@ class SevimaController {
     try {
       const { periode, limit } = req.body;
 
-      const krsArray = await SevimaHelper.getKRSMahasiswaIF(periode, limit);
+      const krsArray = await SevimaHelper.getKrsMahasiswaIf(periode, limit);
 
       const isEmptyTableKRS = (await Krs.count()) === 0;
       const responseArray = [];
@@ -675,7 +675,7 @@ class SevimaController {
 
                 responseArray.push({
                   status: 200,
-                  message: `Berhasil memperbaharui data krs milik NIM ${krs.nim}`,
+                  message: `Berhasil memperbarui data krs milik NIM ${krs.nim}`,
                   data: existingKrs,
                 });
                 uniqueDataKRS[krsDataKey] = true;
@@ -717,10 +717,82 @@ class SevimaController {
 
       return resSend(
         200,
-        "Berhasil memperbaharui data krs dari SEVIMA",
+        "Berhasil memperbarui data krs dari SEVIMA",
         responseArray,
         res
       );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // GET All Mahasiswa By Periode
+  static async getAllMahasiswaByPeriode(req, res, next) {
+    try {
+      const { periode } = req.body;
+
+      const dataMhs = await Mahasiswa.findAll({
+        where: {
+          periode_masuk: periode,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+      });
+
+      // Data Mahasiswa kosong?
+      if (dataMhs.length === 0) {
+        return resError(
+          404,
+          `Data Mahasiswa dengan periode ${periode} tidak ditemukan`,
+          res
+        );
+      } else {
+        return resSend(
+          200,
+          `Berhasil mendapatkan seluruh data Mahasiswa pada periode ${periode}`,
+          dataMhs,
+          res
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // GET All Praktikan Kelas ID
+  static async getAllPraktikanByKelasId(req, res, next) {
+    try {
+      const { kelas_id } = req.body;
+
+      const dataKRS = await Krs.findAll({
+        where: {
+          kelas_id,
+        },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+        include: {
+          model: Mahasiswa,
+          attributes: ["nama_mahasiswa"],
+        },
+      });
+
+      // Data KRS kosong?
+      if (dataKRS.length === 0) {
+        return resError(
+          404,
+          `Data Praktikan dengan kelas id ${kelas_id} tidak ditemukan`,
+          res
+        );
+      } else {
+        return resSend(
+          200,
+          `Berhasil mendapatkan seluruh data Praktikan pada kelas id ${kelas_id}`,
+          dataKRS,
+          res
+        );
+      }
     } catch (error) {
       next(error);
     }
@@ -752,78 +824,6 @@ class SevimaController {
           200,
           `Berhasil mendapatkan seluruh data jadwal praktikum dengan periode ${periode}`,
           dataPraktiks,
-          res
-        );
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  // GET All Mahasiswa By Periode
-  static async getAllMahasiswaByPeriode(req, res, next) {
-    try {
-      const periode = req.params.periode;
-
-      const dataMhs = await Mahasiswa.findAll({
-        where: {
-          periode_masuk: periode,
-        },
-        attributes: {
-          exclude: ["created_at", "updated_at"],
-        },
-      });
-
-      // Data Mahasiswa kosong?
-      if (dataMhs.length === 0) {
-        return resError(
-          404,
-          `Data Mahasiswa dengan periode ${periode} tidak ditemukan`,
-          res
-        );
-      } else {
-        return resSend(
-          200,
-          `Berhasil mendapatkan data Mahasiswa pada periode ${periode}`,
-          dataMhs,
-          res
-        );
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  // GET All Praktikan Kelas ID
-  static async getAllPraktikanByKelasId(req, res, next) {
-    try {
-      const kelasID = req.params.kelasID;
-
-      const dataKRS = await Krs.findAll({
-        where: {
-          kelas_id: kelasID,
-        },
-        attributes: {
-          exclude: ["created_at", "updated_at"],
-        },
-        include: {
-          model: Mahasiswa,
-          attributes: ["nama_mahasiswa"],
-        },
-      });
-
-      // Data KRS kosong?
-      if (dataKRS.length === 0) {
-        return resError(
-          404,
-          `Data Praktikan dengan kelas id ${kelasID} tidak ditemukan`,
-          res
-        );
-      } else {
-        return resSend(
-          200,
-          `Berhasil mendapatkan data Praktikan pada kelas id ${kelasID}`,
-          dataKRS,
           res
         );
       }
