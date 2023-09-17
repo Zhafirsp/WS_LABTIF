@@ -1,7 +1,8 @@
-const { Op, Model } = require("sequelize");
-const { User, Laboran, Mahasiswa } = require("../db/models");
+const { Op } = require("sequelize");
+const { User, Mahasiswa } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
 const { hashPassword } = require("../helpers/bcrypt");
+const googleapi = require("../config/googleapi");
 
 class UserController {
   // ADD New User Otomatis untuk Mahasiswa Baru
@@ -61,7 +62,7 @@ class UserController {
   // ADD New User Manual
   static async addUser(req, res, next) {
     try {
-      const { username, password, email, no_hp, image_url, role } = req.body;
+      const { username, password, email, no_hp, role } = req.body;
 
       // Mencegah duplikasi username dan email
       const userExist = await User.findOne({
@@ -79,6 +80,17 @@ class UserController {
         }
       } else {
         // Username belum terdaftar?
+
+        let image_url = null; // Default null jika tidak ada gambar yang diunggah
+
+        // Jika ada inputan gambar
+        if (req.file) {
+          const { filename } = req.file;
+
+          const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
+          image_url = fileId;
+        }
+
         const newUser = await User.create({
           username,
           password,
@@ -230,6 +242,25 @@ class UserController {
         }
       }
 
+      // Jika ada inputan gambar
+      if (req.file) {
+        const { filename } = req.file;
+
+        const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
+        req.body.image_url = fileId;
+
+        // Jika sebelumnya ada image_url, hapus gambar lama dari google drive
+        const oldImageUrl = dataUser.image_url;
+        if (oldImageUrl) {
+          // Memisahkan ID file dari URL Google Drive
+          const urlParts = oldImageUrl.split("/");
+          const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+          // Hapus file dari Google Drive dengan menggunakan ID file
+          await googleapi.deleteFileFromDrive(fileId);
+        }
+      }
+
       await User.update(req.body, {
         where: {
           user_id: Number(userID),
@@ -257,6 +288,17 @@ class UserController {
       });
 
       if (dataUser) {
+        // Jika sebelumnya ada image_url, hapus gambar dari google drive
+        const oldImageUrl = dataUser.image_url;
+        if (oldImageUrl) {
+          // Memisahkan ID file dari URL Google Drive
+          const urlParts = oldImageUrl.split("/");
+          const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+          // Hapus file dari Google Drive dengan menggunakan ID file
+          await googleapi.deleteFileFromDrive(fileId);
+        }
+
         await User.destroy({
           where: {
             user_id: Number(userID),

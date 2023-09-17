@@ -1,3 +1,4 @@
+const googleapi = require("../config/googleapi");
 const {
   Program,
   Pendaftaran,
@@ -14,7 +15,15 @@ class PendaftaranController {
     try {
       const programID = req.params.programID;
 
-      const { file_syarat, bidang_praktikum } = req.body;
+      const { bidang_praktikum } = req.body;
+
+      if (!req.file) {
+        return resError(400, "File syarat tidak ditemukan", res);
+      }
+
+      const { filename } = req.file;
+
+      const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
 
       const dataProgram = await Program.findOne({
         where: {
@@ -43,7 +52,7 @@ class PendaftaranController {
         if (userExists) {
           // File syarat kosong?
           if (userExists.file_syarat === null) {
-            userExists.file_syarat = file_syarat;
+            userExists.file_syarat = fileId; // Menggunakan ID file dari Google Drive
             await userExists.save();
 
             return resSend(
@@ -103,7 +112,7 @@ class PendaftaranController {
             email: user.email,
             email_kampus: user.Mahasiswa.email_kampus,
             no_hp: user.no_hp,
-            file_syarat,
+            file_syarat: fileId,
             bidang_praktikum,
           };
 
@@ -450,6 +459,13 @@ class PendaftaranController {
           } else {
             // User memiliki data file syarat yang telah diupload sebelumnya
             if (dataPendaftaran.file_syarat) {
+              // Memisahkan ID file dari URL Google Drive
+              const urlParts = dataPendaftaran.file_syarat.split("/");
+              const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+              // Hapus file dari Google Drive dengan menggunakan ID file
+              await googleapi.deleteFileFromDrive(fileId);
+
               // Hapus file_syarat pada data pendaftaran
               dataPendaftaran.file_syarat = null;
               await dataPendaftaran.save();

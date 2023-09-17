@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "manajemen-praktikum-labtif",
+  "private_key_id": "7025b640f284804dc797a757ff930bcb4c4758e7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDF7qZPjkQ65XJq\nhT+Mfxx8n71B12g1e7WJ6w09kr5/aDpeOtq1lSRmCuvvVvQVYSVVx05aO9MBrPsQ\nAvThrXGjxPHXLqpp3TXOJDB36Awy5pAsx58hG1s3WkursCNOc/FOZfYWjeESucvK\nexP/bdGoQlvGrhHQxut0MNV3NL0UihxhsNzqj/kofBoAL3++FqVA1Zi3ElxMgiAw\nk5mNPw4Xt82K98MrIQxGm2DjbhhWQMTLsxE+ADx6RaT2kX2t6gxQkwh/idCjgbRt\nIHQ7HeIeysmNLiSxNeidtIoQRa9oYC9SXFH0Cv+9VAb2gsVHkpUdDsoyQIrc04s6\nckUFoH+nAgMBAAECggEADp34XTwEkOmR614/b648GdNSzt0hXoBuIIB3IAV0GQTx\no99/zaofyoNi93APTXw48sk/DDiKdX9jTm7my7sbKdIpCVBHwyf+ybmayg1ycoMx\nbC/VHMT1lbRkOIp6SQMUnnVhg4/jFRbF1IRbWTaF0FcPilrKM7CvrGB7heFOAglW\n//EDNHvA57ZhoFBqbM/n5J9NKWPNe1P3qE9NgRpq2iM/3vIhE42HOBKColA2rblX\ny6ZRZYdcYqkTKBTAjpLhLT1MU7zrHQmnTcH4Ul6gSzPgdREBfvmq1H92HTr78pqy\nfsLIMVbClLPn1UZtCgpnsgPZb2uQhZBN1E/3zy8S1QKBgQD05ywVhh0jkX/zIAQP\nWgo2jD+WR+xLIOzpHorxLOuuhH9/4zYL4VP5LC32oqzeCzGPyHtdKV81gTfFSofF\nshTCEsXx6Lvr47xYSDQLViboUsNpbFYWQNmiYfYDJSMi9bThnIEWchmS/Nfa54df\nMG5ujJCx3ApjY3vDEEs2jby0tQKBgQDO5qAVDyZWWqlRqCk/t0crbBoAUS1WiMkU\nLkXQPviZoe/UKgkaxeLBeRrjjtN+jEJoZlyzW2NZHeEtx6vZrYbBSqNeYeoe3V5t\nUmyzbBhTav5tij8t9MXcoTuv1Lqej0A7MxY4kMhNvXiFPxxsa/7dgP38zL90FbC2\nOjC2TZAYawKBgE7LqjVqpylwgPhajrPZxntyeGsDzRUHDPKcbxvV1iaaXuNo2VTN\nNNVwz4ERKglvFI0sdfStgQKYBrelmTWUbHVc0O9acEwfQ9QrtwMGvxH0vwbGYpRa\nXSuP1TWB12JCJ+aHEkmEgJH4ZAL8h2OrE3ziIRP4tibwNTu3nFt7EwIZAoGAJDLB\nSy3tXSpbeUfcf6NHNlehbPDG597inz9BQ5/gyrBET3BTS3XXqFXR2IJCil9rtuxB\nx7dzeEH8BZBrhpgPfX3be0XSOjgsrx++mN2Om/maLfwD9bxfaaxjzu1/AQK7ECBu\nANOD1+YQUe+qv2Vdn89ToIkJ7ftlgVxI7XxAe6UCgYAC4rX6lu0VfSHotSs6DIPH\n41mnY8lY7NSABWaAGUakfLwgMax3sEP3+kJC/Xyamn7Tvdw+0aWcCkm6+tEnUlaa\nRE79kOLdTxYFQpoysfBMG3vmxW37ZwTgitYBoM2puLKBvgFX8aI+Bcz+JTm0BUNI\nPWdyViOPSRogdvHVNSoQLw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "labtif-service@manajemen-praktikum-labtif.iam.gserviceaccount.com",
+  "client_id": "116221674436572989414",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/labtif-service%40manajemen-praktikum-labtif.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

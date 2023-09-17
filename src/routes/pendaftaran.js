@@ -4,6 +4,7 @@ const router = express.Router();
 const Authenticated = require("../middleware/authentication");
 const Authorization = require("../middleware/authorization");
 const PendaftaranController = require("../controllers/pendaftaranController");
+const uploadFile = require("../config/uploadFile");
 
 router.use(Authenticated);
 
@@ -12,6 +13,7 @@ router.use(Authenticated);
 router.post(
   "/:programID",
   Authorization.verifyMahasiswa,
+  uploadFile.single("file_syarat"),
   PendaftaranController.addDaftarByProgramId
 );
 
