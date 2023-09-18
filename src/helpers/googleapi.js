@@ -4,7 +4,7 @@ const fs = require("fs");
 // Fungsi untuk mengunggah file ke Google Drive
 async function uploadFileToDrive(file, fileName) {
   const auth = new google.auth.GoogleAuth({
-    keyFile: "./src/apikey.json",
+    keyFile: "./src/config/apikey.json",
     scopes: "https://www.googleapis.com/auth/drive.file",
   });
 
@@ -39,7 +39,7 @@ async function uploadFileToDrive(file, fileName) {
 // Fungsi untuk menghapus file dari Google Drive berdasarkan ID file
 async function deleteFileFromDrive(fileId) {
   const auth = new google.auth.GoogleAuth({
-    keyFile: "./src/apikey.json",
+    keyFile: "./src/config/apikey.json",
     scopes: "https://www.googleapis.com/auth/drive.file",
   });
 

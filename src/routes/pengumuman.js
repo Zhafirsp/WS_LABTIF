@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const Authenticated = require("../middleware/authentication");
-const uploadFile = require("../config/uploadFile");
+const uploadFile = require("../middleware/uploadFile");
+
 const PengumumanController = require("../controllers/pengumumanController");
 router.use(Authenticated);
 

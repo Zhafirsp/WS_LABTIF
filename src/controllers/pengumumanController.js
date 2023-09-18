@@ -1,12 +1,13 @@
 const { Pengumuman } = require("../db/models");
+
+const googleapi = require("../helpers/googleapi");
 const { resError, resSend } = require("../helpers/response");
-const googleapi = require("../config/googleapi");
 
 class PengumumanController {
   // ADD New Pengumuman
   static async addPengumuman(req, res, next) {
     try {
-      const { judul, dokumen, link, is_publish } = req.body;
+      const { judul, link, is_publish } = req.body;
 
       // Data judul kosong?
       if (!judul) {

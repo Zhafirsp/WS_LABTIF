@@ -1,4 +1,3 @@
-const googleapi = require("../config/googleapi");
 const {
   Program,
   Pendaftaran,
@@ -6,7 +5,9 @@ const {
   Mahasiswa,
   Asisten,
 } = require("../db/models");
+
 const generateAslabId = require("../helpers/generateAsistenId");
+const googleapi = require("../helpers/googleapi");
 const { resError, resSend } = require("../helpers/response");
 
 class PendaftaranController {

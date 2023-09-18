@@ -1,8 +1,9 @@
 const { Op } = require("sequelize");
 const { User, Mahasiswa } = require("../db/models");
-const { resSend, resError } = require("../helpers/response");
+
+const googleapi = require("../helpers/googleapi");
 const { hashPassword } = require("../helpers/bcrypt");
-const googleapi = require("../config/googleapi");
+const { resSend, resError } = require("../helpers/response");
 
 class UserController {
   // ADD New User Otomatis untuk Mahasiswa Baru
