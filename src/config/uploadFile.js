@@ -3,7 +3,7 @@ const path = require("path");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     const nim = req.userLogin.username;
@@ -23,6 +23,9 @@ const fileFilter = (req, file, cb) => {
     file.mimetype === "application/msword" || // Dokumen Word (doc)
     file.mimetype ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // Dokumen Word (docx)
+    file.mimetype === "application/vnd.ms-excel" || // Excel Spreadsheet (XLS)
+    file.mimetype ===
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || // Excel Spreadsheet (XLSX)
     file.mimetype === "text/plain" || // Teks
     file.mimetype === "application/zip" // ZIP
   ) {
