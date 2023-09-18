@@ -1,5 +1,7 @@
 const { Op } = require("sequelize");
 const { User } = require("../db/models");
+
+const googleapi = require("../helpers/googleapi");
 const { hashPassword } = require("../helpers/bcrypt");
 const { resSend, resError } = require("../helpers/response");
 
@@ -45,7 +47,7 @@ class ProfileController {
 
       const { username, password, email, role } = req.body;
 
-      const user = await User.findOne({
+      const dataUser = await User.findOne({
         where: {
           user_id: Number(userLogin.user_id),
         },
@@ -98,11 +100,29 @@ class ProfileController {
         }
       }
 
-      const userID = user?.user_id;
+      // Jika ada inputan gambar
+      if (req.file) {
+        const { filename } = req.file;
+        const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
+        req.body.image_url = fileId;
+
+        // Jika sebelumnya ada image_url, hapus gambar lama dari google drive
+        const oldImageUrl = dataUser.image_url;
+        if (oldImageUrl) {
+          // Memisahkan ID file dari URL Google Drive
+          const urlParts = oldImageUrl.split("/");
+          const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+          // Hapus file dari Google Drive dengan menggunakan ID file
+          await googleapi.deleteFileFromDrive(fileId);
+        }
+      }
+
+      // const userID = user?.user_id;
 
       await User.update(req.body, {
         where: {
-          user_id: Number(userID),
+          user_id: Number(userLogin.user_id),
         },
       });
 
