@@ -10,7 +10,7 @@ const AsistenController = require("../controllers/asistenController");
 router.get("/", AsistenController.getAllAslab);
 router.get("/active", AsistenController.getAslabActive);
 router.get("/:id", AsistenController.getAslabById);
-router.put("/:id", AsistenController.updateAslabByID);
-router.delete("/:id", AsistenController.deleteAslabByID);
+router.put("/:id", AsistenController.updateAslabById);
+router.delete("/:id", AsistenController.deleteAslabById);
 
 module.exports = router;

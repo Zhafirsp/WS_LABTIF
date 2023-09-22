@@ -5,6 +5,7 @@ const {
   Matkul,
   Kelas,
   JadwalPraktik,
+  JadwalPiket,
   Krs,
 } = require("../db/models");
 const { resSend, resError } = require("../helpers/response");
@@ -810,6 +811,27 @@ class SevimaController {
         attributes: {
           exclude: ["created_at", "updated_at"],
         },
+        attributes: {
+          exclude: ["created_at", "updated_at"],
+        },
+        include: [
+          {
+            model: Matkul,
+            attributes: ["nama_mk", "sks_mk", "kode_mk"],
+          },
+          {
+            model: Kelas,
+            attributes: ["nama_kelas", "nama_ruang"],
+          },
+          {
+            model: Dosen,
+            attributes: ["nama_dosen", "dosen_nip"],
+          },
+          {
+            model: JadwalPiket,
+            attributes: ["asisten_id", "nama_asisten"],
+          },
+        ],
       });
 
       // Data Praktik kosong?

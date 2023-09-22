@@ -78,7 +78,7 @@ class AsistenController {
   }
 
   // UPDATE Asisten By ID
-  static async updateAslabByID(req, res, next) {
+  static async updateAslabById(req, res, next) {
     try {
       const aslabID = req.params.id;
       const { golongan, is_active } = req.body;
@@ -124,7 +124,7 @@ class AsistenController {
   }
 
   // DELETE Asisten By ID
-  static async deleteAslabByID(req, res, next) {
+  static async deleteAslabById(req, res, next) {
     try {
       const aslabID = req.params.id;
 
