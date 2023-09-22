@@ -54,11 +54,11 @@ class AsistenController {
 
   // GET Asisten By ID
   static async getAslabById(req, res, next) {
-    const asistenID = req.params.id;
+    const aslabID = req.params.id;
 
     const dataAsisten = await Asisten.findOne({
       where: {
-        asisten_id: asistenID,
+        asisten_id: aslabID,
       },
       attributes: {
         exclude: ["created_at", "updated_at"],
@@ -66,11 +66,11 @@ class AsistenController {
     });
 
     if (!dataAsisten) {
-      resError(404, `Data Asisten dengan id ${asistenID} tidak ditemukan`, res);
+      resError(404, `Data Asisten dengan id ${aslabID} tidak ditemukan`, res);
     } else {
       resSend(
         200,
-        `Berhasil mendapatkan data Asisten dengan id ${asistenID}`,
+        `Berhasil mendapatkan data Asisten dengan id ${aslabID}`,
         dataAsisten,
         res
       );
@@ -78,14 +78,14 @@ class AsistenController {
   }
 
   // UPDATE Asisten By ID
-  static async updateAslabByID(req, res, next) {
+  static async updateAslabById(req, res, next) {
     try {
-      const asistenID = req.params.id;
+      const aslabID = req.params.id;
       const { golongan, is_active } = req.body;
 
       const dataAsisten = await Asisten.findOne({
         where: {
-          asisten_id: asistenID,
+          asisten_id: aslabID,
         },
         attributes: {
           exclude: ["created_at", "updated_at"],
@@ -96,7 +96,7 @@ class AsistenController {
       if (!dataAsisten) {
         return resError(
           404,
-          `Data Asisten dengan id ${asistenID} tidak ditemukan`,
+          `Data Asisten dengan id ${aslabID} tidak ditemukan`,
           res
         );
       } else {
@@ -107,13 +107,13 @@ class AsistenController {
 
         await Asisten.update(updatedAslab, {
           where: {
-            asisten_id: asistenID,
+            asisten_id: aslabID,
           },
         });
 
         return resSend(
           200,
-          `Berhasil mengubah data Asisten dengan id ${asistenID}`,
+          `Berhasil mengubah data Asisten dengan id ${aslabID}`,
           updatedAslab,
           res
         );
@@ -124,13 +124,13 @@ class AsistenController {
   }
 
   // DELETE Asisten By ID
-  static async deleteAslabByID(req, res, next) {
+  static async deleteAslabById(req, res, next) {
     try {
-      const asistenID = req.params.id;
+      const aslabID = req.params.id;
 
       const dataAsisten = await Asisten.findOne({
         where: {
-          asisten_id: asistenID,
+          asisten_id: aslabID,
         },
         attributes: {
           exclude: ["created_at", "updated_at"],
@@ -141,7 +141,7 @@ class AsistenController {
       if (!dataAsisten) {
         return resError(
           404,
-          `Data Asisten dengan id ${asistenID} tidak ditemukan`,
+          `Data Asisten dengan id ${aslabID} tidak ditemukan`,
           res
         );
       } else {
@@ -164,13 +164,13 @@ class AsistenController {
         };
         await Asisten.update(deletedAsisten, {
           where: {
-            asisten_id: asistenID,
+            asisten_id: aslabID,
           },
         });
 
         return resSend(
           200,
-          `Berhasil menghapus data Asisten dengan id ${asistenID}`,
+          `Berhasil menghapus data Asisten dengan id ${aslabID}`,
           deletedAsisten,
           res
         );

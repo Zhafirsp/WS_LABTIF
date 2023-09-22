@@ -14,7 +14,7 @@ module.exports = {
       },
       tanggal_daftar: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       nim: {
         allowNull: false,

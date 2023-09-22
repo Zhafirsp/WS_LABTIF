@@ -37,7 +37,7 @@ class ProgramController {
             batas_waktu,
           });
           return resSend(
-            200,
+            201,
             "Berhasil menambahkan data program baru",
             newProgram,
             res
@@ -119,6 +119,9 @@ class ProgramController {
     const dataProgram = await Program.findOne({
       where: {
         program_id: Number(programID),
+      },
+      attributes: {
+        exclude: ["created_at", "updated_at"],
       },
     });
 

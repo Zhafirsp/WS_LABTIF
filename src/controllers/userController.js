@@ -1,7 +1,9 @@
-const { Op, Model } = require("sequelize");
-const { User, Laboran, Mahasiswa } = require("../db/models");
-const { resSend, resError } = require("../helpers/response");
+const { Op } = require("sequelize");
+const { User, Mahasiswa } = require("../db/models");
+
+const googleapi = require("../helpers/googleapi");
 const { hashPassword } = require("../helpers/bcrypt");
+const { resSend, resError } = require("../helpers/response");
 
 class UserController {
   // ADD New User Otomatis untuk Mahasiswa Baru
@@ -51,7 +53,7 @@ class UserController {
           res
         );
       } else {
-        return resSend(200, "Data User sudah up-to-date", createdUsers, res);
+        return resSend(200, "Data Mahasiswa kosong", createdUsers, res);
       }
     } catch (error) {
       next(error);
@@ -61,24 +63,35 @@ class UserController {
   // ADD New User Manual
   static async addUser(req, res, next) {
     try {
-      const { username, password, email, no_hp, image_url, role } = req.body;
+      const { username, password, email, no_hp, role } = req.body;
 
       // Mencegah duplikasi username dan email
-      const existingUser = await User.findOne({
+      const userExist = await User.findOne({
         where: {
           [Op.or]: [{ username }, { email }],
         },
       });
 
       // User sudah terdaftar?
-      if (existingUser) {
-        if (existingUser.username === username) {
+      if (userExist) {
+        if (userExist.username === username) {
           return resError(400, "Username sudah terdaftar", res);
-        } else if (existingUser.email === email) {
+        } else if (userExist.email === email) {
           return resError(400, "Email sudah terdaftar", res);
         }
       } else {
         // Username belum terdaftar?
+
+        let image_url = null; // Default null jika tidak ada gambar yang diunggah
+
+        // Jika ada inputan gambar
+        if (req.file) {
+          const { filename } = req.file;
+
+          const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
+          image_url = fileId;
+        }
+
         const newUser = await User.create({
           username,
           password,
@@ -162,7 +175,7 @@ class UserController {
   static async updateUserById(req, res, next) {
     const userID = req.params.id;
 
-    const { password, email, role } = req.body;
+    const { username, password, email, role } = req.body;
 
     const dataUser = await User.findOne({
       where: {
@@ -177,11 +190,20 @@ class UserController {
         res
       );
     } else {
+      // Jika ada username yang akan diupdate
+      if (username) {
+        return resError(400, "Data username tidak bisa diubah", res);
+      }
+
       // Jika ada email yang akan diupdate
       if (email) {
         const emailExist = await User.findOne({
           where: {
             email,
+            user_id: {
+              // Mengecualikan email yang dimiliki akun tersebut
+              [Op.not]: Number(userID),
+            },
           },
         });
 
@@ -196,7 +218,7 @@ class UserController {
       if (password) {
         // Password hanya bisa diupdate oleh pemilik akun itu sendiri
         if (Number(userID) !== Number(userLogin?.user_id)) {
-          return resError(400, "Akses Dilarang!", res);
+          return resError(400, "Akses Dilarang", res);
         } else {
           const passPattern = new RegExp(
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_/!@#$%^&*.])(?=.{8,})"
@@ -217,7 +239,26 @@ class UserController {
       if (role) {
         // Role user hanya bisa diupdate oleh Laboran
         if (userLogin?.role !== "Laboran") {
-          return resError(400, "Akses Dilarang!", res);
+          return resError(400, "Akses Dilarang", res);
+        }
+      }
+
+      // Jika ada inputan gambar
+      if (req.file) {
+        const { filename } = req.file;
+
+        const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
+        req.body.image_url = fileId;
+
+        // Jika sebelumnya ada image_url, hapus gambar lama dari google drive
+        const oldImageUrl = dataUser.image_url;
+        if (oldImageUrl) {
+          // Memisahkan ID file dari URL Google Drive
+          const urlParts = oldImageUrl.split("/");
+          const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+          // Hapus file dari Google Drive dengan menggunakan ID file
+          await googleapi.deleteFileFromDrive(fileId);
         }
       }
 
@@ -248,6 +289,17 @@ class UserController {
       });
 
       if (dataUser) {
+        // Jika sebelumnya ada image_url, hapus gambar dari google drive
+        const oldImageUrl = dataUser.image_url;
+        if (oldImageUrl) {
+          // Memisahkan ID file dari URL Google Drive
+          const urlParts = oldImageUrl.split("/");
+          const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+          // Hapus file dari Google Drive dengan menggunakan ID file
+          await googleapi.deleteFileFromDrive(fileId);
+        }
+
         await User.destroy({
           where: {
             user_id: Number(userID),

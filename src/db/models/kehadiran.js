@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "asisten_id",
         targetKey: "asisten_id",
       });
+      Kehadiran.belongsTo(models.Asisten, {
+        foreignKey: "pengganti_id",
+        targetKey: "asisten_id",
+      });
       Kehadiran.belongsTo(models.JadwalPiket, {
         foreignKey: "piket_id",
         targetKey: "piket_id",
@@ -26,15 +30,13 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER(11),
       },
-      asisten_id: {
-        allowNull: false,
-        type: DataTypes.STRING(11),
-      },
-      nama_asisten: DataTypes.STRING,
       piket_id: {
         allowNull: false,
         type: DataTypes.INTEGER(11),
       },
+      pertemuan: DataTypes.INTEGER(11),
+      asisten_id: DataTypes.STRING(11),
+      nama_asisten: DataTypes.STRING,
       status: {
         allowNull: false,
         type: DataTypes.ENUM("Hadir", "Izin", "Alpha"),
@@ -45,10 +47,8 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      pengganti_id: {
-        allowNull: false,
-        type: DataTypes.STRING(11),
-      },
+      pengganti_id: DataTypes.STRING(11),
+      nama_pengganti: DataTypes.STRING,
     },
     {
       sequelize,

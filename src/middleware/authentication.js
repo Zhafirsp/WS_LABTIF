@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
 
     // Token tidak ada?
     if (!token) {
-      return resError(401, "Kamu harus login terlebih dahulu", res);
+      return resError(401, "Anda harus login terlebih dahulu", res);
     } else {
       const decoded = verifyToken(token);
       if (!decoded) {

@@ -1,3 +1,4 @@
+const { Asisten } = require("../db/models");
 const { resError } = require("../helpers/response");
 
 const verifyLaboran = (req, res, next) => {
@@ -20,7 +21,7 @@ const verifyLaboran = (req, res, next) => {
   }
 };
 
-const verifyAsisten = (req, res, next) => {
+const verifyAsisten = async (req, res, next) => {
   try {
     const userLogin = req.userLogin;
 
@@ -34,6 +35,19 @@ const verifyAsisten = (req, res, next) => {
       );
     }
 
+    // Mencari data asisten untuk memastikan user yang login adalah asisten
+    const asisten = await Asisten.findOne({
+      where: {
+        nim: userLogin.username,
+      },
+    });
+
+    if (!asisten) {
+      return resError(403, "Akses dilarang! User bukan Asisten", res);
+    }
+
+    // userLogin adalah asisten? Simpan data asisten di request
+    req.userAsisten = asisten;
     next();
   } catch (error) {
     next(error);

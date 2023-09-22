@@ -48,7 +48,7 @@ class LaboranController {
           });
 
           return resSend(
-            200,
+            201,
             "Berhasil menambahkan data Laboran baru",
             newLaboran,
             res
@@ -115,11 +115,11 @@ class LaboranController {
   }
 
   // UPDATE Laboran by NIP
-  static async updateLaboranByNIP(req, res, next) {
+  static async updateLaboranByNip(req, res, next) {
     try {
       const laboranNIP = req.params.nip;
 
-      const { nama_laboran } = req.body;
+      const { nip, nama_laboran } = req.body;
 
       const dataLaboran = await Laboran.findOne({
         where: {
@@ -135,6 +135,15 @@ class LaboranController {
           res
         );
       } else {
+        // Jika ada inputan nip
+        if (nip) {
+          return resError(
+            400,
+            "NIP hanya bisa diubah pada data User bagian username",
+            res
+          );
+        }
+
         // Mencegah duplikasi nama Laboran
         const namaExists = await Laboran.findOne({
           where: {
@@ -164,7 +173,7 @@ class LaboranController {
   }
 
   // DELETE Laboran by NIP
-  static async deleteLaboranByNIP(req, res, next) {
+  static async deleteLaboranByNip(req, res, next) {
     try {
       const laboranNIP = req.params.nip;
 

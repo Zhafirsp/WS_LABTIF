@@ -12,7 +12,21 @@ const port = process.env.APP_PORT;
 const app = express();
 
 // Middleware
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Ganti dengan origin frontend Anda
+    credentials: true, // Mengizinkan pengiriman cookie (kredensial)
+  })
+);
+
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader("Access-Control-Allow-Methods", "*");
+//   res.setHeader("Access-Control-Allow-Headers", "*");
+//   next();
+// });
+
 app.use(
   express.urlencoded({
     extended: true,

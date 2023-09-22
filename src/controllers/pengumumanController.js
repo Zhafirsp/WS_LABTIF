@@ -1,11 +1,13 @@
 const { Pengumuman } = require("../db/models");
+
+const googleapi = require("../helpers/googleapi");
 const { resError, resSend } = require("../helpers/response");
 
 class PengumumanController {
   // ADD New Pengumuman
   static async addPengumuman(req, res, next) {
     try {
-      const { judul, dokumen, link, is_publish } = req.body;
+      const { judul, link, is_publish } = req.body;
 
       // Data judul kosong?
       if (!judul) {
@@ -23,6 +25,16 @@ class PengumumanController {
           return resError(404, "Judul sudah ada", res);
         }
 
+        let dokumen = null; // Default null jika tidak ada dokumen yang diunggah
+
+        // Jika dokumen yang akan di upload
+        if (req.file) {
+          const { filename } = req.file;
+
+          const fileId = await googleapi.uploadFileToDrive(req.file, filename);
+          dokumen = fileId;
+        }
+
         const newPengumuman = await Pengumuman.create({
           judul,
           dokumen,
@@ -32,7 +44,7 @@ class PengumumanController {
         });
 
         return resSend(
-          200,
+          201,
           "Berhasil menambahkan data pengumuman baru",
           newPengumuman,
           res
@@ -172,22 +184,34 @@ class PengumumanController {
           }
         }
 
-        const updatedPengumuman = {
-          judul,
-          dokumen,
-          link,
-          is_publish,
-        };
+        // Cek jika ada file baru yang diunggah
+        if (req.file) {
+          const { filename } = req.file;
 
-        await Pengumuman.update(updatedPengumuman, {
+          const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
+          req.body.dokumen = fileId;
+
+          // Jika sebelumnya ada dokumen, hapus file lama dari google drive
+          const oldFileUrl = dataPengumuman.dokumen;
+          if (oldFileUrl) {
+            // Memisahkan ID file dari URL Google Drive
+            const urlParts = oldFileUrl.split("/");
+            const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+            // Hapus file dari Google Drive dengan menggunakan ID file
+            await googleapi.deleteFileFromDrive(fileId);
+          }
+        }
+        await Pengumuman.update(req.body, {
           where: {
             info_id: Number(infoID),
           },
         });
+
         return resSend(
           200,
           `Berhasil mengubah data program dengan id ${infoID}`,
-          updatedPengumuman,
+          req.body,
           res
         );
       }
@@ -219,8 +243,25 @@ class PengumumanController {
         );
       } else {
         // Non-active menampilkan pengumuman
-        dataPengumuman.is_publish = false;
-        await dataPengumuman.save();
+        // dataPengumuman.is_publish = false;
+        // await dataPengumuman.save();
+
+        // Jika sebelumnya ada dokumen, hapus file dari google drive
+        const oldFileUrl = dataPengumuman.dokumen;
+        if (oldFileUrl) {
+          // Memisahkan ID file dari URL Google Drive
+          const urlParts = oldFileUrl.split("/");
+          const fileId = urlParts[urlParts.length - 2]; // Mengambil bagian kedua terakhir dari URL sebagai ID file
+
+          // Hapus file dari Google Drive dengan menggunakan ID file
+          await googleapi.deleteFileFromDrive(fileId);
+        }
+
+        await Pengumuman.destroy({
+          where: {
+            info_id: Number(infoID),
+          },
+        });
 
         return resSend(
           200,

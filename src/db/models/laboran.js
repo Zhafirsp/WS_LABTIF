@@ -2,11 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Laboran extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       Laboran.belongsTo(models.User, {
         foreignKey: "user_id",
@@ -36,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
           },
           len: {
             args: [2, 255],
-            msg: "Nama harus terdiri dari antara 2 dan 255 karakter.", // Error message I want to display
+            msg: "Nama harus terdiri dari antara 2 dan 255 karakter.",
           },
         },
       },

@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      Penilaian.belongsTo(models.Kelas, {
+        foreignKey: "kelas_id",
+        targetKey: "kelas_id",
+      });
       Penilaian.belongsTo(models.Krs, {
         foreignKey: "krs_id",
         targetKey: "krs_id",
@@ -22,10 +26,13 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         type: DataTypes.INTEGER(11),
       },
+      kelas_id: DataTypes.INTEGER(11),
       krs_id: {
         allowNull: false,
         type: DataTypes.INTEGER(11),
       },
+      nim: DataTypes.STRING(11),
+      cpmk: DataTypes.INTEGER(11),
       tugas_ke: DataTypes.INTEGER(11),
       nilai: DataTypes.INTEGER(11),
     },

@@ -8,11 +8,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER(11),
       },
-      periode: Sequelize.STRING(11),
+      periode_krs: Sequelize.STRING(11),
       kode_mk: {
         allowNull: false,
         type: Sequelize.STRING(11),
       },
+      kelas_id: Sequelize.INTEGER(11),
       nama_kelas: Sequelize.STRING,
       nim: {
         allowNull: false,

@@ -6,9 +6,8 @@ const Authenticated = require("../middleware/authentication");
 
 // Register
 // router.post("/register", AuthController.Register);
-router.post("/login", AuthController.Login);
+router.post("/login", AuthController.login);
 router.get("/refresh", AuthController.refreshToken);
-router.get("/current-login", Authenticated, AuthController.currentUser);
-router.get("/logout", Authenticated, AuthController.Logout);
+router.get("/logout", Authenticated, AuthController.logout);
 
 module.exports = router;
