@@ -15,7 +15,7 @@ Web Service Laboratorium Teknik Informatika UNPAS merupakan sebuah layanan yang 
 - Sequelize
 - JWT
 
-### :pushpin:Dokumentasi API :rocket:
+### :pushpin: Dokumentasi API :rocket:
 https://documenter.getpostman.com/view/18343779/2s93z3gRGU
 
 ### :pushpin: Cloud Server :cloud:
