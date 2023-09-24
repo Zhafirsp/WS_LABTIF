@@ -32,7 +32,7 @@ Pastikan Node.js dan npm (Node Package Manager) terinstal pada sistem Anda. Anda
 - XAMPP:</br>
 Instal XAMPP atau tools serupa yang menyediakan server MySQL. Anda dapat mengunduhnya disini [link download](https://www.apachefriends.org/index.html)
 
-***Instalasi***<br>
+***Instalasi***</br>
 1. Clone repository
 `git clone https://github.com/tsaniawarda2/WS_LABTIF.git`
 
@@ -42,10 +42,10 @@ Instal XAMPP atau tools serupa yang menyediakan server MySQL. Anda dapat mengund
 3. Instal dependensi
 `npm i` atau `npm install`
 
-4. Konfigurasi Database
-- Buat database dengan nama 'labtif'
+4. Konfigurasi Database</br>
+   Buat database dengan nama 'labtif'
 
-5. Jalankan Migrasi:
+6. Jalankan Migrasi:
 Migrasi digunakan untuk membuat tabel dalam database Anda
 `npx sequelize db:migrate`
 
