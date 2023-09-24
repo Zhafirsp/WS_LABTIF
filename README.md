@@ -1,6 +1,6 @@
 
 # WS_LABTIF
-Web Service Laboratorium Teknik Informatika UNPAS merupakan sebuah layanan yang dibangun untuk membantu proses manajemen praktikum di Universitas Pasundan khususnya pada prodi Teknik Informatika. 
+Web Service Laboratorium Teknik Informatika UNPAS merupakan sebuah layanan yang dibangun untuk membantu proses manajemen praktikum di Universitas Pasundan khususnya pada prodi Teknik Informatika. Web service ini hanya dapat digunakan oleh laboran dan mahasiswa Teknik Informatika Universitas Pasundan. 
 
 ### :pushpin: Fitur
 - **Pendaftaran**: Memungkinkan mahasiswa untuk mendaftar dan mengelola data pendaftaran mereka.
@@ -19,8 +19,7 @@ Web Service Laboratorium Teknik Informatika UNPAS merupakan sebuah layanan yang 
 https://documenter.getpostman.com/view/18343779/2s93z3gRGU
 
 ### :pushpin: Cloud Server :cloud:
-***Akses Web Service***<br>
-Web service hanya dapat digunakan oleh laboran dan mahasiswa Teknik Informatika Universitas Pasundan. Dapat diakses melalui tautan berikut: https://api-staging-labtif.cyclic.cloud
+https://api-staging-labtif.cyclic.cloud
 
 ### :pushpin: Local Server :computer:
 
