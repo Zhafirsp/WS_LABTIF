@@ -9,7 +9,7 @@ const PendaftaranController = require("../controllers/pendaftaranController");
 
 router.use(Authenticated);
 
-// --- MAHASISWA ---
+// =============== MAHASISWA ===============
 // ADD new Pendaftaran By ProgramID
 router.post(
   "/:programID",
@@ -25,14 +25,7 @@ router.delete(
   PendaftaranController.deleteFileByProgramId
 );
 
-// --- LABORAN ---
-// UPDATE status or Validasi By Daftar ID
-router.post(
-  "/penerimaan/:id",
-  Authorization.verifyLaboran,
-  PendaftaranController.updateStatusById
-);
-
+// =============== LABORAN ===============
 // GET All Pendaftaran By Program ID
 router.get(
   "/:programID",
@@ -45,6 +38,13 @@ router.get(
   "/nim/:nim",
   Authorization.verifyLaboran,
   PendaftaranController.getDaftarByNim
+);
+
+// UPDATE status or Validasi By Daftar ID
+router.post(
+  "/penerimaan/:id",
+  Authorization.verifyLaboran,
+  PendaftaranController.updateStatusById
 );
 
 // GET Pendaftaran By Program ID dan Status

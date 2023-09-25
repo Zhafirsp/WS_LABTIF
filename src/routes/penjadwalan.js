@@ -1,16 +1,23 @@
 const express = require("express");
 const router = express.Router();
 
+const Authenticated = require("../middleware/authentication");
+const Authorization = require("../middleware/authorization");
+
 const JadwalController = require("../controllers/jadwalController");
 
-// Add New Jadwal Piket by Kelas ID
-router.post("/:kelasID", JadwalController.addPiketByKelasId);
+// router.use(Authenticated);
 
 // GET All Data Jadwal Piket by Periode
 router.get("/", JadwalController.getAllPiketByPeriode);
 
 // GET All Data Jadwal Piket by Kelas ID
 router.get("/:kelasID", JadwalController.getPiketByKelasId);
+
+// router.use(Authorization.verifyLaboran);
+
+// Add New Jadwal Piket by Kelas ID
+router.post("/:kelasID", JadwalController.addPiketByKelasId);
 
 // UPDATE Data Jadwal Piket by Kelas ID dan asisten ID
 router.put("/:aslabID", JadwalController.updatePiketByAslabId);

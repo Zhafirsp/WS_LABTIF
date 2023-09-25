@@ -74,4 +74,32 @@ const verifyMahasiswa = (req, res, next) => {
   }
 };
 
-module.exports = { verifyLaboran, verifyAsisten, verifyMahasiswa };
+const verifyLaboranOrAsisten = async (req, res, next) => {
+  try {
+    const userLogin = req.userLogin;
+
+    // User login tidak ada?
+    // User login bukan Asisten atau Laboran
+    if (
+      !userLogin ||
+      userLogin.role !== "Asisten" ||
+      userLoginrole !== "Laboran"
+    ) {
+      return resError(
+        403,
+        `Akses Dilarang! User adalah ${userLogin?.role}`,
+        res
+      );
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  verifyLaboran,
+  verifyAsisten,
+  verifyMahasiswa,
+  verifyLaboranOrAsisten,
+};
