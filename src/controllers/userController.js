@@ -65,48 +65,59 @@ class UserController {
     try {
       const { username, password, email, no_hp, role } = req.body;
 
-      // Mencegah duplikasi username dan email
-      const userExist = await User.findOne({
-        where: {
-          [Op.or]: [{ username }, { email }],
-        },
-      });
-
-      // User sudah terdaftar?
-      if (userExist) {
-        if (userExist.username === username) {
-          return resError(400, "Username sudah terdaftar", res);
-        } else if (userExist.email === email) {
-          return resError(400, "Email sudah terdaftar", res);
-        }
+      // Data username kosong?
+      if (!username) {
+        return resError(400, "Username tidak boleh kosong", res);
+        // Data email kosong?
+      } else if (!email) {
+        return resError(400, "Email tidak boleh kosong", res);
       } else {
-        // Username belum terdaftar?
-
-        let image_url = null; // Default null jika tidak ada gambar yang diunggah
-
-        // Jika ada inputan gambar
-        if (req.file) {
-          const { filename } = req.file;
-
-          const fileId = await googleapi.uploadFileToDrive(req.file, filename); // Mengunggah file ke Google Drive
-          image_url = fileId;
-        }
-
-        const newUser = await User.create({
-          username,
-          password,
-          email,
-          no_hp,
-          image_url,
-          role,
+        // Mencegah duplikasi username dan email
+        const userExist = await User.findOne({
+          where: {
+            [Op.or]: [{ username }, { email }],
+          },
         });
 
-        return resSend(
-          201,
-          "Berhasil menambahkan akun User baru",
-          newUser,
-          res
-        );
+        // User sudah terdaftar?
+        if (userExist) {
+          if (userExist.username === username) {
+            return resError(400, "Username sudah terdaftar", res);
+          } else if (userExist.email === email) {
+            return resError(400, "Email sudah terdaftar", res);
+          }
+        } else {
+          // Username belum terdaftar?
+
+          let image_url = null; // Default null jika tidak ada gambar yang diunggah
+
+          // Jika ada inputan gambar
+          if (req.file) {
+            const { filename } = req.file;
+
+            const fileId = await googleapi.uploadFileToDrive(
+              req.file,
+              filename
+            ); // Mengunggah file ke Google Drive
+            image_url = fileId;
+          }
+
+          const newUser = await User.create({
+            username,
+            password,
+            email,
+            no_hp,
+            image_url,
+            role,
+          });
+
+          return resSend(
+            201,
+            "Berhasil menambahkan akun User baru",
+            newUser,
+            res
+          );
+        }
       }
     } catch (error) {
       next(error);
@@ -277,7 +288,7 @@ class UserController {
     }
   }
 
-  // DELETE User by Id
+  // DELETE User by ID
   static async deleteUserById(req, res, next) {
     try {
       const userID = req.params.id;

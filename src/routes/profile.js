@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
+const Authenticated = require("../middleware/authentication");
 const uploadImage = require("../middleware/uploadImage");
+
 const ProfileController = require("../controllers/profileController");
 
-const Authenticated = require("../middleware/authentication");
-
-router.use(Authenticated);
+// router.use(Authenticated);
 router.get("/", ProfileController.getProfile);
 router.put(
   "/",
